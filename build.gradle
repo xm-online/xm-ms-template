@@ -21,6 +21,8 @@ plugins {
     id "org.liquibase.gradle"
     id "org.sonarqube"
     id "io.spring.nohttp"
+    id 'pmd'
+    id "com.github.spotbugs"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -158,10 +160,21 @@ gitProperties {
 }
 
 checkstyle {
-    toolVersion "${checkstyleVersion}"
+    toolVersion "${checkstyleToolVersion}"
     configFile file("qa/checkstyle.xml")
     checkstyleTest.enabled = false
 }
+
+spotbugs {
+    toolVersion = "${spotbugsToolVersion}"
+    ignoreFailures = true
+}
+
+pmd {
+    toolVersion "${pmdToolVersion}"
+    ignoreFailures = true
+}
+
 nohttp {
     source.include "build.gradle", "README.md"
 }
