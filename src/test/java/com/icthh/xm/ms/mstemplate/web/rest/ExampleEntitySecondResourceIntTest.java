@@ -1,38 +1,53 @@
-package com.icthh.xm.ms.template.web.rest;
+package com.icthh.xm.ms.mstemplate.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import com.icthh.xm.ms.template.IntegrationTest;
-import com.icthh.xm.ms.template.domain.ExampleEntityFirst;
-import com.icthh.xm.ms.template.domain.ExampleEntitySecond;
-import com.icthh.xm.ms.template.repository.ExampleEntitySecondRepository;
-import com.icthh.xm.ms.template.service.criteria.ExampleEntitySecondCriteria;
-import com.icthh.xm.ms.template.service.dto.ExampleEntitySecondDto;
-import com.icthh.xm.ms.template.service.mapper.ExampleEntitySecondMapper;
+import com.icthh.xm.commons.i18n.error.web.ExceptionTranslator;
+import com.icthh.xm.commons.security.XmAuthenticationContextHolder;
+import com.icthh.xm.commons.tenant.TenantContextHolder;
+import com.icthh.xm.commons.tenant.TenantContextUtils;
+import com.icthh.xm.lep.api.LepManager;
+import com.icthh.xm.ms.mstemplate.AbstractSpringBootTest;
+import com.icthh.xm.ms.mstemplate.domain.ExampleEntityFirst;
+import com.icthh.xm.ms.mstemplate.domain.ExampleEntitySecond;
+import com.icthh.xm.ms.mstemplate.repository.ExampleEntitySecondRepository;
+import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntitySecondDto;
+import com.icthh.xm.ms.mstemplate.service.mapper.ExampleEntitySecondMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import lombok.SneakyThrows;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.icthh.xm.commons.lep.XmLepConstants.THREAD_CONTEXT_KEY_AUTH_CONTEXT;
+import static com.icthh.xm.commons.lep.XmLepConstants.THREAD_CONTEXT_KEY_TENANT_CONTEXT;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Integration tests for the {@link ExampleEntitySecondResource} REST controller.
  */
-@IntegrationTest
-@AutoConfigureMockMvc
-@WithMockUser
-class ExampleEntitySecondResourceIT {
+@WithMockUser(authorities = {"SUPER-ADMIN"})
+public class ExampleEntitySecondResourceIntTest extends AbstractSpringBootTest {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
@@ -53,7 +68,27 @@ class ExampleEntitySecondResourceIT {
     private EntityManager em;
 
     @Autowired
+    private ExampleEntitySecondResource exampleEntitySecondResource;
+
     private MockMvc restExampleEntitySecondMockMvc;
+
+    @Autowired
+    private TenantContextHolder tenantContextHolder;
+
+    @Autowired
+    private XmAuthenticationContextHolder authContextHolder;
+
+    @Autowired
+    private LepManager lepManager;
+
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
 
     private ExampleEntitySecond exampleEntitySecond;
 
@@ -79,14 +114,39 @@ class ExampleEntitySecondResourceIT {
         return exampleEntitySecond;
     }
 
-    @BeforeEach
+    @Before
     public void initTest() {
         exampleEntitySecond = createEntity(em);
     }
 
+    @BeforeTransaction
+    public void beforeTransaction() {
+        TenantContextUtils.setTenant(tenantContextHolder, "RESINTTEST");
+    }
+
+    @SneakyThrows
+    @Before
+    public void setup() {
+        this.restExampleEntitySecondMockMvc = MockMvcBuilders.standaloneSetup(exampleEntitySecondResource)
+                .setCustomArgumentResolvers(pageableArgumentResolver)
+                .setControllerAdvice(exceptionTranslator)
+                .setMessageConverters(jacksonMessageConverter).build();
+
+        lepManager.beginThreadContext(ctx -> {
+            ctx.setValue(THREAD_CONTEXT_KEY_TENANT_CONTEXT, tenantContextHolder.getContext());
+            ctx.setValue(THREAD_CONTEXT_KEY_AUTH_CONTEXT, authContextHolder.getContext());
+        });
+    }
+
+    @After
+    public void tearDown() {
+        lepManager.endThreadContext();
+        tenantContextHolder.getPrivilegedContext().destroyCurrentContext();
+    }
+
     @Test
     @Transactional
-    void createExampleEntitySecond() throws Exception {
+    public void createExampleEntitySecond() throws Exception {
         int databaseSizeBeforeCreate = exampleEntitySecondRepository.findAll().size();
         // Create the ExampleEntitySecond
         ExampleEntitySecondDto exampleEntitySecondDto = exampleEntitySecondMapper.toDto(exampleEntitySecond);
@@ -108,7 +168,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void createExampleEntitySecondWithExistingId() throws Exception {
+    public void createExampleEntitySecondWithExistingId() throws Exception {
         // Create the ExampleEntitySecond with an existing ID
         exampleEntitySecond.setId(1L);
         ExampleEntitySecondDto exampleEntitySecondDto = exampleEntitySecondMapper.toDto(exampleEntitySecond);
@@ -132,7 +192,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntitySeconds() throws Exception {
+    public void getAllExampleEntitySeconds() throws Exception {
         // Initialize the database
         exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
 
@@ -147,7 +207,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void getExampleEntitySecond() throws Exception {
+    public void getExampleEntitySecond() throws Exception {
         // Initialize the database
         exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
 
@@ -162,7 +222,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void getExampleEntitySecondsByIdFiltering() throws Exception {
+    public void getExampleEntitySecondsByIdFiltering() throws Exception {
         // Initialize the database
         exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
 
@@ -180,7 +240,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntitySecondsByNameIsEqualToSomething() throws Exception {
+    public void getAllExampleEntitySecondsByNameIsEqualToSomething() throws Exception {
         // Initialize the database
         exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
 
@@ -193,7 +253,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntitySecondsByNameIsNotEqualToSomething() throws Exception {
+    public void getAllExampleEntitySecondsByNameIsNotEqualToSomething() throws Exception {
         // Initialize the database
         exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
 
@@ -206,7 +266,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntitySecondsByNameIsInShouldWork() throws Exception {
+    public void getAllExampleEntitySecondsByNameIsInShouldWork() throws Exception {
         // Initialize the database
         exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
 
@@ -219,7 +279,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntitySecondsByNameIsNullOrNotNull() throws Exception {
+    public void getAllExampleEntitySecondsByNameIsNullOrNotNull() throws Exception {
         // Initialize the database
         exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
 
@@ -232,7 +292,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntitySecondsByNameContainsSomething() throws Exception {
+    public void getAllExampleEntitySecondsByNameContainsSomething() throws Exception {
         // Initialize the database
         exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
 
@@ -245,7 +305,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntitySecondsByNameNotContainsSomething() throws Exception {
+    public void getAllExampleEntitySecondsByNameNotContainsSomething() throws Exception {
         // Initialize the database
         exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
 
@@ -254,32 +314,6 @@ class ExampleEntitySecondResourceIT {
 
         // Get all the exampleEntitySecondList where name does not contain UPDATED_NAME
         defaultExampleEntitySecondShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllExampleEntitySecondsByExampleEntityFirstIsEqualToSomething() throws Exception {
-        // Initialize the database
-        exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
-        ExampleEntityFirst exampleEntityFirst;
-        if (TestUtil.findAll(em, ExampleEntityFirst.class).isEmpty()) {
-            exampleEntityFirst = ExampleEntityFirstResourceIT.createEntity(em);
-            em.persist(exampleEntityFirst);
-            em.flush();
-        } else {
-            exampleEntityFirst = TestUtil.findAll(em, ExampleEntityFirst.class).get(0);
-        }
-        em.persist(exampleEntityFirst);
-        em.flush();
-        exampleEntitySecond.addExampleEntityFirst(exampleEntityFirst);
-        exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
-        Long exampleEntityFirstId = exampleEntityFirst.getId();
-
-        // Get all the exampleEntitySecondList where exampleEntityFirst equals to exampleEntityFirstId
-        defaultExampleEntitySecondShouldBeFound("exampleEntityFirstId.equals=" + exampleEntityFirstId);
-
-        // Get all the exampleEntitySecondList where exampleEntityFirst equals to (exampleEntityFirstId + 1)
-        defaultExampleEntitySecondShouldNotBeFound("exampleEntityFirstId.equals=" + (exampleEntityFirstId + 1));
     }
 
     /**
@@ -322,14 +356,14 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void getNonExistingExampleEntitySecond() throws Exception {
+    public void getNonExistingExampleEntitySecond() throws Exception {
         // Get the exampleEntitySecond
         restExampleEntitySecondMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
-    void putNewExampleEntitySecond() throws Exception {
+    public void putNewExampleEntitySecond() throws Exception {
         // Initialize the database
         exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
 
@@ -360,7 +394,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void putNonExistingExampleEntitySecond() throws Exception {
+    public void putNonExistingExampleEntitySecond() throws Exception {
         int databaseSizeBeforeUpdate = exampleEntitySecondRepository.findAll().size();
         exampleEntitySecond.setId(count.incrementAndGet());
 
@@ -384,7 +418,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void putWithIdMismatchExampleEntitySecond() throws Exception {
+    public void putWithIdMismatchExampleEntitySecond() throws Exception {
         int databaseSizeBeforeUpdate = exampleEntitySecondRepository.findAll().size();
         exampleEntitySecond.setId(count.incrementAndGet());
 
@@ -408,7 +442,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void putWithMissingIdPathParamExampleEntitySecond() throws Exception {
+    public void putWithMissingIdPathParamExampleEntitySecond() throws Exception {
         int databaseSizeBeforeUpdate = exampleEntitySecondRepository.findAll().size();
         exampleEntitySecond.setId(count.incrementAndGet());
 
@@ -432,7 +466,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void partialUpdateExampleEntitySecondWithPatch() throws Exception {
+    public void partialUpdateExampleEntitySecondWithPatch() throws Exception {
         // Initialize the database
         exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
 
@@ -462,7 +496,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void fullUpdateExampleEntitySecondWithPatch() throws Exception {
+    public void fullUpdateExampleEntitySecondWithPatch() throws Exception {
         // Initialize the database
         exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
 
@@ -492,7 +526,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void patchNonExistingExampleEntitySecond() throws Exception {
+    public void patchNonExistingExampleEntitySecond() throws Exception {
         int databaseSizeBeforeUpdate = exampleEntitySecondRepository.findAll().size();
         exampleEntitySecond.setId(count.incrementAndGet());
 
@@ -516,7 +550,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void patchWithIdMismatchExampleEntitySecond() throws Exception {
+    public void patchWithIdMismatchExampleEntitySecond() throws Exception {
         int databaseSizeBeforeUpdate = exampleEntitySecondRepository.findAll().size();
         exampleEntitySecond.setId(count.incrementAndGet());
 
@@ -540,7 +574,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void patchWithMissingIdPathParamExampleEntitySecond() throws Exception {
+    public void patchWithMissingIdPathParamExampleEntitySecond() throws Exception {
         int databaseSizeBeforeUpdate = exampleEntitySecondRepository.findAll().size();
         exampleEntitySecond.setId(count.incrementAndGet());
 
@@ -564,7 +598,7 @@ class ExampleEntitySecondResourceIT {
 
     @Test
     @Transactional
-    void deleteExampleEntitySecond() throws Exception {
+    public void deleteExampleEntitySecond() throws Exception {
         // Initialize the database
         exampleEntitySecondRepository.saveAndFlush(exampleEntitySecond);
 

@@ -1,4 +1,4 @@
-package com.icthh.xm.ms.template.web.rest;
+package com.icthh.xm.ms.mstemplate.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

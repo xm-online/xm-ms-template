@@ -1,14 +1,15 @@
-package com.icthh.xm.ms.template.service.dto;
+package com.icthh.xm.ms.mstemplate.service.dto;
+
+import com.icthh.xm.ms.mstemplate.AbstractUnitTest;
+import com.icthh.xm.ms.mstemplate.web.rest.TestUtil;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.icthh.xm.ms.template.web.rest.TestUtil;
-import org.junit.jupiter.api.Test;
-
-class ExampleEntitySecondDtoTest {
+public class ExampleEntitySecondDtoUnitTest extends AbstractUnitTest {
 
     @Test
-    void dtoEqualsVerifier() throws Exception {
+    public void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(ExampleEntitySecondDto.class);
         ExampleEntitySecondDto exampleEntitySecondDto1 = new ExampleEntitySecondDto();
         exampleEntitySecondDto1.setId(1L);

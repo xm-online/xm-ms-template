@@ -1,38 +1,57 @@
-package com.icthh.xm.ms.template.web.rest;
+package com.icthh.xm.ms.mstemplate.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import com.icthh.xm.ms.template.IntegrationTest;
-import com.icthh.xm.ms.template.domain.ExampleEntityFirst;
-import com.icthh.xm.ms.template.domain.ExampleEntitySecond;
-import com.icthh.xm.ms.template.repository.ExampleEntityFirstRepository;
-import com.icthh.xm.ms.template.service.criteria.ExampleEntityFirstCriteria;
-import com.icthh.xm.ms.template.service.dto.ExampleEntityFirstDto;
-import com.icthh.xm.ms.template.service.mapper.ExampleEntityFirstMapper;
+import com.icthh.xm.commons.i18n.error.web.ExceptionTranslator;
+import com.icthh.xm.commons.security.XmAuthenticationContextHolder;
+import com.icthh.xm.commons.tenant.TenantContextHolder;
+import com.icthh.xm.commons.tenant.TenantContextUtils;
+import com.icthh.xm.lep.api.LepManager;
+import com.icthh.xm.ms.mstemplate.AbstractSpringBootTest;
+import com.icthh.xm.ms.mstemplate.domain.ExampleEntityFirst;
+import com.icthh.xm.ms.mstemplate.domain.ExampleEntitySecond;
+import com.icthh.xm.ms.mstemplate.repository.ExampleEntityFirstRepository;
+import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntityFirstDto;
+import com.icthh.xm.ms.mstemplate.service.mapper.ExampleEntityFirstMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import lombok.SneakyThrows;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.security.web.FilterChainProxy;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
+
+import static com.icthh.xm.commons.lep.XmLepConstants.THREAD_CONTEXT_KEY_AUTH_CONTEXT;
+import static com.icthh.xm.commons.lep.XmLepConstants.THREAD_CONTEXT_KEY_TENANT_CONTEXT;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Integration tests for the {@link ExampleEntityFirstResource} REST controller.
  */
-@IntegrationTest
-@AutoConfigureMockMvc
-@WithMockUser
-class ExampleEntityFirstResourceIT {
+@WithMockUser(authorities = {"SUPER-ADMIN"})
+public class ExampleEntityFirstResourceIntTest extends AbstractSpringBootTest {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
@@ -52,8 +71,35 @@ class ExampleEntityFirstResourceIT {
     @Autowired
     private EntityManager em;
 
-    @Autowired
     private MockMvc restExampleEntityFirstMockMvc;
+
+    @Autowired
+    private TenantContextHolder tenantContextHolder;
+
+    @Autowired
+    private XmAuthenticationContextHolder authContextHolder;
+
+    @Autowired
+    private LepManager lepManager;
+
+    @Autowired
+    private ExampleEntityFirstResource exampleEntityFirstResource;
+
+    @Autowired
+    private WebApplicationContext context;
+
+    @Autowired
+    private FilterChainProxy springSecurityFilter;
+
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
+
 
     private ExampleEntityFirst exampleEntityFirst;
 
@@ -79,14 +125,39 @@ class ExampleEntityFirstResourceIT {
         return exampleEntityFirst;
     }
 
-    @BeforeEach
+    @Before
     public void initTest() {
         exampleEntityFirst = createEntity(em);
     }
 
+    @BeforeTransaction
+    public void beforeTransaction() {
+        TenantContextUtils.setTenant(tenantContextHolder, "RESINTTEST");
+    }
+
+    @SneakyThrows
+    @Before
+    public void setup() {
+        this.restExampleEntityFirstMockMvc = MockMvcBuilders.standaloneSetup(exampleEntityFirstResource)
+                .setCustomArgumentResolvers(pageableArgumentResolver)
+                .setControllerAdvice(exceptionTranslator)
+                .setMessageConverters(jacksonMessageConverter).build();
+
+        lepManager.beginThreadContext(ctx -> {
+            ctx.setValue(THREAD_CONTEXT_KEY_TENANT_CONTEXT, tenantContextHolder.getContext());
+            ctx.setValue(THREAD_CONTEXT_KEY_AUTH_CONTEXT, authContextHolder.getContext());
+        });
+    }
+
+    @After
+    public void tearDown() {
+        lepManager.endThreadContext();
+        tenantContextHolder.getPrivilegedContext().destroyCurrentContext();
+    }
+
     @Test
     @Transactional
-    void createExampleEntityFirst() throws Exception {
+    public void createExampleEntityFirst() throws Exception {
         int databaseSizeBeforeCreate = exampleEntityFirstRepository.findAll().size();
         // Create the ExampleEntityFirst
         ExampleEntityFirstDto exampleEntityFirstDto = exampleEntityFirstMapper.toDto(exampleEntityFirst);
@@ -108,7 +179,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void createExampleEntityFirstWithExistingId() throws Exception {
+    public void createExampleEntityFirstWithExistingId() throws Exception {
         // Create the ExampleEntityFirst with an existing ID
         exampleEntityFirst.setId(1L);
         ExampleEntityFirstDto exampleEntityFirstDto = exampleEntityFirstMapper.toDto(exampleEntityFirst);
@@ -132,7 +203,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntityFirsts() throws Exception {
+    public void getAllExampleEntityFirsts() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
 
@@ -147,7 +218,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void getExampleEntityFirst() throws Exception {
+    public void getExampleEntityFirst() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
 
@@ -162,7 +233,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void getExampleEntityFirstsByIdFiltering() throws Exception {
+    public void getExampleEntityFirstsByIdFiltering() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
 
@@ -180,7 +251,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntityFirstsByNameIsEqualToSomething() throws Exception {
+    public void getAllExampleEntityFirstsByNameIsEqualToSomething() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
 
@@ -193,7 +264,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntityFirstsByNameIsNotEqualToSomething() throws Exception {
+    public void getAllExampleEntityFirstsByNameIsNotEqualToSomething() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
 
@@ -206,7 +277,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntityFirstsByNameIsInShouldWork() throws Exception {
+    public void getAllExampleEntityFirstsByNameIsInShouldWork() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
 
@@ -219,7 +290,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntityFirstsByNameIsNullOrNotNull() throws Exception {
+    public void getAllExampleEntityFirstsByNameIsNullOrNotNull() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
 
@@ -232,7 +303,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntityFirstsByNameContainsSomething() throws Exception {
+    public void getAllExampleEntityFirstsByNameContainsSomething() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
 
@@ -245,7 +316,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntityFirstsByNameNotContainsSomething() throws Exception {
+    public void getAllExampleEntityFirstsByNameNotContainsSomething() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
 
@@ -258,12 +329,12 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void getAllExampleEntityFirstsByExampleEntitySecondIsEqualToSomething() throws Exception {
+    public void getAllExampleEntityFirstsByExampleEntitySecondIsEqualToSomething() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
         ExampleEntitySecond exampleEntitySecond;
         if (TestUtil.findAll(em, ExampleEntitySecond.class).isEmpty()) {
-            exampleEntitySecond = ExampleEntitySecondResourceIT.createEntity(em);
+            exampleEntitySecond = ExampleEntitySecondResourceIntTest.createEntity(em);
             em.persist(exampleEntitySecond);
             em.flush();
         } else {
@@ -322,14 +393,14 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void getNonExistingExampleEntityFirst() throws Exception {
+    public void getNonExistingExampleEntityFirst() throws Exception {
         // Get the exampleEntityFirst
         restExampleEntityFirstMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
-    void putNewExampleEntityFirst() throws Exception {
+    public void putNewExampleEntityFirst() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
 
@@ -360,7 +431,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void putNonExistingExampleEntityFirst() throws Exception {
+    public void putNonExistingExampleEntityFirst() throws Exception {
         int databaseSizeBeforeUpdate = exampleEntityFirstRepository.findAll().size();
         exampleEntityFirst.setId(count.incrementAndGet());
 
@@ -384,7 +455,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void putWithIdMismatchExampleEntityFirst() throws Exception {
+    public void putWithIdMismatchExampleEntityFirst() throws Exception {
         int databaseSizeBeforeUpdate = exampleEntityFirstRepository.findAll().size();
         exampleEntityFirst.setId(count.incrementAndGet());
 
@@ -408,7 +479,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void putWithMissingIdPathParamExampleEntityFirst() throws Exception {
+    public void putWithMissingIdPathParamExampleEntityFirst() throws Exception {
         int databaseSizeBeforeUpdate = exampleEntityFirstRepository.findAll().size();
         exampleEntityFirst.setId(count.incrementAndGet());
 
@@ -432,7 +503,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void partialUpdateExampleEntityFirstWithPatch() throws Exception {
+    public void partialUpdateExampleEntityFirstWithPatch() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
 
@@ -462,7 +533,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void fullUpdateExampleEntityFirstWithPatch() throws Exception {
+    public void fullUpdateExampleEntityFirstWithPatch() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
 
@@ -492,7 +563,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void patchNonExistingExampleEntityFirst() throws Exception {
+    public void patchNonExistingExampleEntityFirst() throws Exception {
         int databaseSizeBeforeUpdate = exampleEntityFirstRepository.findAll().size();
         exampleEntityFirst.setId(count.incrementAndGet());
 
@@ -516,7 +587,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void patchWithIdMismatchExampleEntityFirst() throws Exception {
+    public void patchWithIdMismatchExampleEntityFirst() throws Exception {
         int databaseSizeBeforeUpdate = exampleEntityFirstRepository.findAll().size();
         exampleEntityFirst.setId(count.incrementAndGet());
 
@@ -540,7 +611,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void patchWithMissingIdPathParamExampleEntityFirst() throws Exception {
+    public void patchWithMissingIdPathParamExampleEntityFirst() throws Exception {
         int databaseSizeBeforeUpdate = exampleEntityFirstRepository.findAll().size();
         exampleEntityFirst.setId(count.incrementAndGet());
 
@@ -564,7 +635,7 @@ class ExampleEntityFirstResourceIT {
 
     @Test
     @Transactional
-    void deleteExampleEntityFirst() throws Exception {
+    public void deleteExampleEntityFirst() throws Exception {
         // Initialize the database
         exampleEntityFirstRepository.saveAndFlush(exampleEntityFirst);
 

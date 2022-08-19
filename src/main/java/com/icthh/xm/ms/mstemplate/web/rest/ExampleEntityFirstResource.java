@@ -1,17 +1,15 @@
-package com.icthh.xm.ms.template.web.rest;
+package com.icthh.xm.ms.mstemplate.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.icthh.xm.commons.permission.annotation.PrivilegeDescription;
-import com.icthh.xm.ms.template.repository.ExampleEntityFirstRepository;
-import com.icthh.xm.ms.template.service.ExampleEntityFirstQueryService;
-import com.icthh.xm.ms.template.service.ExampleEntityFirstService;
-import com.icthh.xm.ms.template.service.criteria.ExampleEntityFirstCriteria;
-import com.icthh.xm.ms.template.service.dto.ExampleEntityFirstDto;
-import com.icthh.xm.ms.template.web.rest.errors.BadRequestAlertException;
+import com.icthh.xm.ms.mstemplate.service.ExampleEntityFirstQueryService;
+import com.icthh.xm.ms.mstemplate.service.ExampleEntityFirstService;
+import com.icthh.xm.ms.mstemplate.service.criteria.ExampleEntityFirstCriteria;
+import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntityFirstDto;
+import com.icthh.xm.ms.mstemplate.web.rest.errors.BadRequestAlertException;
+import com.icthh.xm.ms.mstemplate.web.rest.utils.RespContentUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
-import tech.jhipster.web.util.ResponseUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -40,7 +37,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * REST controller for managing {@link com.icthh.xm.ms.template.domain.ExampleEntityFirst}.
+ * REST controller for managing {@link com.icthh.xm.ms.mstemplate.domain.ExampleEntityFirst}.
  */
 @Slf4j
 @RestController
@@ -148,7 +145,7 @@ public class ExampleEntityFirstResource {
 
         Optional<ExampleEntityFirstDto> result = exampleEntityFirstService.partialUpdate(exampleEntityFirstDto);
 
-        return ResponseUtil.wrapOrNotFound(
+        return RespContentUtil.wrapOrNotFound(
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exampleEntityFirstDto.getId().toString())
         );
@@ -196,7 +193,7 @@ public class ExampleEntityFirstResource {
     @PrivilegeDescription("Privilege to get the example entity first by id")
     public ResponseEntity<ExampleEntityFirstDto> getExampleEntityFirst(@PathVariable Long id) {
         Optional<ExampleEntityFirstDto> exampleEntityFirstDto = exampleEntityFirstService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(exampleEntityFirstDto);
+        return RespContentUtil.wrapOrNotFound(exampleEntityFirstDto);
     }
 
     /**

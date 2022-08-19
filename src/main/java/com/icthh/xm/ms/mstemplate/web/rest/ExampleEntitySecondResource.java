@@ -1,12 +1,13 @@
-package com.icthh.xm.ms.template.web.rest;
+package com.icthh.xm.ms.mstemplate.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.icthh.xm.commons.permission.annotation.PrivilegeDescription;
-import com.icthh.xm.ms.template.service.ExampleEntitySecondQueryService;
-import com.icthh.xm.ms.template.service.ExampleEntitySecondService;
-import com.icthh.xm.ms.template.service.criteria.ExampleEntitySecondCriteria;
-import com.icthh.xm.ms.template.service.dto.ExampleEntitySecondDto;
-import com.icthh.xm.ms.template.web.rest.errors.BadRequestAlertException;
+import com.icthh.xm.ms.mstemplate.service.ExampleEntitySecondQueryService;
+import com.icthh.xm.ms.mstemplate.service.ExampleEntitySecondService;
+import com.icthh.xm.ms.mstemplate.service.criteria.ExampleEntitySecondCriteria;
+import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntitySecondDto;
+import com.icthh.xm.ms.mstemplate.web.rest.errors.BadRequestAlertException;
+import com.icthh.xm.ms.mstemplate.web.rest.utils.RespContentUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -33,10 +34,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
-import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link com.icthh.xm.ms.template.domain.ExampleEntitySecond}.
+ * REST controller for managing {@link com.icthh.xm.ms.mstemplate.domain.ExampleEntitySecond}.
  */
 @Slf4j
 @RestController
@@ -144,7 +144,7 @@ public class ExampleEntitySecondResource {
 
         Optional<ExampleEntitySecondDto> result = exampleEntitySecondService.partialUpdate(exampleEntitySecondDto);
 
-        return ResponseUtil.wrapOrNotFound(
+        return RespContentUtil.wrapOrNotFound(
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exampleEntitySecondDto.getId().toString())
         );
@@ -192,7 +192,7 @@ public class ExampleEntitySecondResource {
     @PrivilegeDescription("Privilege to get the example entity second by id")
     public ResponseEntity<ExampleEntitySecondDto> getExampleEntitySecond(@PathVariable Long id) {
         Optional<ExampleEntitySecondDto> exampleEntitySecondDto = exampleEntitySecondService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(exampleEntitySecondDto);
+        return RespContentUtil.wrapOrNotFound(exampleEntitySecondDto);
     }
 
     /**

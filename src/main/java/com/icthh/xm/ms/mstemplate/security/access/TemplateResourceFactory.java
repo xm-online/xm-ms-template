@@ -1,9 +1,9 @@
-package com.icthh.xm.ms.template.security.access;
+package com.icthh.xm.ms.mstemplate.security.access;
 
 import com.icthh.xm.commons.permission.access.AbstractResourceFactory;
 import com.icthh.xm.commons.permission.access.repository.ResourceRepository;
-import com.icthh.xm.ms.template.repository.ExampleEntityFirstRepository;
-import com.icthh.xm.ms.template.repository.ExampleEntitySecondRepository;
+import com.icthh.xm.ms.mstemplate.repository.ExampleEntityFirstRepository;
+import com.icthh.xm.ms.mstemplate.repository.ExampleEntitySecondRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

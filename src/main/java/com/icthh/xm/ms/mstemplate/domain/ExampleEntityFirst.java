@@ -1,4 +1,4 @@
-package com.icthh.xm.ms.template.domain;
+package com.icthh.xm.ms.mstemplate.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -39,6 +40,7 @@ public class ExampleEntityFirst implements Serializable {
     private String name;
 
     @ManyToOne
+    @JoinColumn(name = "example_entity_second_id", nullable = false)
     @JsonIgnoreProperties(value = { "exampleEntityFirsts" }, allowSetters = true)
     private ExampleEntitySecond exampleEntitySecond;
 
