@@ -1,4 +1,4 @@
-package com.icthh.xm.ms.template.service.criteria;
+package com.icthh.xm.ms.mstemplate.service.criteria;
 
 import org.springdoc.api.annotations.ParameterObject;
 import tech.jhipster.service.Criteria;
@@ -10,8 +10,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Criteria class for the {@link com.icthh.xm.ms.template.domain.ExampleEntitySecond} entity. This class is used
- * in {@link com.icthh.xm.ms.template.web.rest.ExampleEntitySecondResource} to receive all the possible filtering options from
+ * Criteria class for the {@link com.icthh.xm.ms.mstemplate.domain.ExampleEntitySecond} entity. This class is used
+ * in {@link com.icthh.xm.ms.mstemplate.web.rest.ExampleEntitySecondResource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
  * {@code /example-entity-seconds?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
@@ -27,17 +27,11 @@ public class ExampleEntitySecondCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
-    private LongFilter exampleEntityFirstId;
-
-    private Boolean distinct;
-
     public ExampleEntitySecondCriteria() {}
 
     public ExampleEntitySecondCriteria(ExampleEntitySecondCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
-        this.exampleEntityFirstId = other.exampleEntityFirstId == null ? null : other.exampleEntityFirstId.copy();
-        this.distinct = other.distinct;
     }
 
     @Override
@@ -75,29 +69,6 @@ public class ExampleEntitySecondCriteria implements Serializable, Criteria {
         this.name = name;
     }
 
-    public LongFilter getExampleEntityFirstId() {
-        return exampleEntityFirstId;
-    }
-
-    public LongFilter exampleEntityFirstId() {
-        if (exampleEntityFirstId == null) {
-            exampleEntityFirstId = new LongFilter();
-        }
-        return exampleEntityFirstId;
-    }
-
-    public void setExampleEntityFirstId(LongFilter exampleEntityFirstId) {
-        this.exampleEntityFirstId = exampleEntityFirstId;
-    }
-
-    public Boolean getDistinct() {
-        return distinct;
-    }
-
-    public void setDistinct(Boolean distinct) {
-        this.distinct = distinct;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -109,15 +80,13 @@ public class ExampleEntitySecondCriteria implements Serializable, Criteria {
         final ExampleEntitySecondCriteria that = (ExampleEntitySecondCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(name, that.name) &&
-            Objects.equals(exampleEntityFirstId, that.exampleEntityFirstId) &&
-            Objects.equals(distinct, that.distinct)
+            Objects.equals(name, that.name)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, exampleEntityFirstId, distinct);
+        return Objects.hash(id, name);
     }
 
     // prettier-ignore
@@ -126,8 +95,6 @@ public class ExampleEntitySecondCriteria implements Serializable, Criteria {
         return "ExampleEntitySecondCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (name != null ? "name=" + name + ", " : "") +
-            (exampleEntityFirstId != null ? "exampleEntityFirstId=" + exampleEntityFirstId + ", " : "") +
-            (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
 }
