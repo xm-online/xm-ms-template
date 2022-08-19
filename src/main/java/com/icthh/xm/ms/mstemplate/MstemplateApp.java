@@ -1,10 +1,11 @@
-package com.icthh.xm.ms.template;
+package com.icthh.xm.ms.mstemplate;
 
 import com.icthh.xm.commons.logging.util.MdcUtils;
 import com.icthh.xm.commons.tenant.TenantContextHolder;
 import com.icthh.xm.commons.tenant.TenantContextUtils;
 import com.icthh.xm.commons.tenant.TenantKey;
-import com.icthh.xm.ms.template.config.ApplicationProperties;
+import com.icthh.xm.ms.mstemplate.config.ApplicationProperties;
+import java.util.TimeZone;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -118,6 +119,7 @@ public class MstemplateApp {
                         + "Application '{}' is running! Access URLs:\n\t"
                         + "Local: \t\t{}://localhost:{}{}\n\t"
                         + "External: \t{}://{}:{}{}\n\t"
+                        + "Timezone: \t{}\n\t"
                         + "Profile(s): \t{}\n----------------------------------------------------------",
                 env.getProperty("spring.application.name"),
                 protocol,
@@ -127,13 +129,7 @@ public class MstemplateApp {
                 hostAddress,
                 serverPort,
                 contextPath,
+                TimeZone.getDefault().toZoneId().getId(),
                 env.getActiveProfiles());
-
-        String configServerStatus = env.getProperty("configserver.status");
-        if (configServerStatus == null) {
-            configServerStatus = "Not found or not setup for this application";
-        }
-        log.info("\n----------------------------------------------------------\n\t"
-                + "Config Server: \t{}\n----------------------------------------------------------", configServerStatus);
     }
 }
