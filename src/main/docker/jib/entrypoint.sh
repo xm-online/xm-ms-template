@@ -30,4 +30,4 @@ fi
 
 echo "The application will start in ${JHIPSTER_SLEEP}s..." && sleep ${JHIPSTER_SLEEP}
 
-exec java -Djava.security.egd=file:/dev/./urandom -cp $( cat /app/jib-classpath-file ) $( cat /app/jib-main-class-file )
+exec java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -Duser.timezone=$TZ -Xmx$XMX -XX:+ExitOnOutOfMemoryError -cp $( cat /app/jib-classpath-file ) $( cat /app/jib-main-class-file )
