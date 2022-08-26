@@ -7,7 +7,7 @@ import com.icthh.xm.ms.mstemplate.service.ExampleEntitySecondService;
 import com.icthh.xm.ms.mstemplate.service.criteria.ExampleEntitySecondCriteria;
 import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntitySecondDto;
 import com.icthh.xm.ms.mstemplate.web.rest.errors.BadRequestAlertException;
-import com.icthh.xm.ms.mstemplate.web.rest.utils.RespContentUtil;
+import com.icthh.xm.ms.mstemplate.web.rest.utils.ResponseContentUtils;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -144,7 +144,7 @@ public class ExampleEntitySecondResource {
 
         Optional<ExampleEntitySecondDto> result = exampleEntitySecondService.partialUpdate(exampleEntitySecondDto);
 
-        return RespContentUtil.wrapOrNotFound(
+        return ResponseContentUtils.wrapOrNotFound(
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exampleEntitySecondDto.getId().toString())
         );
@@ -192,7 +192,7 @@ public class ExampleEntitySecondResource {
     @PrivilegeDescription("Privilege to get the example entity second by id")
     public ResponseEntity<ExampleEntitySecondDto> getExampleEntitySecond(@PathVariable Long id) {
         Optional<ExampleEntitySecondDto> exampleEntitySecondDto = exampleEntitySecondService.findOne(id);
-        return RespContentUtil.wrapOrNotFound(exampleEntitySecondDto);
+        return ResponseContentUtils.wrapOrNotFound(exampleEntitySecondDto);
     }
 
     /**

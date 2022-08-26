@@ -6,9 +6,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public final class RespContentUtil {
+public final class ResponseContentUtils {
 
-    private RespContentUtil() {
+    private ResponseContentUtils() {
     }
 
     /**

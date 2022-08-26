@@ -7,7 +7,7 @@ import com.icthh.xm.ms.mstemplate.service.ExampleEntityFirstService;
 import com.icthh.xm.ms.mstemplate.service.criteria.ExampleEntityFirstCriteria;
 import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntityFirstDto;
 import com.icthh.xm.ms.mstemplate.web.rest.errors.BadRequestAlertException;
-import com.icthh.xm.ms.mstemplate.web.rest.utils.RespContentUtil;
+import com.icthh.xm.ms.mstemplate.web.rest.utils.ResponseContentUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -145,7 +145,7 @@ public class ExampleEntityFirstResource {
 
         Optional<ExampleEntityFirstDto> result = exampleEntityFirstService.partialUpdate(exampleEntityFirstDto);
 
-        return RespContentUtil.wrapOrNotFound(
+        return ResponseContentUtils.wrapOrNotFound(
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exampleEntityFirstDto.getId().toString())
         );
@@ -193,7 +193,7 @@ public class ExampleEntityFirstResource {
     @PrivilegeDescription("Privilege to get the example entity first by id")
     public ResponseEntity<ExampleEntityFirstDto> getExampleEntityFirst(@PathVariable Long id) {
         Optional<ExampleEntityFirstDto> exampleEntityFirstDto = exampleEntityFirstService.findOne(id);
-        return RespContentUtil.wrapOrNotFound(exampleEntityFirstDto);
+        return ResponseContentUtils.wrapOrNotFound(exampleEntityFirstDto);
     }
 
     /**
