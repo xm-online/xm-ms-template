@@ -185,3 +185,5 @@ application:
   kafka-system-topic: system_topic
   kafka-system-queue: system_queue
   kafka-metadata-max-age: 60000 #in milliseconds
+  kafkaHealth:
+    enabled: true

@@ -21,4 +21,10 @@ public class ApplicationProperties {
     private String kafkaSystemTopic;
     private String kafkaSystemQueue;
     private Integer kafkaMetadataMaxAge;
+    private KafkaHealth kafkaHealth;
+
+    @Data
+    public static class KafkaHealth {
+        private Boolean enabled;
+    }
 }
