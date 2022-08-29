@@ -2,7 +2,7 @@ logging:
   level:
     ROOT: INFO
     tech.jhipster: INFO
-    com.icthh.xm.ms.template: INFO
+    com.icthh.xm.ms.mstemplate: INFO
 
 management:
   metrics:
@@ -17,6 +17,16 @@ spring:
     livereload:
       enabled: false
   cloud:
+    # if you need to start service without consul, use next configuration and disable consul by spring.cloud.consul.enabled
+#    discovery:
+#      client:
+#        simple:
+#          instances:
+#            config:
+#              - instanceId: config
+#                serviceId: config
+#                host: localhost
+#                port: 8084
     consul:
       discovery:
         prefer-ip-address: true

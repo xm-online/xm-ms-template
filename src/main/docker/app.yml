@@ -12,6 +12,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://mstemplate-postgresql:5432/mstemplate
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://mstemplate-postgresql:5432/mstemplate
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      - TZ=UTC
   mstemplate-postgresql:
     image: postgres:14.2
     # volumes:

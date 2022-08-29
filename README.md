@@ -32,7 +32,7 @@ Database support multi tenancy by adding commons `xm-commons-migration-db`
 Configuration files for Liquibase are in `resources/config/liquibase`.
 
 **NOTE:** on the micoservice level you still need custom configuration for DB:
-`com.icthh.xm.ms.template.config.XmDatabaseConfiguration`
+`com.icthh.xm.ms.mstemplate.config.XmDatabaseConfiguration`
 
 Here you can decide if you need or do not need H2 and also provide base package for scan.
 
@@ -120,6 +120,29 @@ To start your application in the dev profile, run:
 ./gradlew
 ```
 
+### Start microservice without ms-config
+
+Some microservices can work without ms-config instance.
+The only reason they may need config is for getting public key for token verification and tenant list json to resolve tenant.
+
+To start your microservice without config you can use `configMode=FILE` which still points to real config repository
+but does not require running ms-config instance.
+
+There is example configuration in application.yaml:
+```yaml
+xm-config:
+  enabled: true
+  configMode: FILE
+  configDirPath: /path/to/xm-config-repo
+```
+These settings activate:
+ - com.icthh.xm.commons.config.client.repository.FileCommonConfigRepository - implementation of file based repo
+ - com.icthh.xm.commons.security.oauth2.FileVerificationKeyClient - reads certificate from `${configDirPath}/config/public.cer`
+
+**NOTE:**
+1. Config files will be updated as you change content in the local repo thanks to `com.icthh.xm.commons.config.client.repository.file.FileUpdateWatcher`
+2. WARNING: you need to be aware that file will have **raw unprocessed** content (so environment variables will not be rosolved)
+
 ### Doing API-First development using openapi-generator
 
 [OpenAPI-Generator]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
@@ -135,6 +158,20 @@ To edit the `api.yml` definition file, you can use a tool such as [Swagger-Edito
 Refer to [Doing API-First development][] for more details.
 
 ## Building for production
+
+### Manage application timezone
+
+Timezone can be defined as environment variable `TZ` of docker container.
+Usually it is configured in compose file as following:
+```yaml
+version: '3.8'
+services:
+  mstemplate-app:
+    image: mstemplate
+    environment:
+      - XMX=512M
+      - TZ=UTC
+```
 
 ### Packaging as jar
 

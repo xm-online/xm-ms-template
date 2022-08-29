@@ -71,6 +71,16 @@ spring:
   main:
     allow-bean-definition-overriding: true
   cloud:
+    # if you need to start service without consul, use next configuration and disable consul by spring.cloud.consul.enabled
+#    discovery:
+#      client:
+#        simple:
+#          instances:
+#            config:
+#              - instanceId: config
+#                serviceId: config
+#                host: localhost
+#                port: 8084
     consul:
       enabled: true
       discovery:
@@ -99,9 +109,14 @@ spring:
         bootstrap-mode: default
   jpa:
     open-in-view: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     properties:
+      hibernate.model.generator_name_as_sequence_name: false
       hibernate.jdbc.time_zone: UTC
-      hibernate.id.new_generator_mappings: true
       hibernate.connection.provider_disables_autocommit: true
       hibernate.cache.use_second_level_cache: false
       hibernate.cache.use_query_cache: false
@@ -112,11 +127,6 @@ spring:
       hibernate.order_updates: true
       hibernate.query.fail_on_pagination_over_collection_fetch: true
       hibernate.query.in_clause_parameter_padding: true
-    hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
   jackson:
     deserialization:
       fail-on-unknown-properties: false
@@ -137,6 +147,8 @@ springdoc:
 
 xm-config:
   enabled: true
+  #configMode: FILE
+  #configDirPath:
 
 # Properties to be exposed on the /info management endpoint
 info:
@@ -161,6 +173,17 @@ jhipster:
     content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com data:"
 
 application:
-  tenant-ignored-path-list: /v2/api-docs, /api/profile-info, /swagger-resources/configuration/ui, /management/health, /management/prometheus
-  timelines-enabled: false
   specification-path-pattern: /config/tenants/{tenantName}/${spring.application.name}/example-of-microservice-spec.yml
+  tenant-ignored-path-list: /v2/api-docs, /api/profile-info, /swagger-resources/configuration/ui, /management/health, /management/prometheus
+  timeline-ignored-http-methods:
+
+  timelines-enabled: false
+  kafka-enabled: true
+  scheduler-enabled: false
+
+  tenant-with-creation-access-list: XM, MANAGER
+  kafka-system-topic: system_topic
+  kafka-system-queue: system_queue
+  kafka-metadata-max-age: 60000 #in milliseconds
+  kafkaHealth:
+    enabled: true
