@@ -135,6 +135,19 @@ spring:
     default-property-inclusion: non_empty
   kafka:
     bootstrap-servers: localhost:9092
+#  To start using feign client with authentication, use this configuration and provide correct
+#  token-uri, client-id and client-secret
+  security:
+    oauth2:
+      client:
+        provider:
+          uaa:
+            token-uri: http://localhost:9999/oauth/token
+        registration:
+          uaa:
+            authorization-grant-type: client_credentials
+            client-id: internal
+            client-secret: internal
 
 server:
   servlet:
