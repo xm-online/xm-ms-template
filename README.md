@@ -4,6 +4,18 @@ This application was generated using JHipster 7.8.1, you can find documentation 
 
 This is a "microservice" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
 
+## How to use this template
+1. Clone xm-ms-template to separate folder.
+2. Start project in you local XM environment and check if it is working, run tests.
+3. Remove `.git/` folder before project modification.
+4. Add project to new git repository where it will evolve and live.
+5. Find and replace `mstemplate` term everywhere in the projects.
+6. Find end remove everything related to `ExampleEntityFirst` (after checking how it is proposed to use)
+7. Do you need to use database:
+   - if YES - correct liquibase scripts in `resources/config/liquibase`
+   - if NO - remove liquibase scripts and commons `xm-commons-migration-db`
+8. Check all `com.icthh.xm.commons` libraries in `build.gradle` and remove redundant. try to keep minimum set of commons.
+
 ## Project Structure
 
 `/src/*/java` structure follows default Java structure.
@@ -85,7 +97,18 @@ It supports criteria based filters and SpEL defined in permission.
 
 ### Service & DTO conventions
 
-[//]: # (TODO: discuss the approach: Service returns Entity, then Controller converts to DTO; or Service returns DTO. )
+By design Services should never expose DB Entities outside. All communication with controllers should be using DTOs.
+[Mapstruct](https://mapstruct.org/) is advised to use for mapping Entities to DTOs and vice versa.
+
+Typical Service & DTO pattern:
+```java
+    @Override
+    public ExampleEntityFirstDto save(ExampleEntityFirstDto exampleEntityFirstDto) {
+        ExampleEntityFirst exampleEntityFirst = exampleEntityFirstMapper.toEntity(exampleEntityFirstDto);
+        exampleEntityFirst = exampleEntityFirstRepository.save(exampleEntityFirst);
+        return exampleEntityFirstMapper.toDto(exampleEntityFirst);
+    }
+```
 
 ### CI/CD
 
