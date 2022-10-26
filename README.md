@@ -10,10 +10,10 @@ This is a "microservice" application intended to be part of a microservice archi
 3. Remove `.git/` folder before project modification.
 4. Add project to new git repository where it will evolve and live.
 5. Find and replace `mstemplate` term everywhere in the projects.
-6. Find end remove everything related to `ExampleEntityFirst` (after checking how it is proposed to use)
+6. Find end remove everything related to `ExampleEntityFirst` and `ExampleEntitySecond` (after checking how it is proposed to use)
 7. Do you need to use database:
    - if YES - correct liquibase scripts in `resources/config/liquibase`
-   - if NO - remove liquibase scripts and commons `xm-commons-migration-db`
+   - if NO - remove liquibase scripts, config `XmDatabaseConfiguration` and commons `xm-commons-migration-db`
 8. Check all `com.icthh.xm.commons` libraries in `build.gradle` and remove redundant. try to keep minimum set of commons.
 
 ## Project Structure
