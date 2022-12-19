@@ -95,6 +95,31 @@ There are conventions for privilege keys:
 NOTE: for filtering lists you need to setup `com.icthh.xm.commons.permission.annotation.FindWithPermission` annotation on Service layer.
 It supports criteria based filters and SpEL defined in permission.
 
+### Client binding
+HTTP client binding connected using `xm-commons-client-feign` which contains autoconfiguration for 
+feign clients
+
+To configure HTTP client automated authorization use next application configuration:
+```yaml
+spring:
+    security:
+        oauth2:
+            client:
+                provider:
+                    uaa:
+                        token-uri: http://localhost:9999/oauth/token
+                registration:
+                    uaa:
+                        authorization-grant-type: client_credentials
+                        client-id: internal
+                        client-secret: internal
+```
+Where `token-uri` is a URI to UAA service, `client-id` and `client-secret` are credentials to receive
+client token.
+
+After configuration properties are set, use `@AuthorizedFeignClient` annotation on your client feign
+interfaces to provide automatic authorization and simple declarative request configuration
+
 ### Service & DTO conventions
 
 By design Services should never expose DB Entities outside. All communication with controllers should be using DTOs.

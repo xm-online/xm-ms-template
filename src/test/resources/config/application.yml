@@ -56,6 +56,17 @@ spring:
       matching-strategy: ant_path_matcher
   thymeleaf:
     mode: HTML
+  security:
+    oauth2:
+      client:
+        provider:
+          uaa:
+            token-uri: http://localhost:9999/oauth/token
+        registration:
+          uaa:
+            authorization-grant-type: client_credentials
+            client-id: internal
+            client-secret: internal
 
 server:
   port: 10344
