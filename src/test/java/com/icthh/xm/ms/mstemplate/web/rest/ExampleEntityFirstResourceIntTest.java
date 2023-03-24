@@ -16,16 +16,14 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import lombok.SneakyThrows;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
@@ -125,7 +123,7 @@ public class ExampleEntityFirstResourceIntTest extends AbstractSpringBootTest {
         return exampleEntityFirst;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         exampleEntityFirst = createEntity(em);
     }
@@ -136,7 +134,7 @@ public class ExampleEntityFirstResourceIntTest extends AbstractSpringBootTest {
     }
 
     @SneakyThrows
-    @Before
+    @BeforeEach
     public void setup() {
         this.restExampleEntityFirstMockMvc = MockMvcBuilders.standaloneSetup(exampleEntityFirstResource)
                 .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -149,7 +147,7 @@ public class ExampleEntityFirstResourceIntTest extends AbstractSpringBootTest {
         });
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         lepManager.endThreadContext();
         tenantContextHolder.getPrivilegedContext().destroyCurrentContext();
