@@ -1,7 +1,7 @@
 package com.icthh.xm.ms.mstemplate;
 
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
 
-@Category(AbstractUnitTest.class)
+@Tag("com.icthh.xm.ms.mstemplate.AbstractUnitTest")
 public abstract class AbstractUnitTest {
 }

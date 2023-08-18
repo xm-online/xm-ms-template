@@ -6,7 +6,6 @@ import com.icthh.xm.commons.tenant.TenantContextHolder;
 import com.icthh.xm.commons.tenant.TenantContextUtils;
 import com.icthh.xm.lep.api.LepManager;
 import com.icthh.xm.ms.mstemplate.AbstractSpringBootTest;
-import com.icthh.xm.ms.mstemplate.domain.ExampleEntityFirst;
 import com.icthh.xm.ms.mstemplate.domain.ExampleEntitySecond;
 import com.icthh.xm.ms.mstemplate.repository.ExampleEntitySecondRepository;
 import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntitySecondDto;
@@ -16,9 +15,9 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import lombok.SneakyThrows;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
@@ -114,7 +113,7 @@ public class ExampleEntitySecondResourceIntTest extends AbstractSpringBootTest {
         return exampleEntitySecond;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         exampleEntitySecond = createEntity(em);
     }
@@ -125,7 +124,7 @@ public class ExampleEntitySecondResourceIntTest extends AbstractSpringBootTest {
     }
 
     @SneakyThrows
-    @Before
+    @BeforeEach
     public void setup() {
         this.restExampleEntitySecondMockMvc = MockMvcBuilders.standaloneSetup(exampleEntitySecondResource)
                 .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -138,7 +137,7 @@ public class ExampleEntitySecondResourceIntTest extends AbstractSpringBootTest {
         });
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         lepManager.endThreadContext();
         tenantContextHolder.getPrivilegedContext().destroyCurrentContext();

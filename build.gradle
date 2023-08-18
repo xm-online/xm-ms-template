@@ -115,8 +115,8 @@ test {
 }
 
 task runCategorizedTests(type: Test) {
-    useJUnit {
-        includeCategories(testCategories)
+    useJUnitPlatform {
+        includeTags(testCategories)
     }
     testLogging testLoggingConf
 }
