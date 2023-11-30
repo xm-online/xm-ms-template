@@ -1,12 +1,10 @@
 package com.icthh.xm.ms.mstemplate;
 
-import static com.icthh.xm.commons.lep.XmLepConstants.THREAD_CONTEXT_KEY_AUTH_CONTEXT;
-import static com.icthh.xm.commons.lep.XmLepConstants.THREAD_CONTEXT_KEY_TENANT_CONTEXT;
 import com.icthh.xm.commons.lep.XmLepScriptConfigServerResourceLoader;
+import com.icthh.xm.commons.lep.api.LepManagementService;
 import com.icthh.xm.commons.security.XmAuthenticationContextHolder;
 import com.icthh.xm.commons.tenant.TenantContextHolder;
 import com.icthh.xm.commons.tenant.TenantContextUtils;
-import com.icthh.xm.lep.api.LepManager;
 import com.icthh.xm.ms.mstemplate.config.TestLepConfiguration.TestLepService;
 import com.icthh.xm.ms.mstemplate.config.lep.LepContext;
 import lombok.SneakyThrows;
@@ -35,7 +33,7 @@ public class LepContextCastIntTest extends AbstractSpringBootTest {
     private XmAuthenticationContextHolder authContextHolder;
 
     @Autowired
-    private LepManager lepManager;
+    private LepManagementService lepManager;
 
     @Autowired
     private XmLepScriptConfigServerResourceLoader leps;
@@ -48,10 +46,7 @@ public class LepContextCastIntTest extends AbstractSpringBootTest {
     public void setup() {
         TenantContextUtils.setTenant(tenantContextHolder, "TEST_TENANT");
 
-        lepManager.beginThreadContext(ctx -> {
-            ctx.setValue(THREAD_CONTEXT_KEY_TENANT_CONTEXT, tenantContextHolder.getContext());
-            ctx.setValue(THREAD_CONTEXT_KEY_AUTH_CONTEXT, authContextHolder.getContext());
-        });
+        lepManager.beginThreadContext();
     }
 
     @AfterEach

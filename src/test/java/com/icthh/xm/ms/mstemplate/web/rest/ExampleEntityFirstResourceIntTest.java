@@ -1,20 +1,16 @@
 package com.icthh.xm.ms.mstemplate.web.rest;
 
 import com.icthh.xm.commons.i18n.error.web.ExceptionTranslator;
+import com.icthh.xm.commons.lep.api.LepManagementService;
 import com.icthh.xm.commons.security.XmAuthenticationContextHolder;
 import com.icthh.xm.commons.tenant.TenantContextHolder;
 import com.icthh.xm.commons.tenant.TenantContextUtils;
-import com.icthh.xm.lep.api.LepManager;
 import com.icthh.xm.ms.mstemplate.AbstractSpringBootTest;
 import com.icthh.xm.ms.mstemplate.domain.ExampleEntityFirst;
 import com.icthh.xm.ms.mstemplate.domain.ExampleEntitySecond;
 import com.icthh.xm.ms.mstemplate.repository.ExampleEntityFirstRepository;
 import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntityFirstDto;
 import com.icthh.xm.ms.mstemplate.service.mapper.ExampleEntityFirstMapper;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,8 +27,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.icthh.xm.commons.lep.XmLepConstants.THREAD_CONTEXT_KEY_AUTH_CONTEXT;
-import static com.icthh.xm.commons.lep.XmLepConstants.THREAD_CONTEXT_KEY_TENANT_CONTEXT;
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -78,7 +77,7 @@ public class ExampleEntityFirstResourceIntTest extends AbstractSpringBootTest {
     private XmAuthenticationContextHolder authContextHolder;
 
     @Autowired
-    private LepManager lepManager;
+    private LepManagementService lepManagementService;
 
     @Autowired
     private ExampleEntityFirstResource exampleEntityFirstResource;
@@ -141,15 +140,12 @@ public class ExampleEntityFirstResourceIntTest extends AbstractSpringBootTest {
                 .setControllerAdvice(exceptionTranslator)
                 .setMessageConverters(jacksonMessageConverter).build();
 
-        lepManager.beginThreadContext(ctx -> {
-            ctx.setValue(THREAD_CONTEXT_KEY_TENANT_CONTEXT, tenantContextHolder.getContext());
-            ctx.setValue(THREAD_CONTEXT_KEY_AUTH_CONTEXT, authContextHolder.getContext());
-        });
+        lepManagementService.beginThreadContext();
     }
 
     @AfterEach
     public void tearDown() {
-        lepManager.endThreadContext();
+        lepManagementService.endThreadContext();
         tenantContextHolder.getPrivilegedContext().destroyCurrentContext();
     }
 

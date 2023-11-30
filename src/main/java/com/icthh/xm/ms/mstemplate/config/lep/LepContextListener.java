@@ -1,22 +1,17 @@
 package com.icthh.xm.ms.mstemplate.config.lep;
 
-import com.icthh.xm.commons.lep.commons.CommonsExecutor;
-import com.icthh.xm.commons.lep.commons.CommonsService;
-import com.icthh.xm.commons.lep.spring.SpringLepProcessingApplicationListener;
-import com.icthh.xm.lep.api.ScopedContext;
+import com.icthh.xm.commons.lep.api.BaseLepContext;
+import com.icthh.xm.commons.lep.api.LepContextFactory;
+import com.icthh.xm.lep.api.LepMethod;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class LepContextListener extends SpringLepProcessingApplicationListener {
-
-    private static final String COMMONS = "commons";
-
-    private final CommonsService commonsService;
+public class LepContextListener implements LepContextFactory {
 
     @Override
-    protected void bindExecutionContext(ScopedContext executionContext) {
-        executionContext.setValue(COMMONS, new CommonsExecutor(commonsService));
+    public BaseLepContext buildLepContext(LepMethod lepMethod) {
+        return new LepContext();
     }
 }

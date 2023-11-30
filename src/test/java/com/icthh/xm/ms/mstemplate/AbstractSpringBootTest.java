@@ -1,6 +1,5 @@
 package com.icthh.xm.ms.mstemplate;
 
-import com.icthh.xm.commons.lep.config.LepConfiguration;
 import com.icthh.xm.ms.mstemplate.config.IntegrationTestConfiguration;
 import com.icthh.xm.ms.mstemplate.config.TestLepConfiguration;
 import org.junit.jupiter.api.Tag;
@@ -9,10 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest(classes = {
-        MstemplateApp.class,
-        LepConfiguration.class,
-        IntegrationTestConfiguration.class,
         TestLepConfiguration.class,
+        MstemplateApp.class,
+        IntegrationTestConfiguration.class
 })
 @Tag("com.icthh.xm.ms.mstemplate.AbstractSpringBootTest")
 @ExtendWith(SpringExtension.class)
