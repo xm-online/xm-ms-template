@@ -325,3 +325,19 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [openapi-generator]: https://openapi-generator.tech
 [swagger-editor]: https://editor.swagger.io
 [doing api-first development]: https://www.jhipster.tech/doing-api-first-development/
+
+## Migrate existing ms-template based microservices to new Lep Engine
+
+1 - Add configuration
+```java
+@Configuration
+public class LepConfiguration extends GroovyLepEngineConfiguration {
+    public LepConfiguration(@Value("${spring.application.name}") String appName) {
+        super(appName);
+    }
+}
+```
+2 - Make migration by 
+[migration guide](https://github.com/xm-online/xm-commons/blob/master/xm-commons-lep/MIGRATION_GUIDE.MD)
+
+
