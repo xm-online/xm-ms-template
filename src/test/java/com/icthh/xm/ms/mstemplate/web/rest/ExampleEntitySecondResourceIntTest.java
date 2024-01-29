@@ -1,5 +1,17 @@
 package com.icthh.xm.ms.mstemplate.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.icthh.xm.commons.i18n.error.web.ExceptionTranslator;
 import com.icthh.xm.commons.lep.api.LepManagementService;
 import com.icthh.xm.commons.security.XmAuthenticationContextHolder;
@@ -10,6 +22,10 @@ import com.icthh.xm.ms.mstemplate.domain.ExampleEntitySecond;
 import com.icthh.xm.ms.mstemplate.repository.ExampleEntitySecondRepository;
 import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntitySecondDto;
 import com.icthh.xm.ms.mstemplate.service.mapper.ExampleEntitySecondMapper;
+import jakarta.persistence.EntityManager;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,27 +40,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 /**
  * Integration tests for the {@link ExampleEntitySecondResource} REST controller.
  */
-@WithMockUser(authorities = {"SUPER-ADMIN"})
+@WithMockUser(authorities = { "SUPER-ADMIN" })
 public class ExampleEntitySecondResourceIntTest extends AbstractSpringBootTest {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -125,10 +124,13 @@ public class ExampleEntitySecondResourceIntTest extends AbstractSpringBootTest {
     @SneakyThrows
     @BeforeEach
     public void setup() {
-        this.restExampleEntitySecondMockMvc = MockMvcBuilders.standaloneSetup(exampleEntitySecondResource)
+        this.restExampleEntitySecondMockMvc =
+            MockMvcBuilders
+                .standaloneSetup(exampleEntitySecondResource)
                 .setCustomArgumentResolvers(pageableArgumentResolver)
                 .setControllerAdvice(exceptionTranslator)
-                .setMessageConverters(jacksonMessageConverter).build();
+                .setMessageConverters(jacksonMessageConverter)
+                .build();
 
         lepManagementService.beginThreadContext();
     }
