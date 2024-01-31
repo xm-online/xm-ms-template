@@ -1,29 +1,40 @@
-dependencies {
-    developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
-    implementation "com.h2database:h2"
+
+configurations {
+  all {
+    resolutionStrategy {
+      // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
+      force "org.hibernate.orm:hibernate-core:${hibernateVersion}"
+    }
+  }
 }
 
-def profiles = "dev"
-if (project.hasProperty("no-liquibase")) {
-    profiles += ",no-liquibase"
+dependencies {
+    developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+    implementation "org.postgresql:postgresql"
+    testImplementation "org.testcontainers:postgresql"
+}
+
+ext {
+    springProfiles = "dev"
+    if (project.hasProperty("no-liquibase")) {
+        profiles += ",no-liquibase"
+    }
 }
 
 springBoot {
     buildInfo {
-        properties {
-            time = null
-        }
+        excludes = ['time']
     }
 }
 
 bootRun {
-    args = []
+    args = ["--spring.profiles.active=${springProfiles}"]
 }
 
 
 processResources {
     inputs.property('version', version)
-    inputs.property('springProfiles', profiles)
+    inputs.property('springProfiles', springProfiles)
     filesMatching("**/application.yml") {
         filter {
             it.replace("#project.version#", version)
@@ -31,8 +42,26 @@ processResources {
     }
     filesMatching("**/bootstrap.yml") {
         filter {
-            it.replace("#spring.profiles.active#", profiles)
+            it.replace("#spring.profiles.active#", springProfiles)
         }
     }
 }
+
+task integrationTest(type: Test) {
+    maxHeapSize = "1G"
+    useJUnitPlatform()
+    description = "Execute integration tests."
+    group = "verification"
+    include "**/*IT*", "**/*IntTest*"
+    testLogging {
+        events 'FAILED', 'SKIPPED'
+    }
+    systemProperty('spring.profiles.active', 'testdev')
+    systemProperty('java.security.egd', 'file:/dev/./urandom')
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
+    reports.html.required = false
+}
+integrationTest.dependsOn test
 

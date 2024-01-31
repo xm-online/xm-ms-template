@@ -8,8 +8,14 @@ import com.icthh.xm.ms.mstemplate.service.criteria.ExampleEntityFirstCriteria;
 import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntityFirstDto;
 import com.icthh.xm.ms.mstemplate.web.rest.errors.BadRequestAlertException;
 import com.icthh.xm.ms.mstemplate.web.rest.utils.ResponseContentUtils;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,12 +35,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * REST controller for managing {@link com.icthh.xm.ms.mstemplate.domain.ExampleEntityFirst}.
@@ -162,7 +162,7 @@ public class ExampleEntityFirstResource {
     @GetMapping("/example-entity-firsts")
     public ResponseEntity<List<ExampleEntityFirstDto>> getAllExampleEntityFirsts(
         ExampleEntityFirstCriteria criteria,
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+        @ParameterObject Pageable pageable
     ) {
         Page<ExampleEntityFirstDto> page = exampleEntityFirstQueryService.findByCriteria(criteria, pageable, null);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

@@ -11,10 +11,20 @@ spring:
   application:
     name: mstemplate
   cloud:
+    consul:
+      discovery:
+        enabled: false
+        instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+      config:
+        enabled: false
+      enabled: false
     stream:
       kafka:
         binder:
           autoCreateTopics: false
+  # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
+  liquibase:
+    contexts: test
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:h2:mem:mstemplate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -26,34 +36,23 @@ spring:
   jackson:
     serialization:
       write-durations-as-timestamps: false
-  jpa:
-    database-platform: io.github.jhipster.domain.util.FixedH2Dialect
-    database: H2
-    open-in-view: false
-    show-sql: true
-    hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-    properties:
-      hibernate.model.generator_name_as_sequence_name: false # see org.hibernate.cfg.AvailableSettings.PREFER_GENERATOR_NAME_AS_DEFAULT_SEQUENCE_NAME
-      hibernate.id.new_generator_mappings: true
-      hibernate.connection.provider_disables_autocommit: true
-      hibernate.cache.use_second_level_cache: false
-      hibernate.cache.use_query_cache: false
-      hibernate.generate_statistics: true
-      hibernate.hbm2ddl.auto: validate
-      hibernate.jdbc.time_zone: UTC
-  liquibase:
-    contexts: test
   mail:
     host: localhost
   main:
     allow-bean-definition-overriding: true
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
+  messages:
+    basename: i18n/messages
+  task:
+    execution:
+      thread-name-prefix: xm-ms-template-task-
+      pool:
+        core-size: 1
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      thread-name-prefix: xm-ms-template-scheduling-
+      pool:
+        size: 20
   thymeleaf:
     mode: HTML
   security:
@@ -81,7 +80,13 @@ jhipster:
     title: Mstemplate API
     description: Mstemplate API documentation
   security:
-    content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com data:"
+    authentication:
+      jwt:
+        # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+        base64-secret: MTk2MzFmZjU1MWNhMTVhNjg4Yjk5ZmFlOGFhNWQ4MGU0MDc2MTg5NTA4MGE1ZTlmMTgxZWEwYTdjM2JjNjQ1MjkyNTBmMTI0MzE5NzM3M2NhNzNhZTQ4ZTZkN2UwMzNlYzRjMjg4ZTEzN2EwZDE0ODI2NTRkYmI2ZTE5MzMyNTg=
+        # Token is valid 24 hours
+        token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 86400
 
 xm-config:
   enabled: false
@@ -92,5 +97,3 @@ application:
   specification-path-pattern: /config/tenants/{tenantName}/${spring.application.name}/example-of-microservice-spec.yml
   scheduler-enabled: false
   kafka-enabled: false
-
-

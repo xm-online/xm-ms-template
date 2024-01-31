@@ -10,6 +10,7 @@ import com.icthh.xm.ms.mstemplate.repository.ExampleEntitySecondRepository;
 import com.icthh.xm.ms.mstemplate.service.criteria.ExampleEntitySecondCriteria;
 import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntitySecondDto;
 import com.icthh.xm.ms.mstemplate.service.mapper.ExampleEntitySecondMapper;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,9 +19,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
-
-import javax.persistence.criteria.JoinType;
-import java.util.List;
 
 /**
  * Service for executing complex queries for {@link ExampleEntitySecond} entities in the database.
@@ -48,8 +46,9 @@ public class ExampleEntitySecondQueryService extends QueryService<ExampleEntityS
     @FindWithPermission("EXAMPLE_ENTITY_SECOND.GET_LIST")
     @PrivilegeDescription("Privilege to get all example entity second which matches the criteria from the database")
     public Page<ExampleEntitySecondDto> findByCriteria(ExampleEntitySecondCriteria criteria, Pageable page, String privilegeKey) {
-        return permittedRepository.findWithPermission(ExampleEntitySecond.class, criteria, page, privilegeKey)
-                .map(exampleEntitySecondMapper::toDto);
+        return permittedRepository
+            .findWithPermission(ExampleEntitySecond.class, criteria, page, privilegeKey)
+            .map(exampleEntitySecondMapper::toDto);
     }
 
     /**
@@ -63,5 +62,4 @@ public class ExampleEntitySecondQueryService extends QueryService<ExampleEntityS
     public long countByCriteria(ExampleEntitySecondCriteria criteria, String privilegeKey) {
         return permittedRepository.countByCondition(ExampleEntitySecond.class, criteria, privilegeKey);
     }
-
 }

@@ -15,6 +15,7 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -161,7 +162,7 @@ public class ExampleEntitySecondResource {
     @GetMapping("/example-entity-seconds")
     public ResponseEntity<List<ExampleEntitySecondDto>> getAllExampleEntitySeconds(
         ExampleEntitySecondCriteria criteria,
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+        @ParameterObject Pageable pageable
     ) {
         Page<ExampleEntitySecondDto> page = exampleEntitySecondQueryService.findByCriteria(criteria, pageable, null);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
