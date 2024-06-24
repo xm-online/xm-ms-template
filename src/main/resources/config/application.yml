@@ -1,4 +1,10 @@
 management:
+  tracing:
+    propagation:
+      type: b3
+    enabled: true
+    sampling:
+      probability: 1.0 # report 100% of traces
   endpoints:
     web:
       base-path: /management
@@ -15,6 +21,7 @@ management:
           - prometheus
           - threaddump
           - caches
+          - metrics
           - liquibase
   endpoint:
     health:
@@ -72,15 +79,6 @@ spring:
     allow-bean-definition-overriding: true
   cloud:
     # if you need to start service without consul, use next configuration and disable consul by spring.cloud.consul.enabled
-    #    discovery:
-    #      client:
-    #        simple:
-    #          instances:
-    #            config:
-    #              - instanceId: config
-    #                serviceId: config
-    #                host: localhost
-    #                port: 8084
     consul:
       enabled: true
       discovery:
@@ -90,14 +88,38 @@ spring:
       config:
         watch:
           enabled: false
-  profiles:
-    active: #spring.profiles.active#
+    #    compatibility-verifier:
+    #      enabled: false
+    stream:
+      kafka:
+        binder:
+          brokers: ${spring.kafka.bootstrap-servers}
+          autoCreateTopics: false
+  kafka:
+    consumer:
+      group-id: mstemplate
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      concurrency: 16
+      observation-enabled: true
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        max.block.ms: 5000
+    bootstrap-servers: localhost:9092
+    template:
+      observation-enabled: true
+  config:
+    activate:
+      on-profile: #spring.profiles.active#
     group:
       dev:
         - dev
         - api-docs
   jmx:
-    enabled: false # TODO false ot true ?
+    enabled: true # TODO false ot true ?
   data:
     jpa:
       repositories:

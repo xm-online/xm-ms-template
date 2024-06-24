@@ -1,0 +1,127 @@
+logging:
+  level:
+    ROOT: INFO
+    tech.jhipster: INFO
+    com.icthh.xm.ms.dictionary: INFO
+    org.springframework.cloud.client: INFO
+    com.icthh.xm.commons.logging: TRACE
+    com.icthh.xm.commons.topic: TRACE
+    com.icthh.xm.commons.timeline: TRACE
+
+management:
+  #  endpoints:
+  #    web:
+  #      exposure:
+  #        include: prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+#  tracing:
+#    propagation:
+#      type: b3
+#    enabled: true
+#    sampling:
+#      probability: 1.0 # report 100% of traces
+
+spring:
+  liquibase:
+    enabled: false
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:h2:mem:mstemplate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: mstemplate
+    password:
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  h2:
+    console:
+      # disable spring boot built-in h2-console since we start it manually with correct configuration
+      enabled: false
+  jpa:
+    database: H2 # used by xm-commons-migration-db -> DatabaseTxIdResolver constructor -> jpaVendor
+    database-platform: org.hibernate.dialect.H2Dialect
+  #    database-platform: tech.jhipster.domain.util.FixedH2Dialect
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+  cloud:
+    # if you need to start service without consul, use next configuration and disable consul by spring.cloud.consul.enabled
+    #    discovery:
+    #      client:
+    #        simple:
+    #          instances:
+    #            config:
+    #              - instanceId: config
+    #                serviceId: config
+    #                host: localhost
+    #                port: 8084
+    consul:
+      discovery:
+        prefer-ip-address: true
+      host: localhost
+      port: 8500
+  thymeleaf:
+    cache: true
+
+server:
+  port: 8081
+  shutdown: graceful # see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-graceful-shutdown
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json,image/svg+xml
+    min-response-size: 1024
+
+# ===================================================================
+# JHipster specific properties
+#
+# Full reference is available at: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+jhipster:
+  logging:
+    use-json-format: false # By default, logs are not in Json format
+    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+      enabled: false
+      host: localhost
+      port: 5000
+  api-docs:
+    servers:
+      - url: ${application.service-public-url}
+        description: Base url
+    title: Template Service
+    version: ${build.version}
+    description: Сервіс шаблон
+
+xm-config:
+  enabled: true
+  #  xmConfigUrl: http://config:8084
+  configMode: FILE
+  configDirPath: /home/vosiievska/work/dila/xm-ms-config-repository # this one
+  kafka-config-topic: config_topic
+
+old-elastic-index:
+  order-calculation-response: 'diagnosticordercalculation-20230928175000'
+  order-request: 'diagnosticorderrequestdto-55320592953079'
+  cross-selling-response: 'crosssellingresponsedto-56059369883385'
+
+application:
+  timelines-enabled: true
+  scheduler-enabled: false
+  kafkaMetric:
+    enabled: true
+  #  service-public-url: https://localhost:8081/template
+
+  retry:
+    max-attempts: 3
+    delay: 1000 #in milliseconds
+    multiplier: 2
