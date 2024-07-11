@@ -15,6 +15,7 @@ management:
           - prometheus
           - threaddump
           - caches
+          - metrics
           - liquibase
   endpoint:
     health:
@@ -97,7 +98,7 @@ spring:
         - dev
         - api-docs
   jmx:
-    enabled: false # TODO false ot true ?
+    enabled: true
   data:
     jpa:
       repositories:
