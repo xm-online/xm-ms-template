@@ -86,8 +86,7 @@ out/
 ######################
 .gradle/
 /build/
-/buildSrc/.gradle/
-/buildSrc/build/
+/buildSrc/
 
 ######################
 # Package Files
@@ -124,6 +123,7 @@ Desktop.ini
 ######################
 /bin/
 /deploy/
+/.devcontainer
 
 ######################
 # Logs
