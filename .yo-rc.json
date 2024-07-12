@@ -18,7 +18,7 @@
     "entities": [],
     "feignClient": false,
     "gradleEnterpriseHost": null,
-    "jhipsterVersion": "8.1.0",
+    "jhipsterVersion": "8.6.0",
     "jwtSecretKey": "MTk2MzFmZjU1MWNhMTVhNjg4Yjk5ZmFlOGFhNWQ4MGU0MDc2MTg5NTA4MGE1ZTlmMTgxZWEwYTdjM2JjNjQ1MjkyNTBmMTI0MzE5NzM3M2NhNzNhZTQ4ZTZkN2UwMzNlYzRjMjg4ZTEzN2EwZDE0ODI2NTRkYmI2ZTE5MzMyNTg=",
     "messageBroker": false,
     "microfrontend": null,
@@ -32,6 +32,7 @@
     "serverSideOptions": [],
     "serviceDiscoveryType": "consul",
     "skipClient": true,
+    "skipUserManagement": true,
     "testFrameworks": [],
     "websocket": false,
     "withAdminUi": null

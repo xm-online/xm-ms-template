@@ -297,7 +297,7 @@ task cleanResources(type: Delete) {
 }
 
 wrapper {
-    gradleVersion = "8.5"
+    gradleVersion = "8.8"
 }
 
 compileJava {
