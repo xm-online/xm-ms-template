@@ -124,13 +124,10 @@ public class ExampleEntitySecondResourceIntTest extends AbstractSpringBootTest {
     @SneakyThrows
     @BeforeEach
     public void setup() {
-        this.restExampleEntitySecondMockMvc =
-            MockMvcBuilders
-                .standaloneSetup(exampleEntitySecondResource)
+        this.restExampleEntitySecondMockMvc = MockMvcBuilders.standaloneSetup(exampleEntitySecondResource)
                 .setCustomArgumentResolvers(pageableArgumentResolver)
                 .setControllerAdvice(exceptionTranslator)
-                .setMessageConverters(jacksonMessageConverter)
-                .build();
+                .setMessageConverters(jacksonMessageConverter).build();
 
         lepManagementService.beginThreadContext();
     }

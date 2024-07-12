@@ -133,13 +133,10 @@ public class ExampleEntityFirstResourceIntTest extends AbstractSpringBootTest {
     @SneakyThrows
     @BeforeEach
     public void setup() {
-        this.restExampleEntityFirstMockMvc =
-            MockMvcBuilders
-                .standaloneSetup(exampleEntityFirstResource)
+        this.restExampleEntityFirstMockMvc = MockMvcBuilders.standaloneSetup(exampleEntityFirstResource)
                 .setCustomArgumentResolvers(pageableArgumentResolver)
                 .setControllerAdvice(exceptionTranslator)
-                .setMessageConverters(jacksonMessageConverter)
-                .build();
+                .setMessageConverters(jacksonMessageConverter).build();
 
         lepManagementService.beginThreadContext();
     }
