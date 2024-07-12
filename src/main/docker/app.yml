@@ -1,7 +1,6 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: mstemplate
 services:
-  app:
+  mstemplate-app:
     image: mstemplate
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
