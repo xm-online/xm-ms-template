@@ -11,20 +11,18 @@ spring:
   application:
     name: mstemplate
   cloud:
-    consul:
-      discovery:
-        enabled: false
-        instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
-      config:
-        enabled: false
-      enabled: false
+#    consul:
+#      discovery:
+#        enabled: false
+#        instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+#      config:
+#        enabled: false
+#      enabled: false
     stream:
       kafka:
         binder:
           autoCreateTopics: false
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
-  liquibase:
-    contexts: test
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:h2:mem:mstemplate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -55,25 +53,28 @@ spring:
       hibernate.generate_statistics: true
       hibernate.hbm2ddl.auto: validate
       hibernate.jdbc.time_zone: UTC
-    liquibase:
-      contexts: test
+  liquibase:
+    contexts: test
   mail:
     host: localhost
   main:
     allow-bean-definition-overriding: true
-  messages:
-    basename: i18n/messages
-  task:
-    execution:
-      thread-name-prefix: xm-ms-template-task-
-      pool:
-        core-size: 1
-        max-size: 50
-        queue-capacity: 10000
-    scheduling:
-      thread-name-prefix: xm-ms-template-scheduling-
-      pool:
-        size: 20
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+#  messages:
+#    basename: i18n/messages
+#  task:
+#    execution:
+#      thread-name-prefix: xm-ms-template-task-
+#      pool:
+#        core-size: 1
+#        max-size: 50
+#        queue-capacity: 10000
+#    scheduling:
+#      thread-name-prefix: xm-ms-template-scheduling-
+#      pool:
+#        size: 20
   thymeleaf:
     mode: HTML
   security:

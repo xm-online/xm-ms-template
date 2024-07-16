@@ -5,14 +5,6 @@ logging:
     org.hibernate.SQL: DEBUG
     com.icthh.xm.ms.mstemplate: DEBUG
 
-management:
-  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
-    tracing:
-      endpoint: http://localhost:9411/api/v2/spans
-  tracing:
-    sampling:
-      probability: 1.0 # report 100% of traces
-
 spring:
   devtools:
     restart:
@@ -60,6 +52,11 @@ spring:
 
 server:
   port: 8081
+  shutdown: graceful # see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-graceful-shutdown
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json,image/svg+xml
+    min-response-size: 1024
 
 # ===================================================================
 # JHipster specific properties
