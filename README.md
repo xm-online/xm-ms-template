@@ -153,6 +153,32 @@ In the project root, JHipster generates configuration files for tools like git, 
 - `.jhipster/*.json` - JHipster entity configuration files
 - `/src/main/docker` - Docker configurations for the application and services that the application depends on
 
+### CI/CD
+
+[//]: # (TODO: define travice/gitlab file)
+
+### Actuator
+
+#### Healthcheck
+
+[//]: # (TODO: need to find helathckeck for Kafka)
+
+#### Metrics
+
+Metrics should be collected in Prometheus format using Micrometer.
+You can access metric endpoint by `http://localhost:8081/management/prometheus`
+
+#### Log management
+Endpoint for logs management `http://localhost:8081/management/logs`
+
+#### Introspections
+
+Endpoint for thread dump: `http://localhost:8081/management/threaddump`
+
+### Error handling
+
+Commons `xm-commons-i18n` contains `com.icthh.xm.commons.i18n.error.web.ExceptionTranslator` class which is responsible for exception translation.
+
 ## Development
 
 To start your application in the dev profile, run:
