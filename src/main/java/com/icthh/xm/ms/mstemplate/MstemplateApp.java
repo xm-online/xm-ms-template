@@ -5,7 +5,6 @@ import com.icthh.xm.commons.tenant.TenantContextHolder;
 import com.icthh.xm.commons.tenant.TenantContextUtils;
 import com.icthh.xm.commons.tenant.TenantKey;
 import com.icthh.xm.ms.mstemplate.config.ApplicationProperties;
-import com.icthh.xm.ms.mstemplate.config.CRLFLogConverter;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import java.net.InetAddress;
@@ -14,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.TimeZone;
+
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -122,17 +122,13 @@ public class MstemplateApp {
         } catch (UnknownHostException e) {
             log.warn("The host name could not be determined, using `localhost` as fallback");
         }
-        log.info(
-            CRLFLogConverter.CRLF_SAFE_MARKER,
-            """
-
-            ----------------------------------------------------------
-            \tApplication '{}' is running! Access URLs:
-            \tLocal: \t\t{}://localhost:{}{}
-            \tExternal: \t{}://{}:{}{}
-            \tProfile(s): \t{}
-            ----------------------------------------------------------""",
-            applicationName,
+        log.info("\n----------------------------------------------------------\n\t"
+                + "Application '{}' is running! Access URLs:\n\t"
+                + "Local: \t\t{}://localhost:{}{}\n\t"
+                + "External: \t{}://{}:{}{}\n\t"
+                + "Timezone: \t{}\n\t"
+                + "Profile(s): \t{}\n----------------------------------------------------------",
+            env.getProperty("spring.application.name"),
             protocol,
             serverPort,
             contextPath,
@@ -140,18 +136,7 @@ public class MstemplateApp {
             hostAddress,
             serverPort,
             contextPath,
-            env.getActiveProfiles().length == 0 ? env.getDefaultProfiles() : env.getActiveProfiles()
-        );
-
-        String configServerStatus = env.getProperty("configserver.status");
-        if (configServerStatus == null) {
-            configServerStatus = "Not found or not setup for this application";
-        }
-        log.info(
-            CRLFLogConverter.CRLF_SAFE_MARKER,
-            "\n----------------------------------------------------------\n\t" +
-            "Config Server: \t{}\n----------------------------------------------------------",
-            configServerStatus
-        );
+            TimeZone.getDefault().toZoneId().getId(),
+            env.getActiveProfiles());
     }
 }

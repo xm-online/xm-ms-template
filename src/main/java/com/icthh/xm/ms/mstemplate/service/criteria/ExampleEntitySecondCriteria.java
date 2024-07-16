@@ -1,12 +1,13 @@
 package com.icthh.xm.ms.mstemplate.service.criteria;
 
-import java.io.Serializable;
-import java.util.Objects;
 import org.springdoc.core.annotations.ParameterObject;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Criteria class for the {@link com.icthh.xm.ms.mstemplate.domain.ExampleEntitySecond} entity. This class is used
@@ -77,7 +78,10 @@ public class ExampleEntitySecondCriteria implements Serializable, Criteria {
             return false;
         }
         final ExampleEntitySecondCriteria that = (ExampleEntitySecondCriteria) o;
-        return (Objects.equals(id, that.id) && Objects.equals(name, that.name));
+        return (
+            Objects.equals(id, that.id) &&
+            Objects.equals(name, that.name)
+        );
     }
 
     @Override

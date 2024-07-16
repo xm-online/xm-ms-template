@@ -10,7 +10,6 @@ import com.icthh.xm.ms.mstemplate.repository.ExampleEntityFirstRepository;
 import com.icthh.xm.ms.mstemplate.service.criteria.ExampleEntityFirstCriteria;
 import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntityFirstDto;
 import com.icthh.xm.ms.mstemplate.service.mapper.ExampleEntityFirstMapper;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,6 +18,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
+
+import java.util.List;
 
 /**
  * Service for executing complex queries for {@link ExampleEntityFirst} entities in the database.
@@ -46,8 +47,7 @@ public class ExampleEntityFirstQueryService extends QueryService<ExampleEntityFi
     @FindWithPermission("EXAMPLE_ENTITY_FIRST.GET_LIST")
     @PrivilegeDescription("Privilege to get all example entity first which matches the criteria from the database")
     public Page<ExampleEntityFirstDto> findByCriteria(ExampleEntityFirstCriteria criteria, Pageable page, String privilegeKey) {
-        return permittedRepository
-            .findWithPermission(ExampleEntityFirst.class, criteria, page, privilegeKey)
+        return permittedRepository.findWithPermission(ExampleEntityFirst.class, criteria, page, privilegeKey)
             .map(exampleEntityFirstMapper::toDto);
     }
 

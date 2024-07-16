@@ -55,23 +55,6 @@ if (project.hasProperty("war")) {
     apply from: "gradle/war.gradle"
 }
 
-if (project.hasProperty("gae")) {
-    apply plugin: 'maven'
-    apply plugin: 'org.springframework.boot.experimental.thin-launcher'
-    apply plugin: 'io.spring.dependency-management'
-
-    dependencyManagement {
-        imports {
-            mavenBom "tech.jhipster:jhipster-dependencies:${jhipsterDependenciesVersion}"
-        }
-    }
-    appengineStage.dependsOn thinResolve
-}
-
-if (project.hasProperty("zipkin")) {
-    apply from: "gradle/zipkin.gradle"
-}
-
 sourceSets {
     test {
         groovy {
@@ -82,12 +65,6 @@ sourceSets {
         groovy {
             srcDirs += ['src/main/lep']
         }
-    }
-}
-
-idea {
-    module {
-        excludeDirs += files("node_modules")
     }
 }
 
@@ -252,6 +229,14 @@ dependencies {
     implementation 'io.micrometer:micrometer-observation'
     implementation "io.micrometer:micrometer-tracing-bridge-brave"
     implementation "org.postgresql:postgresql"
+    implementation 'com.oracle.database.jdbc:ojdbc11:23.4.0.24.05'
+
+    // >>> JSONB
+    implementation 'com.vladmihalcea:hibernate-types-60:2.21.1'
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.8.1'
+    implementation 'org.hibernate.orm:hibernate-community-dialects:6.5.2.Final'
+    // <<<
+
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernateVersion}"
@@ -276,7 +261,6 @@ dependencies {
     implementation "com.icthh.xm.commons:xm-commons-topic:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-logging-configurable:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-logging-trace:${xm_commons_version}"
-//    implementation "com.icthh.xm.commons:xm-commons-client-feign:${xm_commons_version}"
 
     testCompileOnly "org.projectlombok:lombok:${lombok_version}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombok_version}"

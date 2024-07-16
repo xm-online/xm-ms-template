@@ -24,15 +24,15 @@ spring:
       enabled: false
   cloud:
     # if you need to start service without consul, use next configuration and disable consul by spring.cloud.consul.enabled
-    #    discovery:
-    #      client:
-    #        simple:
-    #          instances:
-    #            config:
-    #              - instanceId: config
-    #                serviceId: config
-    #                host: localhost
-    #                port: 8084
+  #    discovery:
+  #      client:
+  #        simple:
+  #          instances:
+  #            config:
+  #              - instanceId: config
+  #                serviceId: config
+  #                host: localhosthibernate.query.in_clause_parameter_padding: true
+  #                port: 8084
     consul:
       discovery:
         prefer-ip-address: true

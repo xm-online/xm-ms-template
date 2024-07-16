@@ -32,7 +32,6 @@ class TechnicalStructureTest {
 
         .ignoreDependency(belongToAnyOf(MstemplateApp.class), alwaysTrue())
         .ignoreDependency(alwaysTrue(), belongToAnyOf(
-            com.icthh.xm.ms.mstemplate.config.Constants.class,
             com.icthh.xm.ms.mstemplate.config.ApplicationProperties.class
         ));
 }

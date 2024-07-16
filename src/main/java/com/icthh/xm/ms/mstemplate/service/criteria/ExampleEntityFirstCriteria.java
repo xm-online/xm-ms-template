@@ -1,12 +1,13 @@
 package com.icthh.xm.ms.mstemplate.service.criteria;
 
-import java.io.Serializable;
-import java.util.Objects;
 import org.springdoc.core.annotations.ParameterObject;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Criteria class for the {@link com.icthh.xm.ms.mstemplate.domain.ExampleEntityFirst} entity. This class is used
