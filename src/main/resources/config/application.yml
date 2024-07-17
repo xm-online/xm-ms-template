@@ -62,8 +62,6 @@ management:
       application: ${spring.application.name}
 
 spring:
-  application:
-    name: mstemplate
   main:
     allow-bean-definition-overriding: true
   cloud:
@@ -86,8 +84,9 @@ spring:
       config:
         watch:
           enabled: false
-  profiles:
-    active: '@spring.profiles.active@'
+  config:
+    activate:
+      on-profile: '@spring.profiles.active@'
     group:
       dev:
         - dev
