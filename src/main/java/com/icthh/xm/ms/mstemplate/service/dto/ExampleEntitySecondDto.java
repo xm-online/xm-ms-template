@@ -1,6 +1,8 @@
 package com.icthh.xm.ms.mstemplate.service.dto;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -11,6 +13,18 @@ public class ExampleEntitySecondDto implements Serializable {
     private Long id;
 
     private String name;
+
+    private byte[] jhiValue;
+
+    public Map<String, Object> getData() {
+        return data;
+    }
+
+    public void setData(Map<String, Object> data) {
+        this.data = data;
+    }
+
+    private Map<String, Object> data = new HashMap<>();
 
     public Long getId() {
         return id;
@@ -56,5 +70,13 @@ public class ExampleEntitySecondDto implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             "}";
+    }
+
+    public byte[] getJhiValue() {
+        return jhiValue;
+    }
+
+    public void setJhiValue(byte[] jhiValue) {
+        this.jhiValue = jhiValue;
     }
 }

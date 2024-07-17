@@ -207,8 +207,8 @@ application:
   scheduler-enabled: false
 
   tenant-with-creation-access-list: XM, MANAGER
-  kafka-system-topic: system_topic
-  kafka-system-queue: system_queue
+  kafka-system-topic: system-topic
+  kafka-system-queue: system-queue
   kafka-metadata-max-age: 60000 #in milliseconds
   kafkaHealth:
     enabled: true

@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Data
-@ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "application", ignoreUnknownFields = true)
 public class ApplicationProperties {
     private String specificationPathPattern;
     private List<String> tenantIgnoredPathList = Collections.emptyList();

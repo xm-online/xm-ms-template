@@ -1,0 +1,199 @@
+logging:
+  level:
+    org.springframework.cloud.client: INFO
+    com.icthh.xm.commons.logging: TRACE
+    com.icthh.xm.commons.topic: TRACE
+    com.icthh.xm.commons.timeline: TRACE
+    org.springframework.kafka.listener.DeadLetterPublishingRecoverer: TRACE
+    org.springframework.aop: DEBUG
+
+
+management:
+#    endpoints:
+#      web:
+#        exposure:
+#          include: prometheus
+#  endpoint:
+    prometheus:
+      metrics:
+        export:
+          enabled: true
+#  prometheus:
+#    metrics:
+#      export:
+#        enabled: true
+#  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
+#    tracing:
+#      endpoint: http://localhost:9411/api/v2/spans
+##  tracing:
+##    propagation:
+##      type: b3
+##    enabled: true
+##    sampling:
+##      probability: 1.0 # report 100% of traces
+#
+spring:
+  devtools:
+    restart:
+      enabled: true
+      additional-exclude: static/**,.h2.server.properties
+    livereload:
+      enabled: false # we use Webpack dev server + BrowserSync for livereload
+  jackson:
+    serialization:
+      indent-output: true
+  cloud:
+    consul:
+      enabled: true
+      discovery:
+        prefer-ip-address: true
+        tags:
+          - profile=${spring.profiles.active}
+          - version='@project.version@'
+          - git-version=${git.commit.id.describe:}
+          - git-commit=${git.commit.id.abbrev:}
+          - git-branch=${git.branch:}
+      host: localhost
+      port: 8500
+  liquibase:
+    enabled: false
+
+    # Remove 'faker' if you do not want the sample data to be loaded automatically
+    contexts: dev, faker
+  messages:
+    cache-duration: PT1S # 1 second, see the ISO 8601 standard
+  thymeleaf:
+    cache: false
+###################################################################
+#        POSTGRESQL DataSource configuration
+###################################################################
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    database-platform: com.icthh.xm.commons.migration.db.jsonb.CustomPostgreSQLDialect
+    database: POSTGRESQL
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate.model.generator_name_as_sequence_name: false
+      hibernate.id.new_generator_mappings: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.cache.use_minimal_puts: true
+      hibernate.hbm2ddl.auto: none
+      hibernate.show_sql: true
+      hibernate.format_sql: true
+      hibernate.interceptor: com.icthh.xm.commons.domainevent.db.service.DatabaseSourceInterceptor
+      hibernate:
+        dialect: com.icthh.xm.commons.migration.db.jsonb.CustomPostgreSQLDialect
+  ###################################################################
+#        ORACLE DataSource configuration
+###################################################################
+#  datasource:
+#    driver-class-name: oracle.jdbc.driver.OracleDriver
+#    type: com.zaxxer.hikari.HikariDataSource
+#    url: jdbc:oracle:thin:@localhost:1521:FREE
+#    username: system
+#    password: oracle
+#  jpa:
+#    database-platform: com.icthh.xm.commons.migration.db.jsonb.CustomOracleDialect
+##    database-platform: org.hibernate.dialect.OracleDialect
+#    database: ORACLE
+#    show-sql: false
+#    hibernate:
+#      ddl-auto: none
+#    properties:
+#      hibernate.model.generator_name_as_sequence_name: false
+#      hibernate.id.new_generator_mappings: true
+#      hibernate.cache.use_second_level_cache: false
+#      hibernate.cache.use_query_cache: false
+#      hibernate.cache.use_minimal_puts: true
+#      hibernate.hbm2ddl.auto: none
+#      hibernate.show_sql: true
+#      hibernate.format_sql: true
+#      hibernate.interceptor: com.icthh.xm.commons.domainevent.db.service.DatabaseSourceInterceptor
+#      hibernate:
+#        dialect: com.icthh.xm.commons.migration.db.jsonb.CustomOracleDialect
+#  ###################################################################
+#
+#  devtools:
+#    restart:
+#      enabled: false
+#    livereload:
+#      enabled: false
+#  cloud:
+#    # if you need to start service without consul, use next configuration and disable consul by spring.cloud.consul.enabled
+#    #    discovery:
+#    #      client:
+#    #        simple:
+#    #          instances:
+#    #            config:
+#    #              - instanceId: config
+#    #                serviceId: config
+#    #                host: localhost
+#    #                port: 8084
+#    consul:
+#      discovery:
+#        prefer-ip-address: true
+#      host: localhost
+#      port: 8500
+#  thymeleaf:
+#    cache: true
+#
+
+server:
+  port: 8081
+  shutdown: graceful # see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-graceful-shutdown
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json,image/svg+xml
+    min-response-size: 1024
+
+# ===================================================================
+# JHipster specific properties
+#
+# Full reference is available at: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+#jhipster:
+#  logging:
+#    use-json-format: false # By default, logs are not in Json format
+#    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+#      enabled: false
+#      host: localhost
+#      port: 5000
+#  api-docs:
+#    servers:
+#      - url: ${application.service-public-url}
+#        description: Base url
+#    title: Template Service
+#    version: ${build.version}
+#    description: Сервіс шаблон
+#  security:
+#    content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com data:"
+
+
+xm-config:
+  enabled: true
+  #  xmConfigUrl: http://config:8084
+  configMode: FILE
+  configDirPath: /home/vosiievska/work/dila/xm-ms-config-repository # this one
+  kafka-config-topic: config_topic
+
+application:
+  domain-event:
+    enabled: false
+  timelines-enabled: false
+  scheduler-enabled: false
+  kafkaMetric:
+    enabled: true
+  #  service-public-url: https://localhost:8081/template
+
+#  retry:
+#    max-attempts: 3
+#    delay: 1000 #in milliseconds
+#    multiplier: 2

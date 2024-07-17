@@ -1,21 +1,32 @@
 package com.icthh.xm.ms.mstemplate.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer;
+import com.icthh.xm.ms.mstemplate.domain.converter.MapToStringConverter;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import javax.persistence.Convert;
 
 /**
  * A ExampleEntitySecond.
@@ -31,8 +42,9 @@ public class ExampleEntitySecond implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+//    @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
     private Long id;
 
@@ -42,6 +54,20 @@ public class ExampleEntitySecond implements Serializable {
     @OneToMany(mappedBy = "exampleEntitySecond")
     @JsonIgnoreProperties(value = { "exampleEntitySecond" }, allowSetters = true)
     private Set<ExampleEntityFirst> exampleEntityFirsts = new HashSet<>();
+
+//    /**
+//     * Content value as byte array
+//     */
+//    @NotNull
+//    // @Lob // Do not use this annotation as it has different behaviour in Postgres and H2.
+//    @Column(name = "jhi_value", nullable = false, columnDefinition="BLOB")
+//    private byte[] jhiValue;
+//
+//    @JsonDeserialize(using = UntypedObjectDeserializer.class)
+//    @Convert(converter = MapToStringConverter.class)
+//    @JdbcTypeCode(SqlTypes.JSON)
+//    @Column(name = "data")
+//    private Map<String, Object> data = new HashMap<>();
 
     public ExampleEntitySecond addExampleEntityFirst(ExampleEntityFirst exampleEntityFirst) {
         this.exampleEntityFirsts.add(exampleEntityFirst);

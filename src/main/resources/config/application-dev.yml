@@ -93,4 +93,11 @@ jhipster:
       host: localhost
       port: 5000
       ring-buffer-size: 512
+
+xm-config:
+  enabled: true
+  #  xmConfigUrl: http://config:8084
+  configMode: FILE
+  configDirPath: /home/vosiievska/work/dila/xm-ms-config-repository # this one
+  kafka-config-topic: config_topic
 # application:

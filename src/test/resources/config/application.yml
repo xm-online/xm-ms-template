@@ -13,23 +13,15 @@ spring:
   application:
     name: mstemplate
   cloud:
-#    consul:
-#      discovery:
-#        enabled: false
-#        instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
-#      config:
-#        enabled: false
-#      enabled: false
     stream:
       kafka:
         binder:
           autoCreateTopics: false
-  # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:mem:mstemplate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    name:
-    username:
+    url: jdbc:h2:mem:mstemplate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_UPPER=false
+    driver-class-name: org.h2.Driver
+    username: sa
     password:
     hikari:
       auto-commit: false
@@ -37,12 +29,12 @@ spring:
     serialization:
       write-durations-as-timestamps: false
   jpa:
-    database-platform: io.github.jhipster.domain.util.FixedH2Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
     database: H2
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
@@ -53,7 +45,7 @@ spring:
       hibernate.cache.use_second_level_cache: false
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: true
-      hibernate.hbm2ddl.auto: validate
+      hibernate.hbm2ddl.auto: create-drop
       hibernate.jdbc.time_zone: UTC
   liquibase:
     contexts: test
@@ -64,19 +56,6 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-#  messages:
-#    basename: i18n/messages
-#  task:
-#    execution:
-#      thread-name-prefix: xm-ms-template-task-
-#      pool:
-#        core-size: 1
-#        max-size: 50
-#        queue-capacity: 10000
-#    scheduling:
-#      thread-name-prefix: xm-ms-template-scheduling-
-#      pool:
-#        size: 20
   thymeleaf:
     mode: HTML
   security:
