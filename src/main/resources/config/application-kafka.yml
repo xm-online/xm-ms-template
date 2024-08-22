@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: ${spring.kafka.bootstrap-servers}
+          autoCreateTopics: false
+  kafka:
+    consumer:
+      group-id: mstemplate
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      concurrency: 16
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        max.block.ms: 5000
+    bootstrap-servers: localhost:9092

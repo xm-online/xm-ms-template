@@ -22,14 +22,22 @@ plugins {
     id "io.spring.nohttp"
     id 'pmd'
     id "com.github.spotbugs"
+    id "com.github.andygoossens.gradle-modernizer-plugin"
+    id "org.liquibase.gradle"
+    id 'io.spring.dependency-management' version '1.1.4'
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
 group = "com.icthh.xm.ms.mstemplate"
 
-sourceCompatibility=17
-targetCompatibility=17
-assert System.properties["java.specification.version"] == "17"
+sourceCompatibility=21
+targetCompatibility=21
+assert System.properties["java.specification.version"] == "21"
 
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
@@ -105,7 +113,7 @@ test {
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
-    reports.html.enabled = true
+    reports.html.required = true
     testLogging testLoggingConf
 
     doLast {
@@ -122,8 +130,8 @@ task runCategorizedTests(type: Test) {
 }
 
 task testReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn test
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(test)
 }
 
 if (!project.hasProperty("runList")) {
@@ -162,7 +170,6 @@ configurations {
         resolutionStrategy {
             // Inherited version from Spring Boot can't be used because of regressions:
             // To be removed as soon as spring-boot use the same version
-            force 'org.liquibase:liquibase-core:4.6.1'
         }
     }
 }
@@ -181,20 +188,18 @@ dependencies {
 
     implementation platform("tech.jhipster:jhipster-dependencies:${jhipsterDependenciesVersion}")
     implementation group: "tech.jhipster", name: "jhipster-framework"
-    implementation "javax.annotation:javax.annotation-api"
 
     implementation "io.micrometer:micrometer-registry-prometheus"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate6"
     implementation "com.fasterxml.jackson.core:jackson-annotations"
     implementation "com.fasterxml.jackson.core:jackson-databind"
-    implementation "org.hibernate:hibernate-core"
+    implementation "org.hibernate.orm:hibernate-core:${hibernateVersion}"
     implementation "com.zaxxer:HikariCP"
     implementation "org.apache.commons:commons-lang3"
     implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
-    implementation "javax.transaction:javax.transaction-api"
-    implementation "org.hibernate:hibernate-entitymanager"
     implementation "org.hibernate.validator:hibernate-validator"
-    implementation "org.liquibase:liquibase-core"
+    implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
 
     implementation "org.springframework.boot:spring-boot-loader-tools"
     implementation "org.springframework.boot:spring-boot-starter-logging"
@@ -215,8 +220,13 @@ dependencies {
     implementation "org.springframework.security:spring-security-data"
     implementation "org.springframework.security:spring-security-web"
 
-    implementation ("org.springdoc:springdoc-openapi-webmvc-core")
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocOpenapiVersion}"
+    implementation 'io.micrometer:micrometer-tracing'
+    implementation 'io.micrometer:micrometer-core'
+    implementation 'io.micrometer:micrometer-observation'
+    implementation "io.micrometer:micrometer-tracing-bridge-brave"
     implementation "org.postgresql:postgresql"
+
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernateVersion}"
@@ -231,6 +241,7 @@ dependencies {
     implementation "com.icthh.xm.commons:xm-commons-tenant-endpoint:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-i18n:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-timeline:${xm_commons_version}"
+    implementation "com.icthh.xm.commons:xm-commons-cache:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-migration-db:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-permission:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-scheduler:${xm_commons_version}"
@@ -238,7 +249,6 @@ dependencies {
     implementation "com.icthh.xm.commons:xm-commons-topic:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-logging-configurable:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-logging-trace:${xm_commons_version}"
-    implementation "com.icthh.xm.commons:xm-commons-client-feign:${xm_commons_version}"
 
     testCompileOnly "org.projectlombok:lombok:${lombok_version}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombok_version}"
@@ -259,7 +269,7 @@ task cleanResources(type: Delete) {
 }
 
 wrapper {
-    gradleVersion = "7.4.2"
+    gradleVersion = "8.8"
 }
 
 compileJava {

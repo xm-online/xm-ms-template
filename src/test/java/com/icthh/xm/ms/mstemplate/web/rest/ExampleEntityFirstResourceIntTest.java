@@ -11,6 +11,7 @@ import com.icthh.xm.ms.mstemplate.domain.ExampleEntitySecond;
 import com.icthh.xm.ms.mstemplate.repository.ExampleEntityFirstRepository;
 import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntityFirstDto;
 import com.icthh.xm.ms.mstemplate.service.mapper.ExampleEntityFirstMapper;
+import jakarta.persistence.EntityManager;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +28,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -47,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link ExampleEntityFirstResource} REST controller.
  */
-@WithMockUser(authorities = {"SUPER-ADMIN"})
+@WithMockUser(authorities = { "SUPER-ADMIN" })
 public class ExampleEntityFirstResourceIntTest extends AbstractSpringBootTest {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -96,7 +96,6 @@ public class ExampleEntityFirstResourceIntTest extends AbstractSpringBootTest {
 
     @Autowired
     private ExceptionTranslator exceptionTranslator;
-
 
     private ExampleEntityFirst exampleEntityFirst;
 
@@ -402,8 +401,6 @@ public class ExampleEntityFirstResourceIntTest extends AbstractSpringBootTest {
 
         // Update the exampleEntityFirst
         ExampleEntityFirst updatedExampleEntityFirst = exampleEntityFirstRepository.findById(exampleEntityFirst.getId()).get();
-        // Disconnect from session so that the updates on updatedExampleEntityFirst are not directly saved in db
-        em.detach(updatedExampleEntityFirst);
         updatedExampleEntityFirst.setName(UPDATED_NAME);
         ExampleEntityFirstDto exampleEntityFirstDto = exampleEntityFirstMapper.toDto(updatedExampleEntityFirst);
 

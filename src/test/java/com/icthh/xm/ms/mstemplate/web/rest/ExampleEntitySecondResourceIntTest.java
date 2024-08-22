@@ -10,6 +10,10 @@ import com.icthh.xm.ms.mstemplate.domain.ExampleEntitySecond;
 import com.icthh.xm.ms.mstemplate.repository.ExampleEntitySecondRepository;
 import com.icthh.xm.ms.mstemplate.service.dto.ExampleEntitySecondDto;
 import com.icthh.xm.ms.mstemplate.service.mapper.ExampleEntitySecondMapper;
+import jakarta.persistence.EntityManager;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,11 +27,6 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -44,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link ExampleEntitySecondResource} REST controller.
  */
-@WithMockUser(authorities = {"SUPER-ADMIN"})
+@WithMockUser(authorities = { "SUPER-ADMIN" })
 public class ExampleEntitySecondResourceIntTest extends AbstractSpringBootTest {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";

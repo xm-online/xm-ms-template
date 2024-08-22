@@ -1,6 +1,6 @@
 package com.icthh.xm.ms.mstemplate.service.criteria;
 
-import org.springdoc.api.annotations.ParameterObject;
+import org.springdoc.core.annotations.ParameterObject;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.LongFilter;

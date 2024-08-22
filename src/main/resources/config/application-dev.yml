@@ -11,7 +11,7 @@ spring:
       enabled: true
       additional-exclude: static/**,.h2.server.properties
     livereload:
-      enabled: false
+      enabled: false # we use Webpack dev server + BrowserSync for livereload
   jackson:
     serialization:
       indent-output: true
@@ -22,12 +22,12 @@ spring:
         prefer-ip-address: true
         tags:
           - profile=${spring.profiles.active}
-          - version=#project.version#
+          - version='@project.version@'
           - git-version=${git.commit.id.describe:}
           - git-commit=${git.commit.id.abbrev:}
           - git-branch=${git.branch:}
       host: localhost
-      port: 7777
+      port: 8500
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:h2:mem:mstemplate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -45,9 +45,18 @@ spring:
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
+  messages:
+    cache-duration: PT1S # 1 second, see the ISO 8601 standard
+  thymeleaf:
+    cache: false
 
 server:
   port: 8081
+  shutdown: graceful # see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-graceful-shutdown
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json,image/svg+xml
+    min-response-size: 1024
 
 # ===================================================================
 # JHipster specific properties
@@ -56,11 +65,32 @@ server:
 # ===================================================================
 
 jhipster:
+  cache: # Cache configuration
+    caffeine: # Caffeine configuration
+      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache. This sets expireAfterWrite in Caffeine (https://github.com/ben-manes/caffeine/wiki/Eviction#time-based)
+      max-entries: 100 # Number of objects in each cache entry
+  # CORS is disabled by default on microservices, as you should access them through a gateway.
+  # If you want to enable it, please uncomment the configuration below.
+  # cors:
+  #   allowed-origins: "http://localhost:9000,https://localhost:9000"
+  #   allowed-methods: "*"
+  #   allowed-headers: "*"
+  #   exposed-headers: "Authorization,Link,X-Total-Count"
+  #   allow-credentials: true
+  #   max-age: 1800
+  #  security:
+  #    authentication:
+  #      jwt:
+  #        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+  #        base64-secret: MTk2MzFmZjU1MWNhMTVhNjg4Yjk5ZmFlOGFhNWQ4MGU0MDc2MTg5NTA4MGE1ZTlmMTgxZWEwYTdjM2JjNjQ1MjkyNTBmMTI0MzE5NzM3M2NhNzNhZTQ4ZTZkN2UwMzNlYzRjMjg4ZTEzN2EwZDE0ODI2NTRkYmI2ZTE5MzMyNTg=
+  #        # Token is valid 24 hours
+  #        token-validity-in-seconds: 86400
+  #        token-validity-in-seconds-for-remember-me: 2592000
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
       enabled: false
       host: localhost
       port: 5000
-
+      ring-buffer-size: 512
 # application:

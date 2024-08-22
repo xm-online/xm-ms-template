@@ -1,12 +1,18 @@
 jib {
     from {
-        image = "openjdk:17-alpine"
+        image = "eclipse-temurin:21-jre-alpine"
+        platforms {
+            platform {
+                architecture = "${findProperty('jibArchitecture') ?: 'amd64'}"
+                os = "linux"
+            }
+        }
     }
     to {
         image = "mstemplate:latest"
     }
     container {
-        entrypoint = ["sh", "-c", "/entrypoint.sh"]
+        entrypoint = ["bash", "-c", "/entrypoint.sh"]
         ports = ["8081"]
         environment = [
             SPRING_OUTPUT_ANSI_ENABLED: "ALWAYS",
@@ -14,7 +20,8 @@ jib {
             TZ: "Etc/UTC",
             LANG: "en_US.UTF-8",
             LANGUAGE: "en_US:en",
-            TERM: "xterm"
+            TERM: "xterm",
+            JHIPSTER_SLEEP: "0"
         ]
         creationTime = "USE_CURRENT_TIMESTAMP"
         user = 1000

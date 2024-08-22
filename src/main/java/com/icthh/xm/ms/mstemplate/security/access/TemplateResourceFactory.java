@@ -17,7 +17,7 @@ public class TemplateResourceFactory extends AbstractResourceFactory {
     private final ExampleEntitySecondRepository exampleEntitySecondRepository;
 
     @Override
-    protected Map<String, ? extends ResourceRepository> getRepositories() {
+    protected Map<String, ? extends ResourceRepository<?, ?>> getRepositories() {
         return Map.of(
                 "exampleEntityFirst", exampleEntityFirstRepository,
                 "exampleEntitySecond", exampleEntitySecondRepository

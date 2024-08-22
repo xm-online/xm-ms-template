@@ -1,14 +1,14 @@
 dependencies {
-    testImplementation "com.h2database:h2"
+    implementation "org.postgresql:postgresql"
+    testImplementation "org.testcontainers:postgresql"
 }
 
-def profiles = "prod"
-if (project.hasProperty("no-liquibase")) {
-    profiles += ",no-liquibase"
-}
+ext {
+    springProfiles = "prod" + springProfiles
 
-if (project.hasProperty("api-docs")) {
-    profiles += ",api-docs"
+    if (project.hasProperty("api-docs")) {
+        springProfiles += ",api-docs"
+    }
 }
 
 springBoot {
@@ -16,22 +16,21 @@ springBoot {
 }
 
 bootRun {
-    args = []
+    args = ["--spring.profiles.active=${springProfiles}"]
 }
 
 
 processResources {
     inputs.property('version', version)
-    inputs.property('springProfiles', profiles)
+    inputs.property('springProfiles', springProfiles)
     filesMatching("**/application.yml") {
         filter {
-            it.replace("#project.version#", version)
+            it.replace("@project.version@", version)
         }
     }
     filesMatching("**/bootstrap.yml") {
         filter {
-            it.replace("#spring.profiles.active#", profiles)
+            it.replace("@spring.profiles.active@", springProfiles)
         }
     }
 }
-
