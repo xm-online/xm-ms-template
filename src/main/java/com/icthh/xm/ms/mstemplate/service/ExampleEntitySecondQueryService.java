@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
 
-import javax.persistence.criteria.JoinType;
 import java.util.List;
 
 /**
@@ -63,5 +62,4 @@ public class ExampleEntitySecondQueryService extends QueryService<ExampleEntityS
     public long countByCriteria(ExampleEntitySecondCriteria criteria, String privilegeKey) {
         return permittedRepository.countByCondition(ExampleEntitySecond.class, criteria, privilegeKey);
     }
-
 }

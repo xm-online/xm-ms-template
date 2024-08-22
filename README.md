@@ -1,10 +1,11 @@
 # mstemplate
 
-This application was generated using JHipster 7.8.1, you can find documentation and help at [https://www.jhipster.tech](https://www.jhipster.tech).
+This application was generated using JHipster 8.6.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.6.0](https://www.jhipster.tech/documentation-archive/v8.6.0).
 
 This is a "microservice" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
 
 ## How to use this template
+
 1. Clone xm-ms-template to separate folder.
 2. Start project in you local XM environment and check if it is working, run tests.
 3. Remove `.git/` folder before project modification.
@@ -52,6 +53,7 @@ Here you can decide if you need or do not need H2 and also provide base package 
 
 1. Consul (default) - uses Consul as a service discovery mechanism.
 2. External - allows to configure service IPs from external source. Can be configured using next section in `application.yml`:
+
 ```yaml
 spring:
   cloud:
@@ -65,13 +67,12 @@ spring:
                 host: localhost
                 port: 8084
     consul:
-        enabled: false
+      enabled: false
 ```
-
 
 ### Docker build
 
-[//]: # (# TODO it is planned to use Jib. Need to migrate our Dockerfile to gradle/docker.gradle)
+[//]: # '# TODO it is planned to use Jib. Need to migrate our Dockerfile to gradle/docker.gradle'
 
 ### MS config
 
@@ -85,6 +86,7 @@ You can extend `com.icthh.xm.commons.security.spring.config.SecurityConfiguratio
 ### Privileges
 
 There are conventions for privilege keys:
+
 - `<ENTITY_NAME>.GET_LIST` - get list of entities
 - `<ENTITY_NAME>.GET_LIST.ITEM` - get single entity by ID
 - `<ENTITY_NAME>.CREATE` - create entity
@@ -96,24 +98,27 @@ NOTE: for filtering lists you need to setup `com.icthh.xm.commons.permission.ann
 It supports criteria based filters and SpEL defined in permission.
 
 ### Client binding
-HTTP client binding connected using `xm-commons-client-feign` which contains autoconfiguration for 
+
+HTTP client binding connected using `xm-commons-client-feign` which contains autoconfiguration for
 feign clients
 
 To configure HTTP client automated authorization use next application configuration:
+
 ```yaml
 spring:
-    security:
-        oauth2:
-            client:
-                provider:
-                    uaa:
-                        token-uri: http://localhost:9999/oauth/token
-                registration:
-                    uaa:
-                        authorization-grant-type: client_credentials
-                        client-id: internal
-                        client-secret: internal
+  security:
+    oauth2:
+      client:
+        provider:
+          uaa:
+            token-uri: http://localhost:9999/oauth/token
+        registration:
+          uaa:
+            authorization-grant-type: client_credentials
+            client-id: internal
+            client-secret: internal
 ```
+
 Where `token-uri` is a URI to UAA service, `client-id` and `client-secret` are credentials to receive
 client token.
 
@@ -126,13 +131,15 @@ By design Services should never expose DB Entities outside. All communication wi
 [Mapstruct](https://mapstruct.org/) is advised to use for mapping Entities to DTOs and vice versa.
 
 Typical Service & DTO pattern:
+
 ```java
-    @Override
-    public ExampleEntityFirstDto save(ExampleEntityFirstDto exampleEntityFirstDto) {
-        ExampleEntityFirst exampleEntityFirst = exampleEntityFirstMapper.toEntity(exampleEntityFirstDto);
-        exampleEntityFirst = exampleEntityFirstRepository.save(exampleEntityFirst);
-        return exampleEntityFirstMapper.toDto(exampleEntityFirst);
-    }
+@Override
+public ExampleEntityFirstDto save(ExampleEntityFirstDto exampleEntityFirstDto) {
+  ExampleEntityFirst exampleEntityFirst = exampleEntityFirstMapper.toEntity(exampleEntityFirstDto);
+  exampleEntityFirst = exampleEntityFirstRepository.save(exampleEntityFirst);
+  return exampleEntityFirstMapper.toDto(exampleEntityFirst);
+}
+
 ```
 
 ### CI/CD
@@ -146,6 +153,7 @@ Typical Service & DTO pattern:
 [//]: # (TODO: need to find helathckeck for Kafka)
 
 #### Metrics
+
 Metrics should be collected in Prometheus format using Micrometer.
 You can access metric endpoint by `http://localhost:8081/management/prometheus`
 
@@ -177,17 +185,21 @@ To start your microservice without config you can use `configMode=FILE` which st
 but does not require running ms-config instance.
 
 There is example configuration in application.yaml:
+
 ```yaml
 xm-config:
   enabled: true
   configMode: FILE
   configDirPath: /path/to/xm-config-repo
 ```
+
 These settings activate:
- - com.icthh.xm.commons.config.client.repository.FileCommonConfigRepository - implementation of file based repo
- - com.icthh.xm.commons.security.oauth2.FileVerificationKeyClient - reads certificate from `${configDirPath}/config/public.cer`
+
+- com.icthh.xm.commons.config.client.repository.FileCommonConfigRepository - implementation of file based repo
+- com.icthh.xm.commons.security.oauth2.FileVerificationKeyClient - reads certificate from `${configDirPath}/config/public.cer`
 
 **NOTE:**
+
 1. Config files will be updated as you change content in the local repo thanks to `com.icthh.xm.commons.config.client.repository.file.FileUpdateWatcher`
 2. WARNING: you need to be aware that file will have **raw unprocessed** content (so environment variables will not be rosolved)
 
@@ -211,6 +223,7 @@ Refer to [Doing API-First development][] for more details.
 
 Timezone can be defined as environment variable `TZ` of docker container.
 Usually it is configured in compose file as following:
+
 ```yaml
 version: '3.8'
 services:
@@ -260,7 +273,7 @@ For more information, refer to the [Running tests page][].
 Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
 
 ```
-docker-compose -f src/main/docker/sonar.yml up -d
+docker compose -f src/main/docker/sonar.yml up -d
 ```
 
 Note: we have turned off authentication in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
@@ -282,13 +295,13 @@ You can use Docker to improve your JHipster development experience. A number of 
 For example, to start a postgresql database in a docker container, run:
 
 ```
-docker-compose -f src/main/docker/postgresql.yml up -d
+docker compose -f src/main/docker/postgresql.yml up -d
 ```
 
 To stop it and remove the container, run:
 
 ```
-docker-compose -f src/main/docker/postgresql.yml down
+docker compose -f src/main/docker/postgresql.yml down
 ```
 
 You can also fully dockerize your application and all the services that it depends on.
@@ -301,7 +314,7 @@ To achieve this, first build a docker image of your app by running:
 Then run:
 
 ```
-docker-compose -f src/main/docker/app.yml up -d
+docker compose -f src/main/docker/app.yml up -d
 ```
 
 For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
@@ -310,18 +323,18 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
-[jhipster homepage and latest documentation]: https://www.jhipster.tech
-[jhipster 7.8.1 archive]: https://www.jhipster.tech
-[doing microservices with jhipster]: https://www.jhipster.tech/microservices-architecture/
-[using jhipster in development]: https://www.jhipster.tech/development/
-[service discovery and configuration with consul]: https://www.jhipster.tech/microservices-architecture/#consul
-[using docker and docker-compose]: https://www.jhipster.tech/docker-compose
-[using jhipster in production]: https://www.jhipster.tech/production/
-[running tests page]: https://www.jhipster.tech/running-tests/
-[code quality page]: https://www.jhipster.tech/code-quality/
-[setting up continuous integration]: https://www.jhipster.tech/setting-up-ci/
-[node.js]: https://nodejs.org/
-[npm]: https://www.npmjs.com/
+[JHipster Homepage and latest documentation]: https://www.jhipster.tech
+[JHipster 8.6.0 archive]: https://www.jhipster.tech/documentation-archive/v8.6.0
+[Doing microservices with JHipster]: https://www.jhipster.tech/documentation-archive/v8.6.0/microservices-architecture/
+[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v8.6.0/development/
+[Service Discovery and Configuration with Consul]: https://www.jhipster.tech/documentation-archive/v8.6.0/microservices-architecture/#consul
+[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v8.6.0/docker-compose
+[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v8.6.0/production/
+[Running tests page]: https://www.jhipster.tech/documentation-archive/v8.6.0/running-tests/
+[Code quality page]: https://www.jhipster.tech/documentation-archive/v8.6.0/code-quality/
+[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v8.6.0/setting-up-ci/
+[Node.js]: https://nodejs.org/
+[NPM]: https://www.npmjs.com/
 [openapi-generator]: https://openapi-generator.tech
 [swagger-editor]: https://editor.swagger.io
 [doing api-first development]: https://www.jhipster.tech/doing-api-first-development/
@@ -329,15 +342,17 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 ## Migrate existing ms-template based microservices to new Lep Engine
 
 1 - Add configuration
+
 ```java
 @Configuration
 public class LepConfiguration extends GroovyLepEngineConfiguration {
-    public LepConfiguration(@Value("${spring.application.name}") String appName) {
-        super(appName);
-    }
+
+  public LepConfiguration(@Value("${spring.application.name}") String appName) {
+    super(appName);
+  }
 }
+
 ```
-2 - Make migration by 
+
+2 - Make migration by
 [migration guide](https://github.com/xm-online/xm-commons/blob/master/xm-commons-lep/MIGRATION_GUIDE.MD)
-
-

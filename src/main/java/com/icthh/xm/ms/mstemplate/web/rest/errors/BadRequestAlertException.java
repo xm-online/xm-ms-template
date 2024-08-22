@@ -6,7 +6,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO replace by BusinessException
 public class BadRequestAlertException extends BusinessException {
 
     private static final long serialVersionUID = 1L;

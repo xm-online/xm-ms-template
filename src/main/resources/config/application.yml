@@ -1,24 +1,22 @@
-
 management:
   endpoints:
     web:
       base-path: /management
       exposure:
         include:
-          [
-            'configprops',
-            'env',
-            'health',
-            'info',
-            'jhimetrics',
-            'jhiopenapigroups',
-            'logfile',
-            'loggers',
-            'prometheus',
-            'threaddump',
-            'caches',
-            'liquibase',
-          ]
+          - configprops
+          - env
+          - health
+          - info
+          - jhimetrics
+          - jhiopenapigroups
+          - logfile
+          - loggers
+          - prometheus
+          - threaddump
+          - caches
+          - metrics
+          - liquibase
   endpoint:
     health:
       show-details: when_authorized
@@ -40,12 +38,15 @@ management:
   health:
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
-  metrics:
-    export:
-      # Prometheus is the default metrics backend
-      prometheus:
+  observations:
+    key-values:
+      application: ${spring.application.name}
+  prometheus:
+    metrics:
+      export:
         enabled: true
         step: 60
+  metrics:
     enable:
       http: true
       jvm: true
@@ -59,28 +60,21 @@ management:
         all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
     tags:
       application: ${spring.application.name}
-    web:
-      server:
-        request:
-          autotime:
-            enabled: true
 
 spring:
-  application:
-    name: mstemplate
   main:
     allow-bean-definition-overriding: true
   cloud:
     # if you need to start service without consul, use next configuration and disable consul by spring.cloud.consul.enabled
-#    discovery:
-#      client:
-#        simple:
-#          instances:
-#            config:
-#              - instanceId: config
-#                serviceId: config
-#                host: localhost
-#                port: 8084
+    #    discovery:
+    #      client:
+    #        simple:
+    #          instances:
+    #            config:
+    #              - instanceId: config
+    #                serviceId: config
+    #                host: localhost
+    #                port: 8084
     consul:
       enabled: true
       discovery:
@@ -90,19 +84,13 @@ spring:
       config:
         watch:
           enabled: false
-    stream:
-      kafka:
-        binder:
-          brokers: ${spring.kafka.bootstrap-servers}
-          autoCreateTopics: false
-  profiles:
-    active: #spring.profiles.active#
+  config:
     group:
       dev:
         - dev
         - api-docs
   jmx:
-    enabled: false # TODO false ot true ?
+    enabled: true
   data:
     jpa:
       repositories:
@@ -112,12 +100,13 @@ spring:
     hibernate:
       ddl-auto: none
       naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     properties:
-      hibernate.model.generator_name_as_sequence_name: false
       hibernate.jdbc.time_zone: UTC
-      hibernate.connection.provider_disables_autocommit: true
+      hibernate.timezone.default_storage: NORMALIZE
+      hibernate.type.preferred_instant_jdbc_type: TIMESTAMP
+      hibernate.id.new_generator_mappings: true
       hibernate.cache.use_second_level_cache: false
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
@@ -133,21 +122,42 @@ spring:
     serialization:
       write-dates-as-timestamps: false
     default-property-inclusion: non_empty
-  kafka:
-    bootstrap-servers: localhost:9092
-#  To start using feign client with authentication, use this configuration and provide correct
-#  token-uri, client-id and client-secret
-  security:
-    oauth2:
-      client:
-        provider:
-          uaa:
-            token-uri: http://localhost:9999/oauth/token
-        registration:
-          uaa:
-            authorization-grant-type: client_credentials
-            client-id: internal
-            client-secret: internal
+    kafka:
+      bootstrap-servers: localhost:9092
+    #  To start using feign client with authentication, use this configuration and provide correct
+    #  token-uri, client-id and client-secret
+    security:
+      oauth2:
+        client:
+          provider:
+            uaa:
+              token-uri: http://localhost:9999/oauth/token
+          registration:
+            uaa:
+              authorization-grant-type: client_credentials
+              client-id: internal
+              client-secret: internal
+  messages:
+    basename: i18n/messages
+  mvc:
+    problemdetails:
+      enabled: true
+  task:
+    execution:
+      thread-name-prefix: xm-ms-template-task-
+      pool:
+        core-size: 2
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      thread-name-prefix: xm-ms-template-scheduling-
+      pool:
+        size: 2
+  thymeleaf:
+    mode: HTML
+  output:
+    ansi:
+      console-available: true
 
 server:
   servlet:
@@ -160,8 +170,8 @@ springdoc:
 
 xm-config:
   enabled: true
-  #configMode: FILE
-  #configDirPath:
+  xm-config-url: http://config
+  kafka-config-topic: config_topic
 
 # Properties to be exposed on the /info management endpoint
 info:

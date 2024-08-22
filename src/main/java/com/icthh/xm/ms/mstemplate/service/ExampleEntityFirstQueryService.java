@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
 
-import javax.persistence.criteria.JoinType;
 import java.util.List;
 
 /**
@@ -49,7 +48,7 @@ public class ExampleEntityFirstQueryService extends QueryService<ExampleEntityFi
     @PrivilegeDescription("Privilege to get all example entity first which matches the criteria from the database")
     public Page<ExampleEntityFirstDto> findByCriteria(ExampleEntityFirstCriteria criteria, Pageable page, String privilegeKey) {
         return permittedRepository.findWithPermission(ExampleEntityFirst.class, criteria, page, privilegeKey)
-                .map(exampleEntityFirstMapper::toDto);
+            .map(exampleEntityFirstMapper::toDto);
     }
 
     /**
@@ -64,5 +63,4 @@ public class ExampleEntityFirstQueryService extends QueryService<ExampleEntityFi
         log.debug("count by criteria : {}", criteria);
         return permittedRepository.countByCondition(ExampleEntityFirst.class, criteria, privilegeKey);
     }
-
 }

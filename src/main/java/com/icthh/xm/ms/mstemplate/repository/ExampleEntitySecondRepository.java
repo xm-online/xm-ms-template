@@ -12,4 +12,8 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface ExampleEntitySecondRepository
-    extends JpaRepository<ExampleEntitySecond, Long>, JpaSpecificationExecutor<ExampleEntitySecond>, ResourceRepository {}
+    extends JpaRepository<ExampleEntitySecond, Long>, JpaSpecificationExecutor<ExampleEntitySecond>, ResourceRepository<ExampleEntitySecond, Long> {
+
+    @Override
+    ExampleEntitySecond findResourceById(Long id);
+}

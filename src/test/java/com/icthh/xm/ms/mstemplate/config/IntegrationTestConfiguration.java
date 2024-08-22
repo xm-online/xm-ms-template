@@ -6,8 +6,10 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.icthh.xm.commons.config.client.repository.CommonConfigRepository;
 import com.icthh.xm.commons.config.client.repository.TenantConfigRepository;
 import com.icthh.xm.commons.config.client.repository.TenantListRepository;
+import com.icthh.xm.commons.config.client.service.TenantAliasService;
 import com.icthh.xm.commons.security.jwt.TokenProvider;
 import com.icthh.xm.commons.security.oauth2.JwtVerificationKeyClient;
 import com.icthh.xm.commons.web.spring.TenantVerifyInterceptor;
@@ -78,5 +80,10 @@ public class IntegrationTestConfiguration {
     @SneakyThrows
     public static byte[] readFile(String path) {
         return IntegrationTestConfiguration.class.getClassLoader().getResourceAsStream(path).readAllBytes();
+    }
+
+    @Bean
+    public TenantAliasService tenantAliasService() {
+        return new TenantAliasService(mock(CommonConfigRepository.class), mock(TenantListRepository.class));
     }
 }
