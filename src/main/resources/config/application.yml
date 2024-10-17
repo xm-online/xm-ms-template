@@ -64,7 +64,7 @@ management:
 spring:
   main:
     allow-bean-definition-overriding: true
-    web-application-type: none
+    web-application-type: servlet
   cloud:
     # if you need to start service without consul, use next configuration and disable consul by spring.cloud.consul.enabled
     #    discovery:
