@@ -5,6 +5,9 @@ management:
         enabled: false
 
 spring:
+  groovy:
+    template:
+      check-template-location: false
   config:
     activate:
       on-profile:
@@ -27,24 +30,19 @@ spring:
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:mem:mstemplate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    name:
-    username:
-    password:
+    driver-class-name: org.postgresql.Driver
     hikari:
+      poolName: Hikari
       auto-commit: false
-  jackson:
-    serialization:
-      write-durations-as-timestamps: false
   jpa:
-    database-platform: io.github.jhipster.domain.util.FixedH2Dialect
-    database: H2
+    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+    database: POSTGRESQL
     open-in-view: false
     show-sql: true
     hibernate:
       ddl-auto: create-drop
       naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     properties:
       hibernate.model.generator_name_as_sequence_name: false # see org.hibernate.cfg.AvailableSettings.PREFER_GENERATOR_NAME_AS_DEFAULT_SEQUENCE_NAME
@@ -55,8 +53,16 @@ spring:
       hibernate.generate_statistics: true
       hibernate.hbm2ddl.auto: create-drop
       hibernate.jdbc.time_zone: UTC
+      hibernate.interceptor: com.icthh.xm.commons.domainevent.db.service.DatabaseSourceInterceptor
+      hibernate:
+        dialect: com.icthh.xm.commons.migration.db.jsonb.CustomPostgreSQLDialect
+  jackson:
+    serialization:
+      write-durations-as-timestamps: false
   liquibase:
     contexts: test
+    driver-class-name: org.postgresql.Driver
+    change-log: classpath:config/liquibase/master.xml
   mail:
     host: localhost
   main:
@@ -115,3 +121,4 @@ application:
   specification-path-pattern: /config/tenants/{tenantName}/${spring.application.name}/example-of-microservice-spec.yml
   scheduler-enabled: false
   kafka-enabled: false
+  db-schema-suffix:

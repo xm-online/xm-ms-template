@@ -1,6 +1,5 @@
 package com.icthh.xm.ms.mstemplate.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 import com.icthh.xm.commons.permission.annotation.PrivilegeDescription;
 import com.icthh.xm.ms.mstemplate.service.ExampleEntitySecondQueryService;
 import com.icthh.xm.ms.mstemplate.service.ExampleEntitySecondService;
@@ -13,6 +12,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
