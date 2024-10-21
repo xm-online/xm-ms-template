@@ -198,7 +198,7 @@ jhipster:
 
 application:
   specification-path-pattern: /config/tenants/{tenantName}/${spring.application.name}/example-of-microservice-spec.yml
-  tenant-ignored-path-list: /v2/api-docs, /api/profile-info, /swagger-resources/configuration/ui, /management/health, /management/prometheus
+  tenant-ignored-path-list: /v3/api-docs, /api/profile-info, /swagger-resources/configuration/ui, /management/health, /management/prometheus
   timeline-ignored-http-methods:
 
   timelines-enabled: false
@@ -209,5 +209,19 @@ application:
   kafka-system-topic: system_topic
   kafka-system-queue: system_queue
   kafka-metadata-max-age: 60000 #in milliseconds
+
+  retry:
+    max-attempts: 3
+    delay: 1000 #in milliseconds
+    multiplier: 2
+
+  kafkaMetric:
+    enabled: false
+    connectionTimeoutTopic: 1000
+    metricTopics: system_topic
+
+  domain-event:
+    enabled: true
+
   kafkaHealth:
     enabled: true

@@ -28,3 +28,9 @@ spring:
 
       host: localhost
       port: 8500
+  docker:
+    compose:
+      enabled: true
+      file: dev-compose.yml
+      profiles:
+        active: dev
