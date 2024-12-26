@@ -10,6 +10,7 @@ import com.icthh.xm.commons.config.client.repository.CommonConfigRepository;
 import com.icthh.xm.commons.config.client.repository.TenantConfigRepository;
 import com.icthh.xm.commons.config.client.repository.TenantListRepository;
 import com.icthh.xm.commons.config.client.service.TenantAliasService;
+import com.icthh.xm.commons.config.client.service.TenantAliasServiceImpl;
 import com.icthh.xm.commons.security.jwt.TokenProvider;
 import com.icthh.xm.commons.security.oauth2.JwtVerificationKeyClient;
 import com.icthh.xm.commons.web.spring.TenantVerifyInterceptor;
@@ -84,6 +85,6 @@ public class IntegrationTestConfiguration {
 
     @Bean
     public TenantAliasService tenantAliasService() {
-        return new TenantAliasService(mock(CommonConfigRepository.class), mock(TenantListRepository.class));
+        return new TenantAliasServiceImpl(mock(CommonConfigRepository.class), mock(TenantListRepository.class));
     }
 }
