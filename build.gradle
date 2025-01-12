@@ -35,8 +35,11 @@ dependencyManagement {
 }
 group = "com.icthh.xm.ms.mstemplate"
 
-sourceCompatibility=21
-targetCompatibility=21
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
 assert System.properties["java.specification.version"] == "21"
 
 apply from: "gradle/docker.gradle"
@@ -269,7 +272,7 @@ task cleanResources(type: Delete) {
 }
 
 wrapper {
-    gradleVersion = "8.8"
+    gradleVersion = "8.9"
 }
 
 compileJava {

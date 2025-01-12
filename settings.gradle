@@ -20,3 +20,5 @@ pluginManagement {
 }
 
 rootProject.name = "mstemplate"
+
+System.setProperty("sonar.gradle.skipCompile", "true")
