@@ -6,14 +6,11 @@ dist: jammy
 
 script:
     - set -e
+    - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.61.0
+    - trivy version
     - "./gradlew --no-daemon --refresh-dependencies clean check test"
     - "./gradlew -x test -Pprod --no-daemon bootWar"
     - docker login -u $DOCKER_USER -p $DOCKER_PASS
-    # Додавання кроків Trivy
-    - echo "Початок встановлення Trivy..."
-    - sudo snap install trivy
-    #- curl -sfL https://aquasecurity.github.io/trivy/install.sh | sh -s -- -b /usr/local/bin
-    # Кінець кроків Trivy
     - export DOCKER_REPO=$(echo -n $TRAVIS_REPO_SLUG | sed -e 's/^xm-online\//xmonline\//g')
     - export IMAGE_BRANCH=$(echo -n $TRAVIS_BRANCH | sed -e 's/\//-/g')
     - export PROJECT_VERSION="$IMAGE_BRANCH"
@@ -39,7 +36,7 @@ script:
         docker push $DOCKER_REPO:$TAG;
       done
     - echo "Trivy. Початок сканування Docker-образу..."
-    - trivy image --severity CRITICAL,HIGH $IMAGE_TO_SCAN
+    - trivy image --severity CRITICAL,HIGH $DOCKER_REPO:latest
     - echo "THE END TEST"
 
 cache:
