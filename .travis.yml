@@ -11,7 +11,7 @@ script:
     - docker login -u $DOCKER_USER -p $DOCKER_PASS
     # Додавання кроків Trivy
     - echo "Початок встановлення Trivy..."
-    - snap install trivy
+    - sudo snap install trivy
     #- curl -sfL https://aquasecurity.github.io/trivy/install.sh | sh -s -- -b /usr/local/bin
     # Кінець кроків Trivy
     - export DOCKER_REPO=$(echo -n $TRAVIS_REPO_SLUG | sed -e 's/^xm-online\//xmonline\//g')
