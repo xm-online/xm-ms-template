@@ -6,17 +6,19 @@ apply plugin: "org.openapi.generator"
 
 openApiGenerate {
     generatorName = "spring"
-    inputSpec = "$rootDir/src/main/resources/swagger/api.yml".toString()
-    outputDir = "$buildDir/openapi".toString()
-    apiPackage = "com.icthh.xm.ms.mstemplate.web.api"
-    modelPackage = "com.icthh.xm.ms.mstemplate.service.api.dto"
+    inputSpec = "$projectDir/src/main/resources/swagger/api.yml".toString()
+    outputDir = project.layout.buildDirectory.dir("openapi").get().toString()
+    apiPackage = "com.itsmartflex.ms.eir.management.web.api"
+    modelPackage = "com.itsmartflex.ms.eir.management.service.api.dto"
     apiFilesConstrainedTo = [""]
     modelFilesConstrainedTo = [""]
     supportingFilesConstrainedTo = ["ApiUtil.java"]
-    configOptions = [delegatePattern: "true", title: "mstemplate", useSpringBoot3: "true", useJakartaEe: "true"]
+    configOptions = [delegatePattern: "true", title: "eirManagement", useTags: "true", useSpringBoot3: "true", useJakartaEe: "true"]
     validateSpec = true
-    importMappings = [Problem:"org.springframework.http.ProblemDetail"]
+    importMappings = [Problem: "org.springframework.http.ProblemDetail"]
 }
+
+sourceSets.main.java.srcDir("$buildDir/openapi/src/main/java")
 
 sourceSets {
     main {

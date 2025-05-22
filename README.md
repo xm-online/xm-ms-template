@@ -1,8 +1,10 @@
-# mstemplate
+# eir.management
 
-This application was generated using JHipster 8.6.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.6.0](https://www.jhipster.tech/documentation-archive/v8.6.0).
+This application was generated using JHipster 8.6.0, you can find documentation and help
+at [https://www.jhipster.tech/documentation-archive/v8.6.0](https://www.jhipster.tech/documentation-archive/v8.6.0).
 
-This is a "microservice" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
+This is a "microservice" application intended to be part of a microservice architecture, please refer to
+the [Doing microservices with JHipster][] page of the documentation for more information.
 
 ## How to use this template
 
@@ -10,17 +12,20 @@ This is a "microservice" application intended to be part of a microservice archi
 2. Start project in you local XM environment and check if it is working, run tests.
 3. Remove `.git/` folder before project modification.
 4. Add project to new git repository where it will evolve and live.
-5. Find and replace `mstemplate` term everywhere in the projects.
-6. Find end remove everything related to `ExampleEntityFirst` and `ExampleEntitySecond` (after checking how it is proposed to use)
+5. Find and replace `eir.management` term everywhere in the projects.
+6. Find end remove everything related to `ExampleEntityFirst` and `ExampleEntitySecond` (after checking how it is
+   proposed to use)
 7. Do you need to use database:
-   - if YES - correct liquibase scripts in `resources/config/liquibase`
-   - if NO - remove liquibase scripts, config `XmDatabaseConfiguration` and commons `xm-commons-migration-db`
-8. Check all `com.icthh.xm.commons` libraries in `build.gradle` and remove redundant. try to keep minimum set of commons.
+    - if YES - correct liquibase scripts in `resources/config/liquibase`
+    - if NO - remove liquibase scripts, config `XmDatabaseConfiguration` and commons `xm-commons-migration-db`
+8. Check all `com.icthh.xm.commons` libraries in `build.gradle` and remove redundant. try to keep minimum set of
+   commons.
 
 ## Project Structure
 
 `/src/*/java` structure follows default Java structure.
-`/src/*/lep` structure follows LEP folder structure containing groovy files. Source folder is generated as symlink by XM development plugin.
+`/src/*/lep` structure follows LEP folder structure containing groovy files. Source folder is generated as symlink by XM
+development plugin.
 `/src/main/docker` - Docker configurations for the application and services that the application depends on.
 
 ## XME features and use cases
@@ -45,29 +50,30 @@ Database support multi tenancy by adding commons `xm-commons-migration-db`
 Configuration files for Liquibase are in `resources/config/liquibase`.
 
 **NOTE:** on the micoservice level you still need custom configuration for DB:
-`com.icthh.xm.ms.mstemplate.config.XmDatabaseConfiguration`
+`com.icthh.xm.ms.eir.management.config.XmDatabaseConfiguration`
 
 Here you can decide if you need or do not need H2 and also provide base package for scan.
 
 ### Service discovery modes
 
 1. Consul (default) - uses Consul as a service discovery mechanism.
-2. External - allows to configure service IPs from external source. Can be configured using next section in `application.yml`:
+2. External - allows to configure service IPs from external source. Can be configured using next section
+   in `application.yml`:
 
 ```yaml
 spring:
-  cloud:
-    discovery:
-      client:
-        simple:
-          instances:
-            config:
-              - instanceId: config
-                serviceId: config
-                host: localhost
-                port: 8084
-    consul:
-      enabled: false
+    cloud:
+        discovery:
+            client:
+                simple:
+                    instances:
+                        config:
+                            -   instanceId: config
+                                serviceId: config
+                                host: localhost
+                                port: 8084
+        consul:
+            enabled: false
 ```
 
 ### Docker build
@@ -94,7 +100,8 @@ There are conventions for privilege keys:
 - `<ENTITY_NAME>.PARTIAL_UPDATE` - partial update entity
 - `<ENTITY_NAME>.DELETE` - delete entity
 
-NOTE: for filtering lists you need to setup `com.icthh.xm.commons.permission.annotation.FindWithPermission` annotation on Service layer.
+NOTE: for filtering lists you need to setup `com.icthh.xm.commons.permission.annotation.FindWithPermission` annotation
+on Service layer.
 It supports criteria based filters and SpEL defined in permission.
 
 ### Client binding
@@ -106,17 +113,17 @@ To configure HTTP client automated authorization use next application configurat
 
 ```yaml
 spring:
-  security:
-    oauth2:
-      client:
-        provider:
-          uaa:
-            token-uri: http://localhost:9999/oauth/token
-        registration:
-          uaa:
-            authorization-grant-type: client_credentials
-            client-id: internal
-            client-secret: internal
+    security:
+        oauth2:
+            client:
+                provider:
+                    uaa:
+                        token-uri: http://localhost:9999/oauth/token
+                registration:
+                    uaa:
+                        authorization-grant-type: client_credentials
+                        client-id: internal
+                        client-secret: internal
 ```
 
 Where `token-uri` is a URI to UAA service, `client-id` and `client-secret` are credentials to receive
@@ -133,11 +140,12 @@ By design Services should never expose DB Entities outside. All communication wi
 Typical Service & DTO pattern:
 
 ```java
+
 @Override
 public ExampleEntityFirstDto save(ExampleEntityFirstDto exampleEntityFirstDto) {
-  ExampleEntityFirst exampleEntityFirst = exampleEntityFirstMapper.toEntity(exampleEntityFirstDto);
-  exampleEntityFirst = exampleEntityFirstRepository.save(exampleEntityFirst);
-  return exampleEntityFirstMapper.toDto(exampleEntityFirst);
+    ExampleEntityFirst exampleEntityFirst = exampleEntityFirstMapper.toEntity(exampleEntityFirstDto);
+    exampleEntityFirst = exampleEntityFirstRepository.save(exampleEntityFirst);
+    return exampleEntityFirstMapper.toDto(exampleEntityFirst);
 }
 
 ```
@@ -158,6 +166,7 @@ Metrics should be collected in Prometheus format using Micrometer.
 You can access metric endpoint by `http://localhost:8081/management/prometheus`
 
 #### Log management
+
 Endpoint for logs management `http://localhost:8081/management/logs`
 
 #### Introspections
@@ -166,7 +175,8 @@ Endpoint for thread dump: `http://localhost:8081/management/threaddump`
 
 ### Error handling
 
-Commons `xm-commons-i18n` contains `com.icthh.xm.commons.i18n.error.web.ExceptionTranslator` class which is responsible for exception translation.
+Commons `xm-commons-i18n` contains `com.icthh.xm.commons.i18n.error.web.ExceptionTranslator` class which is responsible
+for exception translation.
 
 ## Development
 
@@ -179,7 +189,8 @@ To start your application in the dev profile, run:
 ### Start microservice without ms-config
 
 Some microservices can work without ms-config instance.
-The only reason they may need config is for getting public key for token verification and tenant list json to resolve tenant.
+The only reason they may need config is for getting public key for token verification and tenant list json to resolve
+tenant.
 
 To start your microservice without config you can use `configMode=FILE` which still points to real config repository
 but does not require running ms-config instance.
@@ -188,24 +199,28 @@ There is example configuration in application.yaml:
 
 ```yaml
 xm-config:
-  enabled: true
-  configMode: FILE
-  configDirPath: /path/to/xm-config-repo
+    enabled: true
+    configMode: FILE
+    configDirPath: /path/to/xm-config-repo
 ```
 
 These settings activate:
 
 - com.icthh.xm.commons.config.client.repository.FileCommonConfigRepository - implementation of file based repo
-- com.icthh.xm.commons.security.oauth2.FileVerificationKeyClient - reads certificate from `${configDirPath}/config/public.cer`
+- com.icthh.xm.commons.security.oauth2.FileVerificationKeyClient - reads certificate
+  from `${configDirPath}/config/public.cer`
 
 **NOTE:**
 
-1. Config files will be updated as you change content in the local repo thanks to `com.icthh.xm.commons.config.client.repository.file.FileUpdateWatcher`
-2. WARNING: you need to be aware that file will have **raw unprocessed** content (so environment variables will not be rosolved)
+1. Config files will be updated as you change content in the local repo thanks
+   to `com.icthh.xm.commons.config.client.repository.file.FileUpdateWatcher`
+2. WARNING: you need to be aware that file will have **raw unprocessed** content (so environment variables will not be
+   rosolved)
 
 ### Doing API-First development using openapi-generator
 
-[OpenAPI-Generator]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
+[OpenAPI-Generator]() is configured for this application. You can generate API code from
+the `src/main/resources/swagger/api.yml` definition file by running:
 
 ```bash
 ./gradlew openApiGenerate
@@ -213,7 +228,9 @@ These settings activate:
 
 Then implements the generated delegate classes with `@Service` classes.
 
-To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker-compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
+To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the
+swagger-editor using docker by running: `docker-compose -f src/main/docker/swagger-editor.yml up -d`. The editor will
+then be reachable at [http://localhost:7742](http://localhost:7742).
 
 Refer to [Doing API-First development][] for more details.
 
@@ -227,16 +244,16 @@ Usually it is configured in compose file as following:
 ```yaml
 version: '3.8'
 services:
-  mstemplate-app:
-    image: mstemplate
-    environment:
-      - XMX=512M
-      - TZ=UTC
+    eir.management-app:
+        image: eir.management
+        environment:
+            - XMX=512M
+            - TZ=UTC
 ```
 
 ### Packaging as jar
 
-To build the final jar and optimize the mstemplate application for production, run:
+To build the final jar and optimize the eir.management application for production, run:
 
 ```
 ./gradlew -Pprod clean bootJar
@@ -276,9 +293,12 @@ Sonar is used to analyse code quality. You can start a local Sonar server (acces
 docker compose -f src/main/docker/sonar.yml up -d
 ```
 
-Note: we have turned off authentication in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
+Note: we have turned off authentication in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box
+experience while trying out SonarQube, for real use cases turn it back on.
 
-You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the gradle plugin.
+You can run a Sonar analysis with using
+the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the gradle
+plugin.
 
 Then, run a Sonar analysis:
 
@@ -290,7 +310,8 @@ For more information, refer to the [Code quality page][].
 
 ## Using Docker to simplify development (optional)
 
-You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
+You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are
+available in the [src/main/docker](src/main/docker) folder to launch required third party services.
 
 For example, to start a postgresql database in a docker container, run:
 
@@ -317,26 +338,44 @@ Then run:
 docker compose -f src/main/docker/app.yml up -d
 ```
 
-For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
+For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the
+docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or
+several JHipster applications.
 
 ## Continuous Integration (optional)
 
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
+To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate
+configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][]
+page for more information.
 
 [JHipster Homepage and latest documentation]: https://www.jhipster.tech
+
 [JHipster 8.6.0 archive]: https://www.jhipster.tech/documentation-archive/v8.6.0
+
 [Doing microservices with JHipster]: https://www.jhipster.tech/documentation-archive/v8.6.0/microservices-architecture/
+
 [Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v8.6.0/development/
+
 [Service Discovery and Configuration with Consul]: https://www.jhipster.tech/documentation-archive/v8.6.0/microservices-architecture/#consul
+
 [Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v8.6.0/docker-compose
+
 [Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v8.6.0/production/
+
 [Running tests page]: https://www.jhipster.tech/documentation-archive/v8.6.0/running-tests/
+
 [Code quality page]: https://www.jhipster.tech/documentation-archive/v8.6.0/code-quality/
+
 [Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v8.6.0/setting-up-ci/
+
 [Node.js]: https://nodejs.org/
+
 [NPM]: https://www.npmjs.com/
+
 [openapi-generator]: https://openapi-generator.tech
+
 [swagger-editor]: https://editor.swagger.io
+
 [doing api-first development]: https://www.jhipster.tech/doing-api-first-development/
 
 ## Migrate existing ms-template based microservices to new Lep Engine
@@ -344,12 +383,13 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 1 - Add configuration
 
 ```java
+
 @Configuration
 public class LepConfiguration extends GroovyLepEngineConfiguration {
 
-  public LepConfiguration(@Value("${spring.application.name}") String appName) {
-    super(appName);
-  }
+    public LepConfiguration(@Value("${spring.application.name}") String appName) {
+        super(appName);
+    }
 }
 
 ```

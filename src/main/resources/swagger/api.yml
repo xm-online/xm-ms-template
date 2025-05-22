@@ -2,7 +2,7 @@
 # This file will be used at compile time to generate Spring-MVC endpoint stubs using openapi-generator
 openapi: '3.0.1'
 info:
-  title: 'mstemplate'
+  title: 'eirManagement'
   version: 0.0.1
 servers:
   - url: http://localhost:8081/api
@@ -10,6 +10,8 @@ servers:
 paths:
   /exampleLepFunctionApiFirst:
     post:
+      tags:
+        - eirManagement
       operationId: executeLepFunction
       requestBody:
         content:
@@ -24,7 +26,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExecuteResponse'
       security:
-        - oAuth2Password: []
+        - oAuth2Password: [ ]
 components:
   responses:
     '400':
@@ -97,5 +99,5 @@ components:
             openapi: Default client scope
 
 security:
-  - oAuth2Password: []
+  - oAuth2Password: [ ]
 

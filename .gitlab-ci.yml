@@ -1,0 +1,25 @@
+include:
+  - project: platform-engineering/itsf/pipeline-shared-lib
+    ref: lib-v1-gradle
+    file: app-gradle-kaniko.gitlab-ci.yml
+
+
+variables:
+  #Gitlab Runner
+  TAGS: kv-itsf
+  #Gradle
+  DEFAULT_GRADLE_WRAPPER: "8.9"
+  GRADLE_TASK_BUILD: bootJar
+  #Image
+  IMAGE_NAME: itsmartflex/itsf-ms-eir-management
+  #INT
+  TARGET_SERVICE_KEY: "eir_management_ms_tag"
+  INT_UPDATE_TAG: 'true'
+  #DEV
+  DEV_UPDATE_TAG: 'true'
+  DEV_TARGET_PROJECT_NAME: 'mw-deploy/mw-int-terraform'
+  DEV_TARGET_BRANCH: 'mw-dev-bravo2'
+  #SONARQUBE
+  SONARQUBE_QUALITYGATE: "true"
+  SONARQUBE_JOB: "true"
+  APP_NAME: itsf-ms-eir-management
