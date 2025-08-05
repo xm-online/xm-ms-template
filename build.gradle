@@ -183,6 +183,9 @@ repositories {
     mavenLocal()
     mavenCentral()
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
+    maven {
+        url "https://reposilite.jevera.software/releases"
+    }
 }
 
 dependencies {
@@ -193,7 +196,6 @@ dependencies {
     implementation platform("tech.jhipster:jhipster-dependencies:${jhipsterDependenciesVersion}")
     implementation group: "tech.jhipster", name: "jhipster-framework"
 
-    implementation "io.micrometer:micrometer-registry-prometheus"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate6"
     implementation "com.fasterxml.jackson.core:jackson-annotations"
@@ -229,6 +231,7 @@ dependencies {
     implementation 'io.micrometer:micrometer-core'
     implementation 'io.micrometer:micrometer-observation'
     implementation "io.micrometer:micrometer-tracing-bridge-brave"
+    implementation "io.micrometer:micrometer-registry-prometheus"
     implementation "org.postgresql:postgresql"
 
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
