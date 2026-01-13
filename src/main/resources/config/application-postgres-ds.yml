@@ -22,3 +22,6 @@ spring:
       hibernate.interceptor: com.icthh.xm.commons.domainevent.db.service.DatabaseSourceInterceptor
       hibernate:
         dialect: com.icthh.xm.commons.migration.db.jsonb.CustomPostgreSQLDialect
+  # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
+  liquibase:
+    contexts: prod
