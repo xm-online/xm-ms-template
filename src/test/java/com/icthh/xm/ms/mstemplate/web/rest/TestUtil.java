@@ -2,16 +2,14 @@ package com.icthh.xm.ms.mstemplate.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.SerializationFeature;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
@@ -31,11 +29,9 @@ public final class TestUtil {
     private static final ObjectMapper mapper = createObjectMapper();
 
     private static ObjectMapper createObjectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS, false);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        mapper.registerModule(new JavaTimeModule());
-        return mapper;
+        return JsonMapper.builder()
+            .disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
+            .build();
     }
 
     /**
@@ -43,9 +39,8 @@ public final class TestUtil {
      *
      * @param object the object to convert.
      * @return the JSON byte array.
-     * @throws IOException
      */
-    public static byte[] convertObjectToJsonBytes(Object object) throws IOException {
+    public static byte[] convertObjectToJsonBytes(Object object) {
         return mapper.writeValueAsBytes(object);
     }
 

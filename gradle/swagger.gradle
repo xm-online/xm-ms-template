@@ -7,7 +7,7 @@ apply plugin: "org.openapi.generator"
 openApiGenerate {
     generatorName = "spring"
     inputSpec = "$rootDir/src/main/resources/swagger/api.yml".toString()
-    outputDir = "$buildDir/openapi".toString()
+    outputDir = "${layout.buildDirectory.get()}/openapi".toString()
     apiPackage = "com.icthh.xm.ms.mstemplate.web.api"
     modelPackage = "com.icthh.xm.ms.mstemplate.service.api.dto"
     apiFilesConstrainedTo = [""]
@@ -21,7 +21,7 @@ openApiGenerate {
 sourceSets {
     main {
         java {
-            srcDir file("${project.buildDir.path}/openapi/src/main/java")
+            srcDir file("${layout.buildDirectory.get()}/openapi/src/main/java")
         }
     }
 }

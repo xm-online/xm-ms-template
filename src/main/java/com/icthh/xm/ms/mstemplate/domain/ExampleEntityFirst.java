@@ -41,6 +41,7 @@ public class ExampleEntityFirst implements Serializable {
     @ManyToOne
     @JoinColumn(name = "example_entity_second_id", nullable = false)
     @JsonIgnoreProperties(value = { "exampleEntityFirsts" }, allowSetters = true)
+    @tools.jackson.annotation.JsonIgnoreProperties(value = { "exampleEntityFirsts" }, allowSetters = true)
     private ExampleEntitySecond exampleEntitySecond;
 
     @Override
