@@ -313,3 +313,9 @@ compileJava {
 }
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo
+
+tasks.register('preCompileLep', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.icthh.xm.commons.lep.groovy.LepCompiler'
+    args = findProperty('exportArgs')?.split(' ')?.toList() ?: []
+}
