@@ -1,6 +1,6 @@
 package com.icthh.xm.ms.mstemplate.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import tools.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,7 +41,6 @@ public class ExampleEntityFirst implements Serializable {
     @ManyToOne
     @JoinColumn(name = "example_entity_second_id", nullable = false)
     @JsonIgnoreProperties(value = { "exampleEntityFirsts" }, allowSetters = true)
-    @tools.jackson.annotation.JsonIgnoreProperties(value = { "exampleEntityFirsts" }, allowSetters = true)
     private ExampleEntitySecond exampleEntitySecond;
 
     @Override

@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
-import tools.jackson.databind.SerializationFeature;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -29,9 +28,7 @@ public final class TestUtil {
     private static final ObjectMapper mapper = createObjectMapper();
 
     private static ObjectMapper createObjectMapper() {
-        return JsonMapper.builder()
-            .disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
-            .build();
+        return JsonMapper.builder().build();
     }
 
     /**
