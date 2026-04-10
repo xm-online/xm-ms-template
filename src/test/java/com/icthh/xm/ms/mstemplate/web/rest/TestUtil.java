@@ -2,8 +2,8 @@ package com.icthh.xm.ms.mstemplate.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.icthh.xm.commons.mapper.JsonMapperUtils;
 import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.json.JsonMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -25,11 +25,7 @@ import org.springframework.format.support.FormattingConversionService;
  */
 public final class TestUtil {
 
-    private static final ObjectMapper mapper = createObjectMapper();
-
-    private static ObjectMapper createObjectMapper() {
-        return JsonMapper.builder().build();
-    }
+    private static final ObjectMapper mapper = JsonMapperUtils.getDefaultJsonMapper();
 
     /**
      * Convert an object to JSON byte array.
