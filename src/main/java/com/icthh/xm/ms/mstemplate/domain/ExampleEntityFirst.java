@@ -1,6 +1,6 @@
 package com.icthh.xm.ms.mstemplate.domain;
 
-import tools.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

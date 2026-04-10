@@ -23,6 +23,7 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.security.test.context.support.WithMockUser;
+import tools.jackson.databind.json.JsonMapper;
 import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -79,7 +80,7 @@ public class ExampleEntitySecondResourceIntTest extends AbstractSpringBootTest {
     private LepManagementService lepManagementService;
 
     @Autowired
-    private JacksonJsonHttpMessageConverter jacksonMessageConverter;
+    private JsonMapper jsonMapper;
 
     @Autowired
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
@@ -127,7 +128,7 @@ public class ExampleEntitySecondResourceIntTest extends AbstractSpringBootTest {
         this.restExampleEntitySecondMockMvc = MockMvcBuilders.standaloneSetup(exampleEntitySecondResource)
                 .setCustomArgumentResolvers(pageableArgumentResolver)
                 .setControllerAdvice(exceptionTranslator)
-                .setMessageConverters(jacksonMessageConverter).build();
+                .setMessageConverters(new JacksonJsonHttpMessageConverter(jsonMapper)).build();
 
         lepManagementService.beginThreadContext();
     }

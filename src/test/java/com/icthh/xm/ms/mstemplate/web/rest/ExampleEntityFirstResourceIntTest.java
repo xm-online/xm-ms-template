@@ -21,6 +21,7 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.security.test.context.support.WithMockUser;
+import tools.jackson.databind.json.JsonMapper;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
@@ -89,7 +90,7 @@ public class ExampleEntityFirstResourceIntTest extends AbstractSpringBootTest {
     private FilterChainProxy springSecurityFilter;
 
     @Autowired
-    private JacksonJsonHttpMessageConverter jacksonMessageConverter;
+    private JsonMapper jsonMapper;
 
     @Autowired
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
@@ -137,7 +138,7 @@ public class ExampleEntityFirstResourceIntTest extends AbstractSpringBootTest {
         this.restExampleEntityFirstMockMvc = MockMvcBuilders.standaloneSetup(exampleEntityFirstResource)
                 .setCustomArgumentResolvers(pageableArgumentResolver)
                 .setControllerAdvice(exceptionTranslator)
-                .setMessageConverters(jacksonMessageConverter).build();
+                .setMessageConverters(new JacksonJsonHttpMessageConverter(jsonMapper)).build();
 
         lepManagementService.beginThreadContext();
     }

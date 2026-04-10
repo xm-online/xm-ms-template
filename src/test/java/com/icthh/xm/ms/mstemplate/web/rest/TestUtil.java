@@ -2,7 +2,7 @@ package com.icthh.xm.ms.mstemplate.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.icthh.xm.commons.mapper.JsonMapperUtils;
+import com.icthh.xm.commons.tenant.JsonMapperUtils;
 import tools.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
