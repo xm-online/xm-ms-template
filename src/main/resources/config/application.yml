@@ -120,7 +120,11 @@ spring:
   jackson:
     deserialization:
       fail-on-unknown-properties: false
+    serialization:
+      INDENT_OUTPUT: true
     default-property-inclusion: non_empty
+    mapper:
+      sort-properties-alphabetically: false
   kafka:
     bootstrap-servers: localhost:9092
     #  To start using feign client with authentication, use this configuration and provide correct
