@@ -1,6 +1,5 @@
 package com.icthh.xm.ms.mstemplate.web.rest.api;
 
-import com.codahale.metrics.annotation.Timed;
 import com.icthh.xm.commons.permission.annotation.PrivilegeDescription;
 import com.icthh.xm.ms.mstemplate.service.ExampleLepService;
 import com.icthh.xm.ms.mstemplate.service.api.dto.ExecuteRequest;
@@ -17,7 +16,6 @@ public class ExampleLepResource implements ExampleLepFunctionApiFirstApiDelegate
 
     private final ExampleLepService exampleLepService;
 
-    @Timed
     @PreAuthorize("hasPermission({'executeRequest': #executeRequest}, 'FUNCTION.EXECUTE')")
     @Override
     @PrivilegeDescription("Privilege to create porting request")
