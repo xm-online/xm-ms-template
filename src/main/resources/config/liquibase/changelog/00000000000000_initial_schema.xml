@@ -24,4 +24,9 @@
             <column name="local_date" type="date"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="20260518000000" author="viktorpavlenko" context="!test" dbms="!h2">
+        <renameSequence newSequenceName="sequencegenerator"
+                        oldSequenceName="sequenceGenerator"/>
+    </changeSet>
 </databaseChangeLog>
