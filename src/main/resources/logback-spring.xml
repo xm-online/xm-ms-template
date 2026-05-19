@@ -27,10 +27,17 @@
         </encoder>
     </appender>
 
-    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
-        <queueSize>512</queueSize>
-        <appender-ref ref="FILE"/>
-    </appender>
+    <springProperty scope="context" name="asyncLoggingEnabled" source="logging.async.enabled" defaultValue="true"/>
+
+    <if condition='property("asyncLoggingEnabled").equals("true")'>
+        <then>
+            <appender name="ASYNC"
+                      class="ch.qos.logback.classic.AsyncAppender">
+                <queueSize>512</queueSize>
+                <appender-ref ref="FILE"/>
+            </appender>
+        </then>
+    </if>
 
     <logger name="com.icthh.xm.ms.mstemplate" level="#logback.loglevel#"/>
 
