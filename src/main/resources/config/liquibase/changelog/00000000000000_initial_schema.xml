@@ -26,6 +26,12 @@
     </changeSet>
 
     <changeSet id="20260518000000" author="viktorpavlenko" context="!test" dbms="!h2">
+        <preConditions onFail="MARK_RAN">
+            <sequenceExists sequenceName="sequenceGenerator"/>
+            <not>
+                <sequenceExists sequenceName="sequencegenerator"/>
+            </not>
+        </preConditions>
         <renameSequence newSequenceName="sequencegenerator"
                         oldSequenceName="sequenceGenerator"/>
     </changeSet>
