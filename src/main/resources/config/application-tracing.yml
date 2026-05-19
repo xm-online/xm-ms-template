@@ -12,7 +12,7 @@ management:
   otlp:
     metrics:
       export:
-        url: ${OTEL_EXPORTER_OTLP_HTTP_BASE_URL:http://localhost:4318}/v1/metrics}
+        url: ${OTEL_EXPORTER_OTLP_HTTP_BASE_URL:http://localhost:4318}/v1/metrics
   tracing:
     propagation:
       type: w3c
