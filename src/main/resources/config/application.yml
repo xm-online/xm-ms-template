@@ -157,11 +157,6 @@ spring:
   output:
     ansi:
       console-available: true
-
-logging:
-  async:
-    enabled: true
-
 server:
   servlet:
     session:
