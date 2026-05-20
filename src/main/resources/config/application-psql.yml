@@ -1,9 +1,9 @@
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://localhost:5432/stellaaiagent
+    username: stellaaiagent
+    password: stellaaiagent
   jpa:
     database-platform: com.icthh.xm.commons.migration.db.jsonb.CustomPostgreSQLDialect
     database: POSTGRESQL
@@ -22,3 +22,5 @@ spring:
       hibernate.interceptor: com.icthh.xm.commons.domainevent.db.service.DatabaseSourceInterceptor
       hibernate:
         dialect: com.icthh.xm.commons.migration.db.jsonb.CustomPostgreSQLDialect
+server:
+  port: 8081

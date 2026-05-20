@@ -27,7 +27,7 @@ spring:
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:mem:mstemplate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:mstemplate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
     name:
     username:
     password:
