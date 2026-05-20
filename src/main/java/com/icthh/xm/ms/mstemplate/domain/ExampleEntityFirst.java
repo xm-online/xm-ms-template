@@ -31,7 +31,7 @@ public class ExampleEntityFirst implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator", sequenceName = "\"sequenceGenerator\"")
     @Column(name = "id")
     private Long id;
 
