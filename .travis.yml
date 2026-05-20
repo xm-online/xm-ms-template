@@ -1,12 +1,12 @@
 language: java
 jdk:
-- oraclejdk21
+- openjdk25
 install: true
 dist: jammy
 
 script:
     - set -e
-    - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.61.0
+    - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.69.3
     - trivy version
     - "./gradlew --no-daemon --refresh-dependencies clean check test"
     - "./gradlew -x test -Pprod --no-daemon bootWar"

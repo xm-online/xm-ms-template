@@ -1,6 +1,5 @@
 package com.icthh.xm.ms.mstemplate.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 import com.icthh.xm.commons.permission.annotation.PrivilegeDescription;
 import com.icthh.xm.ms.mstemplate.service.ExampleEntityFirstQueryService;
 import com.icthh.xm.ms.mstemplate.service.ExampleEntityFirstService;
@@ -61,7 +60,6 @@ public class ExampleEntityFirstResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new exampleEntityFirstDto, or with status {@code 400 (Bad Request)} if the exampleEntityFirst has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @Timed
     @PostMapping("/example-entity-firsts")
     @PreAuthorize("hasPermission({'exampleEntityFirstDto': #exampleEntityFirstDto}, 'EXAMPLE_ENTITY_FIRST.CREATE')")
     @PrivilegeDescription("Privilege to create a new example entity first")
@@ -87,7 +85,6 @@ public class ExampleEntityFirstResource {
      * or with status {@code 500 (Internal Server Error)} if the exampleEntityFirstDto couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @Timed
     @PutMapping("/example-entity-firsts/{id}")
     @PreAuthorize("hasPermission({'exampleEntityFirstDto': #exampleEntityFirstDto, 'id': #id}, 'EXAMPLE_ENTITY_FIRST.UPDATE')")
     @PrivilegeDescription("Privilege to update example entity first")
@@ -124,7 +121,6 @@ public class ExampleEntityFirstResource {
      * or with status {@code 500 (Internal Server Error)} if the exampleEntityFirstDto couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @Timed
     @PreAuthorize("hasPermission({'exampleEntityFirstDto': #exampleEntityFirstDto, 'id': #id}, 'EXAMPLE_ENTITY_FIRST.PARTIAL_UPDATE')")
     @PrivilegeDescription("Privilege to partial update example entity first")
     @PatchMapping(value = "/example-entity-firsts/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -158,7 +154,6 @@ public class ExampleEntityFirstResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of exampleEntityFirsts in body.
      */
-    @Timed
     @GetMapping("/example-entity-firsts")
     public ResponseEntity<List<ExampleEntityFirstDto>> getAllExampleEntityFirsts(
         ExampleEntityFirstCriteria criteria,
@@ -175,7 +170,6 @@ public class ExampleEntityFirstResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
-    @Timed
     @GetMapping("/example-entity-firsts/count")
     public ResponseEntity<Long> countExampleEntityFirsts(ExampleEntityFirstCriteria criteria) {
         return ResponseEntity.ok().body(exampleEntityFirstQueryService.countByCriteria(criteria, null));
@@ -187,7 +181,6 @@ public class ExampleEntityFirstResource {
      * @param id the id of the exampleEntityFirstDto to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the exampleEntityFirstDto, or with status {@code 404 (Not Found)}.
      */
-    @Timed
     @GetMapping("/example-entity-firsts/{id}")
     @PostAuthorize("hasPermission({'returnObject': returnObject.body}, 'EXAMPLE_ENTITY_FIRST.GET_LIST.ITEM')")
     @PrivilegeDescription("Privilege to get the example entity first by id")
@@ -202,7 +195,6 @@ public class ExampleEntityFirstResource {
      * @param id the id of the exampleEntityFirstDto to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @Timed
     @DeleteMapping("/example-entity-firsts/{id}")
     @PreAuthorize("hasPermission({'id': #id}, 'exampleEntityFirst', 'EXAMPLE_ENTITY_FIRST.DELETE')")
     @PrivilegeDescription("Privilege to delete the example entity first by id")

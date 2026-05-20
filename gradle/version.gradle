@@ -12,13 +12,13 @@ buildscript {
 import org.apache.commons.configuration.PropertiesConfiguration
 
 
-task getProjectVersion {
+tasks.register('getProjectVersion') {
     doLast {
         println project.version
     }
 }
 
-task incrementProjectVersion {
+tasks.register('incrementProjectVersion') {
     doLast{
         PropertiesConfiguration props = new PropertiesConfiguration(project.getProjectDir().absolutePath + '/gradle.properties')
         String version = props.getProperty("version")
@@ -32,7 +32,8 @@ task incrementProjectVersion {
 
 }
 
-task decrementProjectVersion(dependsOn: processResources) {
+tasks.register('decrementProjectVersion') {
+    dependsOn processResources
     doLast{
         PropertiesConfiguration props = new PropertiesConfiguration(project.getProjectDir().absolutePath + '/gradle.properties')
         String version = props.getProperty("version")
@@ -46,4 +47,4 @@ task decrementProjectVersion(dependsOn: processResources) {
         props.setProperty("version", newVersion)
         props.save()
     }
-} 
+}

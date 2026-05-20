@@ -1,6 +1,5 @@
 package com.icthh.xm.ms.mstemplate.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 import com.icthh.xm.commons.permission.annotation.PrivilegeDescription;
 import com.icthh.xm.ms.mstemplate.service.ExampleEntitySecondQueryService;
 import com.icthh.xm.ms.mstemplate.service.ExampleEntitySecondService;
@@ -61,7 +60,6 @@ public class ExampleEntitySecondResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new exampleEntitySecondDto, or with status {@code 400 (Bad Request)} if the exampleEntitySecond has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @Timed
     @PostMapping("/example-entity-seconds")
     @PreAuthorize("hasPermission({'exampleEntitySecond': #exampleEntitySecondDto}, 'EXAMPLE_ENTITY_SECOND.CREATE')")
     @PrivilegeDescription("Privilege to create a new example entity second")
@@ -87,7 +85,6 @@ public class ExampleEntitySecondResource {
      * or with status {@code 500 (Internal Server Error)} if the exampleEntitySecondDto couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @Timed
     @PutMapping("/example-entity-seconds/{id}")
     @PreAuthorize("hasPermission({'exampleEntitySecond': #exampleEntitySecondDto, 'id': #id}, 'EXAMPLE_ENTITY_SECOND.UPDATE')")
     @PrivilegeDescription("Privilege to update example entity second")
@@ -124,7 +121,6 @@ public class ExampleEntitySecondResource {
      * or with status {@code 500 (Internal Server Error)} if the exampleEntitySecondDto couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @Timed
     @PreAuthorize("hasPermission({'exampleEntitySecond': #exampleEntitySecondDto, 'id': #id}, 'EXAMPLE_ENTITY_SECOND.PARTIAL_UPDATE')")
     @PrivilegeDescription("Privilege to partial update example entity second")
     @PatchMapping(value = "/example-entity-seconds/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -158,7 +154,6 @@ public class ExampleEntitySecondResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of exampleEntitySeconds in body.
      */
-    @Timed
     @GetMapping("/example-entity-seconds")
     public ResponseEntity<List<ExampleEntitySecondDto>> getAllExampleEntitySeconds(
         ExampleEntitySecondCriteria criteria,
@@ -175,7 +170,6 @@ public class ExampleEntitySecondResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
-    @Timed
     @GetMapping("/example-entity-seconds/count")
     public ResponseEntity<Long> countExampleEntitySeconds(ExampleEntitySecondCriteria criteria) {
         return ResponseEntity.ok().body(exampleEntitySecondQueryService.countByCriteria(criteria, null));
@@ -187,7 +181,6 @@ public class ExampleEntitySecondResource {
      * @param id the id of the exampleEntitySecondDto to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the exampleEntitySecondDto, or with status {@code 404 (Not Found)}.
      */
-    @Timed
     @GetMapping("/example-entity-seconds/{id}")
     @PostAuthorize("hasPermission({'returnObject': returnObject.body}, 'EXAMPLE_ENTITY_SECOND.GET_LIST.ITEM')")
     @PrivilegeDescription("Privilege to get the example entity second by id")
@@ -202,7 +195,6 @@ public class ExampleEntitySecondResource {
      * @param id the id of the exampleEntitySecondDto to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @Timed
     @DeleteMapping("/example-entity-seconds/{id}")
     @PreAuthorize("hasPermission({'id': #id}, 'exampleEntitySecond', 'EXAMPLE_ENTITY_SECOND.DELETE')")
     @PrivilegeDescription("Privilege to delete the example entity second by id")

@@ -27,15 +27,12 @@ spring:
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:mem:mstemplate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:mstemplate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
     name:
     username:
     password:
     hikari:
       auto-commit: false
-  jackson:
-    serialization:
-      write-durations-as-timestamps: false
   jpa:
     database-platform: io.github.jhipster.domain.util.FixedH2Dialect
     database: H2
@@ -44,8 +41,8 @@ spring:
     hibernate:
       ddl-auto: create-drop
       naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        implicit-strategy: org.springframework.boot.hibernate.SpringImplicitNamingStrategy
     properties:
       hibernate.model.generator_name_as_sequence_name: false # see org.hibernate.cfg.AvailableSettings.PREFER_GENERATOR_NAME_AS_DEFAULT_SEQUENCE_NAME
       hibernate.id.new_generator_mappings: true

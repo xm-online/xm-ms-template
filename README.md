@@ -1,6 +1,6 @@
 # mstemplate
 
-This application was generated using JHipster 8.6.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.6.0](https://www.jhipster.tech/documentation-archive/v8.6.0).
+This application was generated using JHipster 9.0.0, you can find documentation and help at https://www.jhipster.tech/documentation-archive/v9.0.0/2026/03/10/jhipster-release-9.0.0.html.
 
 This is a "microservice" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
 
