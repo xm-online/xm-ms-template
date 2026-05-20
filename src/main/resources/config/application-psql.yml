@@ -1,9 +1,9 @@
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/stellaaiagent
-    username: stellaaiagent
-    password: stellaaiagent
+    url: jdbc:postgresql://localhost:${POSTGRES_PORT:5432}/mstemplate
+    username: mstemplate
+    password: mstemplate
   jpa:
     database-platform: com.icthh.xm.commons.migration.db.jsonb.CustomPostgreSQLDialect
     database: POSTGRESQL

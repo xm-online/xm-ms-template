@@ -38,9 +38,9 @@ spring:
       port: 8500
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/entity
-    username: entity
-    password: entity
+    url: jdbc:postgresql://localhost:${POSTGRES_PORT:5432}/mstemplate
+    username: mstemplate
+    password: mstemplate
     hikari:
       poolName: Hikari
       auto-commit: false
