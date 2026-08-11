@@ -3,6 +3,16 @@ management:
     metrics:
       export:
         enabled: false
+  opentelemetry:
+    enabled: false
+  tracing:
+    export:
+      otlp:
+        enabled: false
+  otlp:
+    metrics:
+      export:
+        enabled: false
 
 spring:
   config:

@@ -12,6 +12,7 @@ management:
   otlp:
     metrics:
       export:
+        enabled: ${MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED:false}
         url: ${OTEL_EXPORTER_OTLP_HTTP_BASE_URL:http://localhost:4318}/v1/metrics
   tracing:
     propagation:
@@ -19,4 +20,4 @@ management:
     sampling:
       probability: 1.0 # report 100% of traces
     export:
-      enabled: true
+      enabled: ${MANAGEMENT_TRACING_EXPORT_ENABLED:false}
