@@ -1,0 +1,126 @@
+// Build-time optional dependencies ("features").
+//
+// Each feature is a named group of dependencies, switched on/off with a Gradle property:
+//   ./gradlew build -Pxm.feature.cache=false            # drop a default feature
+//   ./gradlew build -Pxm.feature.oracle=true            # add a non-default feature
+// Defaults can be pinned per service in gradle.properties (xm.feature.<name>=true|false).
+//
+// Dependencies are registered lazily through providers (DependencyHandler#addProvider):
+// a disabled feature yields an empty provider, which Gradle skips. Properties are read via
+// `providers.gradleProperty`, so switching a flag correctly invalidates the configuration cache.
+//
+// A disabled feature with `excludeWhenDisabled = true` also excludes its modules from every
+// configuration, so they are removed even when pulled in transitively by another dependency.
+//
+// Ad-hoc removal of any module (transitive or direct) without touching this file:
+//   ./gradlew build -PexcludeModules=com.icthh.xm.commons:xm-commons-timeline,org.foo:bar
+//
+// Print the resolved state: ./gradlew features
+
+def xmFeatures = [
+    scheduler  : [
+        enabledByDefault   : false,
+        excludeWhenDisabled: false,
+        dependencies       : [
+            implementation: ["com.icthh.xm.commons:xm-commons-scheduler:${xm_commons_version}"]
+        ]
+    ],
+    lepJs      : [
+        enabledByDefault   : false,
+        excludeWhenDisabled: false,
+        dependencies       : [
+            implementation: ["com.icthh.xm.commons:xm-commons-lep-js:${xm_commons_version}"]
+        ]
+    ],
+    cache      : [
+        enabledByDefault   : true,
+        excludeWhenDisabled: true,
+        dependencies       : [
+            implementation: ["com.icthh.xm.commons:xm-commons-cache:${xm_commons_version}"]
+        ]
+    ],
+    redisCache : [
+        enabledByDefault   : false,
+        excludeWhenDisabled: false,
+        requires           : ['cache'], // xm-commons-cache-redis depends on xm-commons-cache
+        dependencies       : [
+            implementation: ["com.icthh.xm.commons:xm-commons-cache-redis:${xm_commons_version}"]
+        ]
+    ],
+    oracle     : [
+        enabledByDefault   : false,
+        excludeWhenDisabled: false,
+        dependencies       : [
+            // version managed by the Spring Boot BOM
+            runtimeOnly: ["com.oracle.database.jdbc:ojdbc11"]
+        ]
+    ],
+]
+
+def featureFlag = { String name, boolean enabledByDefault ->
+    providers.gradleProperty("xm.feature.${name}")
+        .map { it.trim().toBoolean() }
+        .orElse(enabledByDefault)
+}
+
+def featureState = xmFeatures.collectEntries { name, spec ->
+    [(name): featureFlag(name, spec.enabledByDefault)]
+}
+
+xmFeatures.each { name, spec ->
+    spec.requires?.each { required ->
+        if (featureState[name].get() && !featureState[required].get()) {
+            throw new GradleException("Feature '${name}' requires '${required}': " +
+                "use -Pxm.feature.${required}=true or -Pxm.feature.${name}=false")
+        }
+    }
+}
+
+dependencies {
+    xmFeatures.each { name, spec ->
+        Provider<Boolean> enabled = featureState[name]
+        spec.dependencies.each { configurationName, notations ->
+            notations.each { notation ->
+                addProvider(configurationName, enabled.filter { it }.map { notation })
+            }
+        }
+    }
+}
+
+// Exclusions must be known when a configuration is resolved, so they are evaluated here.
+def excludedModules = providers.gradleProperty("excludeModules")
+    .map { it.split(',')*.trim().findAll() }
+    .orElse([])
+    .get()
+    .collect { String coordinates ->
+        def parts = coordinates.split(':')
+        if (parts.length != 2) {
+            throw new GradleException("excludeModules: expected 'group:module', got '${coordinates}'")
+        }
+        [group: parts[0], module: parts[1]]
+    }
+
+xmFeatures.each { name, spec ->
+    if (spec.excludeWhenDisabled && !featureState[name].get()) {
+        spec.dependencies.values().flatten().each { String notation ->
+            def parts = notation.split(':')
+            excludedModules << [group: parts[0], module: parts[1]]
+        }
+    }
+}
+
+configurations.configureEach {
+    excludedModules.each { exclude(it) }
+}
+
+def featureReport = xmFeatures.keySet().collect { name ->
+    "${featureState[name].get() ? '[x]' : '[ ]'} ${name}  (-Pxm.feature.${name}=true|false)"
+} + excludedModules.collect { "excluded: ${it.group}:${it.module}" }
+
+tasks.register('features') {
+    group = 'help'
+    description = 'Prints enabled optional dependency features and exclusions.'
+    doLast {
+        featureReport.each { println it }
+    }
+}

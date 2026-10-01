@@ -217,6 +217,27 @@ To edit the `api.yml` definition file, you can use a tool such as [Swagger-Edito
 
 Refer to [Doing API-First development][] for more details.
 
+### Optional dependencies (build-time features)
+
+Optional dependency groups are declared in `gradle/features.gradle` and switched with `-Pxm.feature.<name>=true|false`
+(or an `xm.feature.<name>=` line in `gradle.properties` to pin a default per service).
+
+| Feature      | Default | Dependencies                                   |
+|--------------|---------|------------------------------------------------|
+| `cache`      | on      | `com.icthh.xm.commons:xm-commons-cache`        |
+| `redisCache` | off     | `com.icthh.xm.commons:xm-commons-cache-redis` (requires `cache`) |
+| `oracle`     | off     | `com.oracle.database.jdbc:ojdbc11` (runtimeOnly, version from Spring Boot BOM) |
+
+```
+./gradlew -Pprod bootJar -Pxm.feature.oracle=true -Pxm.feature.redisCache=true
+./gradlew -Pprod bootJar -Pxm.feature.cache=false
+./gradlew -Pprod bootJar -PexcludeModules=com.icthh.xm.commons:xm-commons-timeline   # remove any module, incl. transitive
+./gradlew features                                                                  # print current state
+```
+
+A disabled feature marked `excludeWhenDisabled` is also excluded transitively from all configurations.
+To add a feature, add an entry to the `xmFeatures` map; do not declare the same dependency in `build.gradle`.
+
 ## Building for production
 
 ### Manage application timezone
