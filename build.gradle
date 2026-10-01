@@ -47,6 +47,8 @@ apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
 apply from: "gradle/swagger.gradle"
 apply from: "gradle/version.gradle"
+// optional dependencies toggled by -Pxm.feature.name=true|false, see the file header
+apply from: "gradle/features.gradle"
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
 if (project.hasProperty("prod")) {
@@ -235,7 +237,6 @@ dependencies {
     implementation "org.springframework.security:spring-security-web"
 
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocOpenapiVersion}"
-    implementation "com.icthh.xm.commons:xm-commons-metric-lep:${xm_commons_version}"
     implementation "io.micrometer:micrometer-registry-prometheus"
     implementation "org.postgresql:postgresql:${postgresqlVersion}"
 
@@ -249,14 +250,12 @@ dependencies {
     }
     implementation "com.icthh.xm.commons:xm-commons-lep:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-lep-groovy:${xm_commons_version}"
-    implementation "com.icthh.xm.commons:xm-commons-lep-js:${xm_commons_version}" // optional
+    implementation "com.icthh.xm.commons:xm-commons-metric-lep:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-tenant-endpoint:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-i18n:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-timeline:${xm_commons_version}"
-    implementation "com.icthh.xm.commons:xm-commons-cache:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-migration-db:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-permission:${xm_commons_version}"
-    implementation "com.icthh.xm.commons:xm-commons-scheduler:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-metric:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-topic:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-logging-configurable:${xm_commons_version}"
