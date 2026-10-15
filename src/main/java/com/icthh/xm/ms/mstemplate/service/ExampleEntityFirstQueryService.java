@@ -57,8 +57,8 @@ public class ExampleEntityFirstQueryService extends QueryService<ExampleEntityFi
      * @return the number of matching entities.
      */
     @Transactional(readOnly = true)
-    @FindWithPermission("EXAMPLE_ENTITY_SECOND.COUNT")
-    @PrivilegeDescription("Privilege to get count of example entity second which matches the criteria from the database")
+    @FindWithPermission("EXAMPLE_ENTITY_FIRST.COUNT")
+    @PrivilegeDescription("Privilege to get count of example entity first which matches the criteria from the database")
     public long countByCriteria(ExampleEntityFirstCriteria criteria, String privilegeKey) {
         log.debug("count by criteria : {}", criteria);
         return permittedRepository.countByCondition(ExampleEntityFirst.class, criteria, privilegeKey);
