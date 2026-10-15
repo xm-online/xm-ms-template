@@ -86,7 +86,6 @@ spring:
           uaa:
             authorization-grant-type: client_credentials
             client-id: internal
-            client-secret: internal
 
 server:
   port: 10344
