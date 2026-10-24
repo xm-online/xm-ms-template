@@ -79,7 +79,8 @@ spring:
     consul:
       enabled: true
       discovery:
-        query-passing: true
+        # Defaults come from xm-commons (xm-defaults.yml). Uncomment to override for this service:
+        # query-passing: true
         healthCheckPath: /management/health
         instanceId: mstemplate:${spring.application.instance-id:${random.value}}
         service-name: mstemplate
@@ -91,8 +92,6 @@ spring:
       dev:
         - dev
         - api-docs
-  jmx:
-    enabled: true
   data:
     jpa:
       repositories:
@@ -124,6 +123,10 @@ spring:
     default-property-inclusion: non_empty
   kafka:
     bootstrap-servers: localhost:9092
+    properties:
+      security.protocol: PLAINTEXT # SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=SASL_PLAINTEXT, protocol to the brokers: PLAINTEXT, SASL_PLAINTEXT, SSL, SASL_SSL; empty is not allowed
+      sasl.mechanism: # SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=SCRAM-SHA-512, SASL mechanism: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512
+      sasl.jaas.config: # SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.scram.ScramLoginModule required username="user" password="secret";, SASL login and password
     #  To start using feign client with authentication, use this configuration and provide correct
     #  token-uri, client-id and client-secret
   security:
@@ -163,8 +166,9 @@ server:
       cookie:
         http-only: true
 
-springdoc:
-  show-actuator: true
+# Defaults come from xm-commons (xm-defaults.yml). Uncomment to override for this service:
+# springdoc:
+#   show-actuator: false
 
 xm-config:
   enabled: true

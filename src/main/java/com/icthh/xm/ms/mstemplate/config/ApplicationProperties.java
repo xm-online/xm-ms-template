@@ -1,5 +1,6 @@
 package com.icthh.xm.ms.mstemplate.config;
 
+import com.icthh.xm.commons.security.RoleConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -23,6 +24,9 @@ public class ApplicationProperties {
     private Integer kafkaMetadataMaxAge;
     private KafkaHealth kafkaHealth;
     private ConfigFetchAll configFetchAll;
+    private String configPrivateKey;
+    private final Prometheus prometheus = new Prometheus();
+    private final Management management = new Management();
 
     @Data
     public static class KafkaHealth {
@@ -32,5 +36,32 @@ public class ApplicationProperties {
     @Data
     public static class ConfigFetchAll {
         private Boolean enabled;
+    }
+
+    @Data
+    public static class Prometheus {
+        /**
+         * application.prometheus.public: /management/prometheus is available without authentication.
+         */
+        private boolean isPublic;
+    }
+
+    @Data
+    public static class Management {
+        private final Access access = new Access();
+        private final Info info = new Info();
+
+        @Data
+        public static class Access {
+            private String role = RoleConstant.SYSTEM_ADMIN;
+        }
+
+        @Data
+        public static class Info {
+            /**
+             * application.management.info.public: /management/info is available without authentication.
+             */
+            private boolean isPublic;
+        }
     }
 }
