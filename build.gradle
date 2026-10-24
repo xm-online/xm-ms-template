@@ -271,7 +271,6 @@ dependencies {
     }
     implementation "com.icthh.xm.commons:xm-commons-lep:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-lep-groovy:${xm_commons_version}"
-    annotationProcessor "com.icthh.xm.commons:xm-commons-lep-annotation-processor:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-lep-js:${xm_commons_version}" // optional
     implementation "com.icthh.xm.commons:xm-commons-tenant-endpoint:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-i18n:${xm_commons_version}"
