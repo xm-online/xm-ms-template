@@ -126,6 +126,13 @@ spring:
       security.protocol: PLAINTEXT # SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=SASL_PLAINTEXT, protocol to the brokers: PLAINTEXT, SASL_PLAINTEXT, SSL, SASL_SSL; empty is not allowed
       sasl.mechanism: # SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=SCRAM-SHA-512, SASL mechanism: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512
       sasl.jaas.config: # SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.scram.ScramLoginModule required username="user" password="secret";, SASL login and password
+    ssl:
+      trust-store-location: # SPRING_KAFKA_SSL_TRUST_STORE_LOCATION=file:/certs/ca.p12, CA of the broker certificate, for SSL and SASL_SSL
+      trust-store-password: # SPRING_KAFKA_SSL_TRUST_STORE_PASSWORD=changeit, password of the trust store
+      trust-store-type: # SPRING_KAFKA_SSL_TRUST_STORE_TYPE=PKCS12, type of the trust store: PKCS12, JKS, PEM
+      key-store-location: # SPRING_KAFKA_SSL_KEY_STORE_LOCATION=file:/certs/mstemplate.p12, client certificate, for SSL and SASL_SSL
+      key-store-password: # SPRING_KAFKA_SSL_KEY_STORE_PASSWORD=changeit, password of the key store, required with SSL and SASL_SSL
+      key-store-type: # SPRING_KAFKA_SSL_KEY_STORE_TYPE=PKCS12, type of the key store: PKCS12, JKS, PEM
     #  To start using feign client with authentication, use this configuration and provide correct
     #  token-uri, client-id and client-secret
   security:
