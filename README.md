@@ -141,6 +141,21 @@ the values are the PEM text; leave the store passwords out.
 
 `SASL_MECHANISM` must match the broker: `SCRAM-SHA-512` or `SCRAM-SHA-256` with `ScramLoginModule`,
 `PLAIN` with `org.apache.kafka.common.security.plain.PlainLoginModule`. The `;` at the end of `SASL_JAAS_CONFIG` is required.
+`OAUTHBEARER` and `GSSAPI` take the `sasl.oauthbearer.*`, `sasl.login.*` and `sasl.kerberos.*` variables listed in `application.yml`.
+
+The SSL stores can be given as one `spring.ssl.bundle` instead of `SPRING_KAFKA_SSL_*_STORE_*`:
+
+```
+SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:19094
+SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=SSL
+SPRING_SSL_BUNDLE_JKS_KAFKA_TRUSTSTORE_LOCATION=file:/certs/ca.p12
+SPRING_SSL_BUNDLE_JKS_KAFKA_TRUSTSTORE_PASSWORD=changeit
+SPRING_SSL_BUNDLE_JKS_KAFKA_TRUSTSTORE_TYPE=PKCS12
+SPRING_SSL_BUNDLE_JKS_KAFKA_KEYSTORE_LOCATION=file:/certs/mstemplate.p12
+SPRING_SSL_BUNDLE_JKS_KAFKA_KEYSTORE_PASSWORD=changeit
+SPRING_SSL_BUNDLE_JKS_KAFKA_KEYSTORE_TYPE=PKCS12
+SPRING_KAFKA_SSL_BUNDLE=kafka
+```
 
 #### Kafka broker with a password
 
@@ -194,7 +209,16 @@ APPLICATION_TENANT_CACHE_REDIS_PASSWORD=secret
 APPLICATION_TENANT_CACHE_REDIS_DATABASE=0
 ```
 
-The connection of `xm-commons-cache-redis` has no user name (ACL) and no TLS: only the password of `requirepass`.
+Redis with an ACL user and TLS, `redis-server --tls-port 6379 --port 0 --tls-cert-file /certs/redis.crt --tls-key-file /certs/redis.key --tls-ca-cert-file /certs/ca.crt --tls-auth-clients no`
+and `ACL SETUSER mstemplate on >secret ~* &* +@all`:
+
+```
+APPLICATION_TENANT_CACHE_REDIS_USERNAME=mstemplate
+APPLICATION_TENANT_CACHE_REDIS_PASSWORD=secret
+APPLICATION_TENANT_CACHE_REDIS_SSL=true
+```
+
+The CA of the Redis certificate must be trusted by the JVM: `JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStore=/certs/ca.p12 -Djavax.net.ssl.trustStorePassword=changeit`.
 
 ### Privileges
 

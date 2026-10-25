@@ -44,15 +44,19 @@ public class ApplicationPropertiesUnitTest {
             "application.tenant-cache.redis.enabled", "true",
             "application.tenant-cache.redis.host", "redis",
             "application.tenant-cache.redis.port", "6379",
+            "application.tenant-cache.redis.username", "user",
             "application.tenant-cache.redis.password", "secret",
-            "application.tenant-cache.redis.database", "0"));
+            "application.tenant-cache.redis.database", "0",
+            "application.tenant-cache.redis.ssl", "true"));
 
         ApplicationProperties.TenantCache.Redis redis = properties.getTenantCache().getRedis();
         assertEquals("true", redis.getEnabled());
         assertEquals("redis", redis.getHost());
         assertEquals("6379", redis.getPort());
+        assertEquals("user", redis.getUsername());
         assertEquals("secret", redis.getPassword());
         assertEquals("0", redis.getDatabase());
+        assertEquals("true", redis.getSsl());
     }
 
     @Test
@@ -70,7 +74,9 @@ public class ApplicationPropertiesUnitTest {
                 "application.tenant-cache.redis.enabled=",
                 "application.tenant-cache.redis.host=",
                 "application.tenant-cache.redis.port=",
+                "application.tenant-cache.redis.username=",
                 "application.tenant-cache.redis.password=",
+                "application.tenant-cache.redis.ssl=",
                 "application.tenant-cache.redis.database=",
                 "application.tenant-memory-cache.enabled=")
             .run(context -> {

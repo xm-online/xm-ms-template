@@ -61,8 +61,10 @@ public class ApplicationProperties {
             private String enabled;
             private String host;
             private String port;
+            private String username;
             private String password;
             private String database;
+            private String ssl;
         }
     }
 
