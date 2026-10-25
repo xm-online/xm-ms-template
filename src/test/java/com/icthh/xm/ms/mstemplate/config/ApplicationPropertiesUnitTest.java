@@ -56,6 +56,13 @@ public class ApplicationPropertiesUnitTest {
     }
 
     @Test
+    public void testTenantMemoryCachePropertyIsBound() {
+        ApplicationProperties properties = bind(Map.of("application.tenant-memory-cache.enabled", "true"));
+
+        assertEquals("true", properties.getTenantMemoryCache().getEnabled());
+    }
+
+    @Test
     public void testEmptyValuesOfApplicationYmlAreBound() {
         new ApplicationContextRunner()
             .withUserConfiguration(EnableApplicationProperties.class)
@@ -64,7 +71,8 @@ public class ApplicationPropertiesUnitTest {
                 "application.tenant-cache.redis.host=",
                 "application.tenant-cache.redis.port=",
                 "application.tenant-cache.redis.password=",
-                "application.tenant-cache.redis.database=")
+                "application.tenant-cache.redis.database=",
+                "application.tenant-memory-cache.enabled=")
             .run(context -> {
                 assertNull(context.getStartupFailure());
                 assertEquals("", context.getBean(ApplicationProperties.class).getTenantCache().getRedis().getPort());

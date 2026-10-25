@@ -186,6 +186,7 @@ Redis server with a password: `redis-server --requirepass secret`.
 Environment variables of the microservice:
 
 ```
+APPLICATION_TENANT_MEMORY_CACHE_ENABLED=true
 APPLICATION_TENANT_CACHE_REDIS_ENABLED=true
 APPLICATION_TENANT_CACHE_REDIS_HOST=redis
 APPLICATION_TENANT_CACHE_REDIS_PORT=6379

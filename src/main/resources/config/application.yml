@@ -227,6 +227,8 @@ application:
     enabled: true
   config-fetch-all:
     enabled: false
+  tenant-memory-cache:
+    enabled: # APPLICATION_TENANT_MEMORY_CACHE_ENABLED=true, caches of cache.yml; with strategy REDIS they use the Redis connection below
   tenant-cache:
     redis: # the commented out properties break the connection when empty, set them by the environment variables when needed
       enabled: # APPLICATION_TENANT_CACHE_REDIS_ENABLED=true, Redis connection of xm-commons-cache-redis for caches with strategy REDIS in cache.yml

@@ -28,6 +28,7 @@ public class ApplicationProperties {
     private final Prometheus prometheus = new Prometheus();
     private final Management management = new Management();
     private final TenantCache tenantCache = new TenantCache();
+    private final TenantMemoryCache tenantMemoryCache = new TenantMemoryCache();
 
     @Data
     public static class KafkaHealth {
@@ -63,6 +64,15 @@ public class ApplicationProperties {
             private String password;
             private String database;
         }
+    }
+
+    /**
+     * application.tenant-memory-cache.enabled: caches of cache.yml, bound by XmTenantLepCacheConfig.
+     * String here, so that the empty value of application.yml is bound.
+     */
+    @Data
+    public static class TenantMemoryCache {
+        private String enabled;
     }
 
     @Data
