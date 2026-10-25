@@ -83,6 +83,111 @@ Microservice config connected using `xm-commons-config` usually transitively by 
 Security by default autoconfigured from `xm-commons-security` module.
 You can extend `com.icthh.xm.commons.security.spring.config.SecurityConfiguration` and override behavior if need.
 
+### Kafka connection
+
+The connection is set by environment variables. Full sets for each `security.protocol`:
+
+PLAINTEXT, no authentication and no encryption:
+
+```
+SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:19092
+SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=PLAINTEXT
+```
+
+SASL_PLAINTEXT, login and password, no encryption:
+
+```
+SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:19093
+SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=SASL_PLAINTEXT
+SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=SCRAM-SHA-512
+SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.scram.ScramLoginModule required username="mstemplate" password="secret";
+```
+
+SSL, encryption and a client certificate (the key store is needed when the broker requires client authentication):
+
+```
+SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:19094
+SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=SSL
+SPRING_KAFKA_SSL_TRUST_STORE_LOCATION=file:/certs/ca.p12
+SPRING_KAFKA_SSL_TRUST_STORE_PASSWORD=changeit
+SPRING_KAFKA_SSL_TRUST_STORE_TYPE=PKCS12
+SPRING_KAFKA_SSL_KEY_STORE_LOCATION=file:/certs/mstemplate.p12
+SPRING_KAFKA_SSL_KEY_STORE_PASSWORD=changeit
+SPRING_KAFKA_SSL_KEY_STORE_TYPE=PKCS12
+```
+
+SASL_SSL, login and password over encryption:
+
+```
+SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:19095
+SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=SASL_SSL
+SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=SCRAM-SHA-512
+SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.scram.ScramLoginModule required username="mstemplate" password="secret";
+SPRING_KAFKA_SSL_TRUST_STORE_LOCATION=file:/certs/ca.p12
+SPRING_KAFKA_SSL_TRUST_STORE_PASSWORD=changeit
+SPRING_KAFKA_SSL_TRUST_STORE_TYPE=PKCS12
+```
+
+`SASL_MECHANISM` must match the broker: `SCRAM-SHA-512` or `SCRAM-SHA-256` with `ScramLoginModule`,
+`PLAIN` with `org.apache.kafka.common.security.plain.PlainLoginModule`. The `;` at the end of `SASL_JAAS_CONFIG` is required.
+
+#### Kafka broker with a password
+
+A broker (KRaft) with one listener per mode, `server.properties`:
+
+```properties
+listeners=CONTROLLER://:29099,PLAINTEXT://:19092,SASLP://:19093,MTLS://:19094,SASLS://:19095
+advertised.listeners=PLAINTEXT://kafka:19092,SASLP://kafka:19093,MTLS://kafka:19094,SASLS://kafka:19095
+listener.security.protocol.map=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SASLP:SASL_PLAINTEXT,MTLS:SSL,SASLS:SASL_SSL
+inter.broker.listener.name=PLAINTEXT
+
+# SASL_PLAINTEXT and SASL_SSL: login and password
+sasl.enabled.mechanisms=SCRAM-SHA-512
+listener.name.saslp.scram-sha-512.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required;
+listener.name.sasls.scram-sha-512.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required;
+
+# SSL and SASL_SSL: the broker certificate must contain the host name of advertised.listeners
+ssl.keystore.location=/certs/broker.p12
+ssl.keystore.password=changeit
+ssl.keystore.type=PKCS12
+# CA of the client certificates, for SSL with client authentication
+ssl.truststore.location=/certs/truststore.p12
+ssl.truststore.password=changeit
+ssl.truststore.type=PKCS12
+listener.name.mtls.ssl.client.auth=required
+```
+
+The SASL user and its password:
+
+```
+# when the storage is formatted
+kafka-storage.sh format -t <cluster id> -c server.properties --add-scram 'SCRAM-SHA-512=[name=mstemplate,password=secret]'
+# or on a running broker
+kafka-configs.sh --bootstrap-server kafka:19092 --alter --entity-type users --entity-name mstemplate \
+    --add-config 'SCRAM-SHA-512=[password=secret]'
+```
+
+### Redis connection
+
+Redis server with a password: `redis-server --requirepass secret` (the `default` user),
+or an ACL user in `redis.conf`: `user mstemplate on >secret ~* +@all`.
+
+Environment variables of the microservice:
+
+```
+SPRING_DATA_REDIS_HOST=redis
+SPRING_DATA_REDIS_PORT=6379
+SPRING_DATA_REDIS_USERNAME=mstemplate
+SPRING_DATA_REDIS_PASSWORD=secret
+```
+
+`SPRING_DATA_REDIS_USERNAME` is only for an ACL user, with `requirepass` leave it out.
+For TLS add `SPRING_DATA_REDIS_SSL_ENABLED=true`.
+
+With `xm-commons-cache-redis` and `application.tenant-cache.redis.enabled=true` the cache uses its own connection:
+`APPLICATION_TENANT_CACHE_REDIS_HOST`, `APPLICATION_TENANT_CACHE_REDIS_PORT`, `APPLICATION_TENANT_CACHE_REDIS_PASSWORD`
+(no user name and no TLS).
+
 ### Privileges
 
 There are conventions for privilege keys:
