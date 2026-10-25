@@ -114,6 +114,8 @@ SPRING_KAFKA_SSL_TRUST_STORE_TYPE=PKCS12
 SPRING_KAFKA_SSL_KEY_STORE_LOCATION=file:/certs/mstemplate.p12
 SPRING_KAFKA_SSL_KEY_STORE_PASSWORD=changeit
 SPRING_KAFKA_SSL_KEY_STORE_TYPE=PKCS12
+SPRING_KAFKA_SSL_KEY_PASSWORD=changeit
+SPRING_KAFKA_SSL_PROTOCOL=TLSv1.3
 ```
 
 SASL_SSL, login and password over encryption:
@@ -129,10 +131,13 @@ SPRING_KAFKA_SSL_TRUST_STORE_TYPE=PKCS12
 SPRING_KAFKA_SSL_KEY_STORE_LOCATION=file:/certs/mstemplate.p12
 SPRING_KAFKA_SSL_KEY_STORE_PASSWORD=changeit
 SPRING_KAFKA_SSL_KEY_STORE_TYPE=PKCS12
+SPRING_KAFKA_SSL_KEY_PASSWORD=changeit
+SPRING_KAFKA_SSL_PROTOCOL=TLSv1.3
 ```
 
-With SSL and SASL_SSL the key store is required: `application.yml` has an empty `spring.kafka.ssl.key-store-password`,
-and Kafka does not start the SSL connection with a key store password but without a key store.
+PEM instead of the store files: `SPRING_KAFKA_SSL_KEY_STORE_TYPE=PEM` with `SPRING_KAFKA_SSL_KEY_STORE_CERTIFICATE_CHAIN`
+and `SPRING_KAFKA_SSL_KEY_STORE_KEY`, `SPRING_KAFKA_SSL_TRUST_STORE_TYPE=PEM` with `SPRING_KAFKA_SSL_TRUST_STORE_CERTIFICATES`,
+the values are the PEM text; leave the store passwords out.
 
 `SASL_MECHANISM` must match the broker: `SCRAM-SHA-512` or `SCRAM-SHA-256` with `ScramLoginModule`,
 `PLAIN` with `org.apache.kafka.common.security.plain.PlainLoginModule`. The `;` at the end of `SASL_JAAS_CONFIG` is required.

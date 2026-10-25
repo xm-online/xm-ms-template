@@ -126,13 +126,20 @@ spring:
       security.protocol: PLAINTEXT # SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=SASL_PLAINTEXT, protocol to the brokers: PLAINTEXT, SASL_PLAINTEXT, SSL, SASL_SSL; empty is not allowed
       sasl.mechanism: # SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=SCRAM-SHA-512, SASL mechanism: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512
       sasl.jaas.config: # SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.scram.ScramLoginModule required username="user" password="secret";, SASL login and password
-    ssl:
+    ssl: # the commented out properties break SSL when empty, set them by the environment variables when needed
       trust-store-location: # SPRING_KAFKA_SSL_TRUST_STORE_LOCATION=file:/certs/ca.p12, CA of the broker certificate, for SSL and SASL_SSL
-      trust-store-password: # SPRING_KAFKA_SSL_TRUST_STORE_PASSWORD=changeit, password of the trust store
+      # trust-store-password: # SPRING_KAFKA_SSL_TRUST_STORE_PASSWORD=changeit, password of the trust store
       trust-store-type: # SPRING_KAFKA_SSL_TRUST_STORE_TYPE=PKCS12, type of the trust store: PKCS12, JKS, PEM
       key-store-location: # SPRING_KAFKA_SSL_KEY_STORE_LOCATION=file:/certs/mstemplate.p12, client certificate, for SSL and SASL_SSL
-      key-store-password: # SPRING_KAFKA_SSL_KEY_STORE_PASSWORD=changeit, password of the key store, required with SSL and SASL_SSL
+      # key-store-password: # SPRING_KAFKA_SSL_KEY_STORE_PASSWORD=changeit, password of the key store file
       key-store-type: # SPRING_KAFKA_SSL_KEY_STORE_TYPE=PKCS12, type of the key store: PKCS12, JKS, PEM
+      # key-password: # SPRING_KAFKA_SSL_KEY_PASSWORD=changeit, password of the private key, when it differs from the key store password
+      # protocol: # SPRING_KAFKA_SSL_PROTOCOL=TLSv1.3, TLS protocol, Kafka default when not set
+      bundle: # SPRING_KAFKA_SSL_BUNDLE=kafka, name of a spring.ssl.bundle instead of the key store and trust store above
+      # PEM instead of the store files above:
+      # key-store-certificate-chain: # SPRING_KAFKA_SSL_KEY_STORE_CERTIFICATE_CHAIN=-----BEGIN CERTIFICATE-----..., client certificate chain in PEM, with SPRING_KAFKA_SSL_KEY_STORE_TYPE=PEM
+      # key-store-key: # SPRING_KAFKA_SSL_KEY_STORE_KEY=-----BEGIN PRIVATE KEY-----..., client private key in PEM, with SPRING_KAFKA_SSL_KEY_STORE_TYPE=PEM
+      # trust-store-certificates: # SPRING_KAFKA_SSL_TRUST_STORE_CERTIFICATES=-----BEGIN CERTIFICATE-----..., CA certificates in PEM, with SPRING_KAFKA_SSL_TRUST_STORE_TYPE=PEM
     #  To start using feign client with authentication, use this configuration and provide correct
     #  token-uri, client-id and client-secret
   security:
@@ -221,9 +228,9 @@ application:
   config-fetch-all:
     enabled: false
   tenant-cache:
-    redis:
+    redis: # the commented out properties break the connection when empty, set them by the environment variables when needed
       enabled: # APPLICATION_TENANT_CACHE_REDIS_ENABLED=true, Redis connection of xm-commons-cache-redis for caches with strategy REDIS in cache.yml
-      host: # APPLICATION_TENANT_CACHE_REDIS_HOST=redis, Redis host
-      port: # APPLICATION_TENANT_CACHE_REDIS_PORT=6379, Redis port
+      # host: # APPLICATION_TENANT_CACHE_REDIS_HOST=redis, Redis host, localhost when not set
+      # port: # APPLICATION_TENANT_CACHE_REDIS_PORT=6379, Redis port, 6379 when not set
       password: # APPLICATION_TENANT_CACHE_REDIS_PASSWORD=secret, Redis password (requirepass)
-      database: # APPLICATION_TENANT_CACHE_REDIS_DATABASE=0, Redis database number
+      # database: # APPLICATION_TENANT_CACHE_REDIS_DATABASE=0, Redis database number, 0 when not set
