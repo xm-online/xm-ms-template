@@ -48,7 +48,8 @@ public class ApplicationProperties {
     }
 
     /**
-     * application.tenant-cache.redis: Redis connection of xm-commons-cache-redis (XmRedisCacheAutoConfiguration).
+     * application.tenant-cache.redis: Redis connection of xm-commons-cache-redis, bound by XmRedisCacheAutoConfiguration.
+     * Strings here, so that the empty values of application.yml are bound.
      */
     @Data
     public static class TenantCache {
@@ -56,11 +57,11 @@ public class ApplicationProperties {
 
         @Data
         public static class Redis {
-            private Boolean enabled;
+            private String enabled;
             private String host;
-            private Integer port;
+            private String port;
             private String password;
-            private Integer database;
+            private String database;
         }
     }
 

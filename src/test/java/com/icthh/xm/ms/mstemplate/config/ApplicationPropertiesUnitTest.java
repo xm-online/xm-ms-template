@@ -1,8 +1,10 @@
 package com.icthh.xm.ms.mstemplate.config;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.boot.context.properties.source.MapConfigurationPropertySource;
+import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import java.util.Map;
 
@@ -46,23 +48,31 @@ public class ApplicationPropertiesUnitTest {
             "application.tenant-cache.redis.database", "0"));
 
         ApplicationProperties.TenantCache.Redis redis = properties.getTenantCache().getRedis();
-        assertTrue(redis.getEnabled());
+        assertEquals("true", redis.getEnabled());
         assertEquals("redis", redis.getHost());
-        assertEquals(6379, redis.getPort());
+        assertEquals("6379", redis.getPort());
         assertEquals("secret", redis.getPassword());
-        assertEquals(0, redis.getDatabase());
+        assertEquals("0", redis.getDatabase());
     }
 
     @Test
-    public void testEmptyTenantCacheRedisPropertiesAreBound() {
-        ApplicationProperties properties = bind(Map.of(
-            "application.tenant-cache.redis.enabled", "",
-            "application.tenant-cache.redis.host", "",
-            "application.tenant-cache.redis.port", "",
-            "application.tenant-cache.redis.password", "",
-            "application.tenant-cache.redis.database", ""));
+    public void testEmptyValuesOfApplicationYmlAreBound() {
+        new ApplicationContextRunner()
+            .withUserConfiguration(EnableApplicationProperties.class)
+            .withPropertyValues(
+                "application.tenant-cache.redis.enabled=",
+                "application.tenant-cache.redis.host=",
+                "application.tenant-cache.redis.port=",
+                "application.tenant-cache.redis.password=",
+                "application.tenant-cache.redis.database=")
+            .run(context -> {
+                assertNull(context.getStartupFailure());
+                assertEquals("", context.getBean(ApplicationProperties.class).getTenantCache().getRedis().getPort());
+            });
+    }
 
-        assertNull(properties.getTenantCache().getRedis().getPort());
+    @EnableConfigurationProperties(ApplicationProperties.class)
+    static class EnableApplicationProperties {
     }
 
     private static ApplicationProperties bind(Map<String, String> values) {
