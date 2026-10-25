@@ -220,3 +220,10 @@ application:
     enabled: true
   config-fetch-all:
     enabled: false
+  tenant-cache:
+    redis:
+      enabled: # APPLICATION_TENANT_CACHE_REDIS_ENABLED=true, Redis connection of xm-commons-cache-redis for caches with strategy REDIS in cache.yml
+      host: # APPLICATION_TENANT_CACHE_REDIS_HOST=redis, Redis host
+      port: # APPLICATION_TENANT_CACHE_REDIS_PORT=6379, Redis port
+      password: # APPLICATION_TENANT_CACHE_REDIS_PASSWORD=secret, Redis password (requirepass)
+      database: # APPLICATION_TENANT_CACHE_REDIS_DATABASE=0, Redis database number

@@ -175,24 +175,20 @@ kafka-configs.sh --bootstrap-server kafka:19092 --alter --entity-type users --en
 
 ### Redis connection
 
-Redis server with a password: `redis-server --requirepass secret` (the `default` user),
-or an ACL user in `redis.conf`: `user mstemplate on >secret ~* +@all`.
+Redis cache of `xm-commons-cache-redis`, for caches with `strategy: REDIS` in `cache.yml`.
+Redis server with a password: `redis-server --requirepass secret`.
 
 Environment variables of the microservice:
 
 ```
-SPRING_DATA_REDIS_HOST=redis
-SPRING_DATA_REDIS_PORT=6379
-SPRING_DATA_REDIS_USERNAME=mstemplate
-SPRING_DATA_REDIS_PASSWORD=secret
+APPLICATION_TENANT_CACHE_REDIS_ENABLED=true
+APPLICATION_TENANT_CACHE_REDIS_HOST=redis
+APPLICATION_TENANT_CACHE_REDIS_PORT=6379
+APPLICATION_TENANT_CACHE_REDIS_PASSWORD=secret
+APPLICATION_TENANT_CACHE_REDIS_DATABASE=0
 ```
 
-`SPRING_DATA_REDIS_USERNAME` is only for an ACL user, with `requirepass` leave it out.
-For TLS add `SPRING_DATA_REDIS_SSL_ENABLED=true`.
-
-With `xm-commons-cache-redis` and `application.tenant-cache.redis.enabled=true` the cache uses its own connection:
-`APPLICATION_TENANT_CACHE_REDIS_HOST`, `APPLICATION_TENANT_CACHE_REDIS_PORT`, `APPLICATION_TENANT_CACHE_REDIS_PASSWORD`
-(no user name and no TLS).
+The connection of `xm-commons-cache-redis` has no user name (ACL) and no TLS: only the password of `requirepass`.
 
 ### Privileges
 

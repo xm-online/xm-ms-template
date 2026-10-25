@@ -27,6 +27,7 @@ public class ApplicationProperties {
     private String configPrivateKey;
     private final Prometheus prometheus = new Prometheus();
     private final Management management = new Management();
+    private final TenantCache tenantCache = new TenantCache();
 
     @Data
     public static class KafkaHealth {
@@ -44,6 +45,23 @@ public class ApplicationProperties {
          * application.prometheus.public: /management/prometheus is available without authentication.
          */
         private boolean isPublic;
+    }
+
+    /**
+     * application.tenant-cache.redis: Redis connection of xm-commons-cache-redis (XmRedisCacheAutoConfiguration).
+     */
+    @Data
+    public static class TenantCache {
+        private final Redis redis = new Redis();
+
+        @Data
+        public static class Redis {
+            private Boolean enabled;
+            private String host;
+            private Integer port;
+            private String password;
+            private Integer database;
+        }
     }
 
     @Data

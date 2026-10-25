@@ -276,6 +276,7 @@ dependencies {
     implementation "com.icthh.xm.commons:xm-commons-i18n:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-timeline:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-cache:${xm_commons_version}"
+    implementation "com.icthh.xm.commons:xm-commons-cache-redis:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-migration-db:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-permission:${xm_commons_version}"
     implementation "com.icthh.xm.commons:xm-commons-scheduler:${xm_commons_version}"

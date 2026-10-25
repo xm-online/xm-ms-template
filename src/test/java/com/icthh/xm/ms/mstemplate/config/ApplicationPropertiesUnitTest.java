@@ -8,6 +8,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ApplicationPropertiesUnitTest {
@@ -33,6 +34,35 @@ public class ApplicationPropertiesUnitTest {
         assertEquals("SUPER-ADMIN", properties.getManagement().getAccess().getRole());
         assertTrue(properties.getManagement().getInfo().isPublic());
         assertEquals("key", properties.getConfigPrivateKey());
+    }
+
+    @Test
+    public void testTenantCacheRedisPropertiesAreBound() {
+        ApplicationProperties properties = bind(Map.of(
+            "application.tenant-cache.redis.enabled", "true",
+            "application.tenant-cache.redis.host", "redis",
+            "application.tenant-cache.redis.port", "6379",
+            "application.tenant-cache.redis.password", "secret",
+            "application.tenant-cache.redis.database", "0"));
+
+        ApplicationProperties.TenantCache.Redis redis = properties.getTenantCache().getRedis();
+        assertTrue(redis.getEnabled());
+        assertEquals("redis", redis.getHost());
+        assertEquals(6379, redis.getPort());
+        assertEquals("secret", redis.getPassword());
+        assertEquals(0, redis.getDatabase());
+    }
+
+    @Test
+    public void testEmptyTenantCacheRedisPropertiesAreBound() {
+        ApplicationProperties properties = bind(Map.of(
+            "application.tenant-cache.redis.enabled", "",
+            "application.tenant-cache.redis.host", "",
+            "application.tenant-cache.redis.port", "",
+            "application.tenant-cache.redis.password", "",
+            "application.tenant-cache.redis.database", ""));
+
+        assertNull(properties.getTenantCache().getRedis().getPort());
     }
 
     private static ApplicationProperties bind(Map<String, String> values) {
