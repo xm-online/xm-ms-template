@@ -68,10 +68,6 @@ public class ApplicationProperties {
         }
     }
 
-    /**
-     * application.tenant-memory-cache.enabled: caches of cache.yml, bound by XmTenantLepCacheConfig.
-     * String here, so that the empty value of application.yml is bound.
-     */
     @Data
     public static class TenantMemoryCache {
         private String enabled;
