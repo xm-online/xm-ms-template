@@ -25,6 +25,7 @@ public class ApplicationProperties {
     private KafkaHealth kafkaHealth;
     private ConfigFetchAll configFetchAll;
     private String configPrivateKey;
+    private final ApiDocs apiDocs = new ApiDocs();
     private final Prometheus prometheus = new Prometheus();
     private final Management management = new Management();
     private final TenantCache tenantCache = new TenantCache();
@@ -39,6 +40,11 @@ public class ApplicationProperties {
     @Data
     public static class ConfigFetchAll {
         private Boolean enabled;
+    }
+
+    @Data
+    public static class ApiDocs {
+        private boolean privilegeCheck = true;
     }
 
     @Data

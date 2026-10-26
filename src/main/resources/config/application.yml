@@ -247,6 +247,8 @@ application:
     enabled: true
   config-fetch-all:
     enabled: false
+  api-docs:
+    privilege-check: true
   tenant-memory-cache:
     enabled: # APPLICATION_TENANT_MEMORY_CACHE_ENABLED=true, caches of cache.yml; with strategy REDIS they use the Redis connection below
   tenant-cache:
