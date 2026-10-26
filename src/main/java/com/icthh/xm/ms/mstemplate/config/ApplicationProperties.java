@@ -1,6 +1,5 @@
 package com.icthh.xm.ms.mstemplate.config;
 
-import com.icthh.xm.commons.security.RoleConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -44,21 +43,14 @@ public class ApplicationProperties {
 
     @Data
     public static class ApiDocs {
-        private boolean privilegeCheck = true;
+        private boolean privilegeCheck;
     }
 
     @Data
     public static class Prometheus {
-        /**
-         * application.prometheus.public: /management/prometheus is available without authentication.
-         */
         private boolean isPublic;
     }
 
-    /**
-     * application.tenant-cache.redis: Redis connection of xm-commons-cache-redis, bound by XmRedisCacheAutoConfiguration.
-     * Strings here, so that the empty values of application.yml are bound.
-     */
     @Data
     public static class TenantCache {
         private final Redis redis = new Redis();
@@ -92,14 +84,11 @@ public class ApplicationProperties {
 
         @Data
         public static class Access {
-            private String role = RoleConstant.SYSTEM_ADMIN;
+            private String role;
         }
 
         @Data
         public static class Info {
-            /**
-             * application.management.info.public: /management/info is available without authentication.
-             */
             private boolean isPublic;
         }
     }
