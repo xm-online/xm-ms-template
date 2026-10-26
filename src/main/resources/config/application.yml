@@ -126,12 +126,12 @@ spring:
       sasl.mechanism: # SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=SCRAM-SHA-512, SASL mechanism: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512
       # sasl.jaas.config: # SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.scram.ScramLoginModule required username="user" password="secret";, SASL login and password
       # ssl.endpoint.identification.algorithm: # SPRING_KAFKA_PROPERTIES_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM=https, check of the broker host name in its certificate, https when not set; empty switches the check off
-      # OAUTHBEARER (SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=OAUTHBEARER, SASL_JAAS_CONFIG with org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required clientId="id" clientSecret="secret";):
+      # OAUTHBEARER (SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=OAUTHBEARER, SASL_JAAS_CONFIG with org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required clientId="id" clientSecret="secret";, SASL_LOGIN_CALLBACK_HANDLER_CLASS below, JAVA_TOOL_OPTIONS=-Dorg.apache.kafka.sasl.oauthbearer.allowed.urls=https://idp/oauth/token, URLs Kafka 4 may open: the token URL and the JWKS URL when set):
       sasl.oauthbearer.token.endpoint.url: # SPRING_KAFKA_PROPERTIES_SASL_OAUTHBEARER_TOKEN_ENDPOINT_URL=https://idp/oauth/token, where the client gets the token
-      sasl.oauthbearer.jwks.endpoint.url: # SPRING_KAFKA_PROPERTIES_SASL_OAUTHBEARER_JWKS_ENDPOINT_URL=https://idp/oauth/jwks, keys to validate the token, when the client validates it
+      # sasl.oauthbearer.jwks.endpoint.url: # SPRING_KAFKA_PROPERTIES_SASL_OAUTHBEARER_JWKS_ENDPOINT_URL=https://idp/oauth/jwks, keys to validate the token, when the client validates it; empty breaks OAUTHBEARER
       # sasl.oauthbearer.scope.claim.name: # SPRING_KAFKA_PROPERTIES_SASL_OAUTHBEARER_SCOPE_CLAIM_NAME=scope, claim of the scope in the token, scope when not set
       # sasl.oauthbearer.sub.claim.name: # SPRING_KAFKA_PROPERTIES_SASL_OAUTHBEARER_SUB_CLAIM_NAME=sub, claim of the principal in the token, sub when not set
-      # sasl.login.callback.handler.class: # SPRING_KAFKA_PROPERTIES_SASL_LOGIN_CALLBACK_HANDLER_CLASS=org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginCallbackHandler, gets the token for OAUTHBEARER
+      # sasl.login.callback.handler.class: # SPRING_KAFKA_PROPERTIES_SASL_LOGIN_CALLBACK_HANDLER_CLASS=org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginCallbackHandler, gets the token for OAUTHBEARER, required for OAUTHBEARER
       # sasl.client.callback.handler.class: # SPRING_KAFKA_PROPERTIES_SASL_CLIENT_CALLBACK_HANDLER_CLASS=com.example.CustomClientCallbackHandler, custom SASL client callback handler
       # sasl.login.class: # SPRING_KAFKA_PROPERTIES_SASL_LOGIN_CLASS=org.apache.kafka.common.security.oauthbearer.internals.OAuthBearerRefreshingLogin, custom login class
       # sasl.login.connect.timeout.ms: # SPRING_KAFKA_PROPERTIES_SASL_LOGIN_CONNECT_TIMEOUT_MS=10000, connect timeout to the token endpoint

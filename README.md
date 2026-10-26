@@ -143,6 +143,22 @@ the values are the PEM text; leave the store passwords out.
 `PLAIN` with `org.apache.kafka.common.security.plain.PlainLoginModule`. The `;` at the end of `SASL_JAAS_CONFIG` is required.
 `OAUTHBEARER` and `GSSAPI` take the `sasl.oauthbearer.*`, `sasl.login.*` and `sasl.kerberos.*` variables listed in `application.yml`.
 
+SASL_PLAINTEXT with OAUTHBEARER, a token of the client credentials from the token endpoint; Kafka 4 opens only the URLs
+listed in `org.apache.kafka.sasl.oauthbearer.allowed.urls`:
+
+```
+SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:19096
+SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=SASL_PLAINTEXT
+SPRING_KAFKA_PROPERTIES_SASL_MECHANISM=OAUTHBEARER
+SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG=org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required clientId="mstemplate" clientSecret="secret";
+SPRING_KAFKA_PROPERTIES_SASL_LOGIN_CALLBACK_HANDLER_CLASS=org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginCallbackHandler
+SPRING_KAFKA_PROPERTIES_SASL_OAUTHBEARER_TOKEN_ENDPOINT_URL=https://idp/oauth/token
+JAVA_TOOL_OPTIONS=-Dorg.apache.kafka.sasl.oauthbearer.allowed.urls=https://idp/oauth/token
+```
+
+With `SPRING_KAFKA_PROPERTIES_SASL_OAUTHBEARER_JWKS_ENDPOINT_URL=https://idp/oauth/jwks` the client also checks the token
+by these keys, then `allowed.urls` takes both URLs separated by a comma.
+
 The SSL stores can be given as one `spring.ssl.bundle` instead of `SPRING_KAFKA_SSL_*_STORE_*`:
 
 ```
