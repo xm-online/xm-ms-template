@@ -313,7 +313,7 @@ The rest of `/management/**` needs the role of `application.management.access.ro
 #### Metrics
 
 Metrics are collected in Prometheus format by Micrometer. In `prod` the export is off and Prometheus is closed;
-`MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true` turns the export on, `APPLICATION_PROMETHEUS_PUBLIC=true` opens it:
+`management.prometheus.metrics.export.enabled=true` turns the export on, `application.prometheus.public=true` opens it:
 
 ```
 curl -H "Authorization: Bearer $TOKEN" http://localhost:9080/management/prometheus
@@ -323,7 +323,7 @@ curl http://localhost:9080/management/prometheus
 #### Log management
 
 `/management/logs` stays on the main port and needs the privilege `LOGS.GET` to read and `LOGS.UPDATE` to change a level,
-with `APPLICATION_MANAGEMENT_LOGS_SYSTEM_ADMIN_ONLY=true` only the role of `application.management.access.role`.
+with `application.management.logs.system-admin-only=true` only the role of `application.management.access.role`.
 Here `TOKEN` is a token of a role with these privileges in `permissions.yml`:
 
 ```
