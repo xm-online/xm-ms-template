@@ -46,9 +46,16 @@ public class ApplicationProperties {
         private boolean privilegeCheck;
     }
 
-    @Data
     public static class Prometheus {
-        private boolean isPublic;
+        private boolean publicAccess;
+
+        public boolean isPublic() {
+            return publicAccess;
+        }
+
+        public void setPublic(boolean publicAccess) {
+            this.publicAccess = publicAccess;
+        }
     }
 
     @Data
@@ -81,15 +88,28 @@ public class ApplicationProperties {
     public static class Management {
         private final Access access = new Access();
         private final Info info = new Info();
+        private final Logs logs = new Logs();
 
         @Data
         public static class Access {
             private String role;
         }
 
-        @Data
         public static class Info {
-            private boolean isPublic;
+            private boolean publicAccess;
+
+            public boolean isPublic() {
+                return publicAccess;
+            }
+
+            public void setPublic(boolean publicAccess) {
+                this.publicAccess = publicAccess;
+            }
+        }
+
+        @Data
+        public static class Logs {
+            private boolean systemAdminOnly;
         }
     }
 }
