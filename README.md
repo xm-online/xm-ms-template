@@ -285,21 +285,42 @@ public ExampleEntityFirstDto save(ExampleEntityFirstDto exampleEntityFirstDto) {
 
 ### Actuator
 
+In `prod` the management endpoints are on port `9080`, `/management/health` is open.
+The rest of `/management/**` needs the role of `application.management.access.role` (`SYSTEM-ADMIN` by default),
+`TOKEN` below is a token of a user with this role.
+`prod,migration` keeps everything on the main port `8081` as before.
+
 #### Healthcheck
 
 [//]: # (TODO: need to find helathckeck for Kafka)
 
 #### Metrics
 
-Metrics should be collected in Prometheus format using Micrometer.
-You can access metric endpoint by `http://localhost:8081/management/prometheus`
+Metrics are collected in Prometheus format by Micrometer. In `prod` the export is off and Prometheus is closed;
+`MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true` turns the export on, `APPLICATION_PROMETHEUS_PUBLIC=true` opens it:
+
+```
+curl -H "Authorization: Bearer $TOKEN" http://localhost:9080/management/prometheus
+curl http://localhost:9080/management/prometheus
+```
 
 #### Log management
-Endpoint for logs management `http://localhost:8081/management/logs`
+
+`/management/logs` stays on the main port and needs the privilege `LOGS.GET` to read and `LOGS.UPDATE` to change a level,
+with `APPLICATION_MANAGEMENT_LOGS_SYSTEM_ADMIN_ONLY=true` only the role of `application.management.access.role`.
+Here `TOKEN` is a token of a role with these privileges in `permissions.yml`:
+
+```
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8081/management/logs
+curl -X PUT -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+    -d '{"name":"com.icthh.xm.ms.mstemplate","level":"DEBUG"}' http://localhost:8081/management/logs
+```
 
 #### Introspections
 
-Endpoint for thread dump: `http://localhost:8081/management/threaddump`
+```
+curl -H "Authorization: Bearer $TOKEN" http://localhost:9080/management/threaddump
+```
 
 ### Error handling
 
