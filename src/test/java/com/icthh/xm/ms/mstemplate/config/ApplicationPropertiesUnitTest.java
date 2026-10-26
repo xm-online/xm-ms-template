@@ -30,12 +30,14 @@ public class ApplicationPropertiesUnitTest {
             "application.prometheus.public", "true",
             "application.management.access.role", "SUPER-ADMIN",
             "application.management.info.public", "true",
-            "application.config-private-key", "key"));
+            "application.config-private-key", "key",
+            "application.xm-auto-configuration-filter.disabled", "true"));
 
         assertTrue(properties.getPrometheus().isPublic());
         assertEquals("SUPER-ADMIN", properties.getManagement().getAccess().getRole());
         assertTrue(properties.getManagement().getInfo().isPublic());
         assertEquals("key", properties.getConfigPrivateKey());
+        assertTrue(properties.getXmAutoConfigurationFilter().isDisabled());
     }
 
     @Test

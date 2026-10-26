@@ -148,17 +148,18 @@ spring:
       # key-password: # SPRING_KAFKA_SSL_KEY_PASSWORD=changeit, password of the private key, when it differs from the key store password
       # protocol: # SPRING_KAFKA_SSL_PROTOCOL=TLSv1.3, TLS protocol, Kafka default when not set
       bundle: # SPRING_KAFKA_SSL_BUNDLE=kafka, name of a spring.ssl.bundle instead of the key store and trust store above
-      # the bundle itself, SPRING_SSL_BUNDLE_JKS_KAFKA_*; empty values break the bundle, set them by the environment variables when needed:
-      # ssl.bundle.jks.kafka.truststore.location: # SPRING_SSL_BUNDLE_JKS_KAFKA_TRUSTSTORE_LOCATION=file:/certs/ca.p12, CA of the broker certificate
-      # ssl.bundle.jks.kafka.truststore.password: # SPRING_SSL_BUNDLE_JKS_KAFKA_TRUSTSTORE_PASSWORD=changeit, password of the trust store
-      # ssl.bundle.jks.kafka.truststore.type: # SPRING_SSL_BUNDLE_JKS_KAFKA_TRUSTSTORE_TYPE=PKCS12, type of the trust store
-      # ssl.bundle.jks.kafka.keystore.location: # SPRING_SSL_BUNDLE_JKS_KAFKA_KEYSTORE_LOCATION=file:/certs/mstemplate.p12, client certificate
-      # ssl.bundle.jks.kafka.keystore.password: # SPRING_SSL_BUNDLE_JKS_KAFKA_KEYSTORE_PASSWORD=changeit, password of the key store
-      # ssl.bundle.jks.kafka.keystore.type: # SPRING_SSL_BUNDLE_JKS_KAFKA_KEYSTORE_TYPE=PKCS12, type of the key store
       # PEM instead of the store files above:
       # key-store-certificate-chain: # SPRING_KAFKA_SSL_KEY_STORE_CERTIFICATE_CHAIN=-----BEGIN CERTIFICATE-----..., client certificate chain in PEM, with SPRING_KAFKA_SSL_KEY_STORE_TYPE=PEM
       # key-store-key: # SPRING_KAFKA_SSL_KEY_STORE_KEY=-----BEGIN PRIVATE KEY-----..., client private key in PEM, with SPRING_KAFKA_SSL_KEY_STORE_TYPE=PEM
       # trust-store-certificates: # SPRING_KAFKA_SSL_TRUST_STORE_CERTIFICATES=-----BEGIN CERTIFICATE-----..., CA certificates in PEM, with SPRING_KAFKA_SSL_TRUST_STORE_TYPE=PEM
+  # the bundle of spring.kafka.ssl.bundle, SPRING_SSL_BUNDLE_JKS_KAFKA_*; empty values break the bundle, set them by the environment variables when needed:
+  # ssl:
+  #   bundle.jks.kafka.truststore.location: # SPRING_SSL_BUNDLE_JKS_KAFKA_TRUSTSTORE_LOCATION=file:/certs/ca.p12, CA of the broker certificate
+  #   bundle.jks.kafka.truststore.password: # SPRING_SSL_BUNDLE_JKS_KAFKA_TRUSTSTORE_PASSWORD=changeit, password of the trust store
+  #   bundle.jks.kafka.truststore.type: # SPRING_SSL_BUNDLE_JKS_KAFKA_TRUSTSTORE_TYPE=PKCS12, type of the trust store
+  #   bundle.jks.kafka.keystore.location: # SPRING_SSL_BUNDLE_JKS_KAFKA_KEYSTORE_LOCATION=file:/certs/mstemplate.p12, client certificate
+  #   bundle.jks.kafka.keystore.password: # SPRING_SSL_BUNDLE_JKS_KAFKA_KEYSTORE_PASSWORD=changeit, password of the key store
+  #   bundle.jks.kafka.keystore.type: # SPRING_SSL_BUNDLE_JKS_KAFKA_KEYSTORE_TYPE=PKCS12, type of the key store
     #  To start using feign client with authentication, use this configuration and provide correct
     #  token-uri, client-id and client-secret
   security:

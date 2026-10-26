@@ -29,6 +29,7 @@ public class ApplicationProperties {
     private final Management management = new Management();
     private final TenantCache tenantCache = new TenantCache();
     private final TenantMemoryCache tenantMemoryCache = new TenantMemoryCache();
+    private final XmAutoConfigurationFilter xmAutoConfigurationFilter = new XmAutoConfigurationFilter();
 
     @Data
     public static class KafkaHealth {
@@ -71,6 +72,11 @@ public class ApplicationProperties {
     @Data
     public static class TenantMemoryCache {
         private String enabled;
+    }
+
+    @Data
+    public static class XmAutoConfigurationFilter {
+        private boolean disabled;
     }
 
     @Data
