@@ -232,7 +232,7 @@ jhipster:
 
 application:
   specification-path-pattern: /config/tenants/{tenantName}/${spring.application.name}/example-of-microservice-spec.yml
-  tenant-ignored-path-list: /v3/api-docs, /api/profile-info, /swagger-resources/configuration/ui, /management/health, /management/health/liveness, /management/health/readiness, /management/prometheus
+  tenant-ignored-path-list: /v3/api-docs, /api/profile-info, /swagger-resources/configuration/ui, /management/health, /management/health/liveness, /management/health/readiness, /management/prometheus, /error
   timeline-ignored-http-methods:
 
   timelines-enabled: false
