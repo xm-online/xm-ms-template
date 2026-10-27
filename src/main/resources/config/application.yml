@@ -232,7 +232,7 @@ jhipster:
 
 application:
   specification-path-pattern: /config/tenants/{tenantName}/${spring.application.name}/example-of-microservice-spec.yml
-  tenant-ignored-path-list: /v3/api-docs, /api/profile-info, /swagger-resources/configuration/ui, /management/health, /management/prometheus
+  tenant-ignored-path-list: /v3/api-docs, /api/profile-info, /swagger-resources/configuration/ui, /management/health, /management/health/liveness, /management/health/readiness, /management/prometheus
   timeline-ignored-http-methods:
 
   timelines-enabled: false
@@ -252,6 +252,7 @@ application:
   tenant-memory-cache:
     enabled: # APPLICATION_TENANT_MEMORY_CACHE_ENABLED=true, caches of cache.yml; with strategy REDIS they use the Redis connection below
   tenant-cache:
+    enabled: # APPLICATION_TENANT_CACHE_ENABLED=true, tenantCacheManager of xm-commons-cache for Java code, caches from cache.yml
     redis: # the commented out properties break the connection when empty, set them by the environment variables when needed
       enabled: # APPLICATION_TENANT_CACHE_REDIS_ENABLED=true, Redis connection of xm-commons-cache-redis for caches with strategy REDIS in cache.yml
       # host: # APPLICATION_TENANT_CACHE_REDIS_HOST=redis, Redis host, localhost when not set

@@ -98,4 +98,6 @@ jhipster:
       host: localhost
       port: 5000
       ring-buffer-size: 512
-# application:
+application:
+  # dev-only private key of the dev key pair (public key in xm-ms-config application-dev.yml); the dev profile is never used in prod
+  config-private-key: MC4CAQAwBQYDK2VwBCIEIDFnGtl71GR+6WZJ5v8q3FFn6eBJ0PfMSC2lqfE3FZFs

@@ -60,6 +60,7 @@ public class ApplicationProperties {
 
     @Data
     public static class TenantCache {
+        private String enabled;
         private final Redis redis = new Redis();
 
         @Data
