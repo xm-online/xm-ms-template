@@ -234,7 +234,17 @@ APPLICATION_TENANT_CACHE_REDIS_PASSWORD=secret
 APPLICATION_TENANT_CACHE_REDIS_SSL=true
 ```
 
-The CA of the Redis certificate must be trusted by the JVM: `JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStore=/certs/ca.p12 -Djavax.net.ssl.trustStorePassword=changeit`.
+The CA of the Redis certificate must be trusted by the JVM. Do not point the JVM trust store at the CA file alone
+(`-Djavax.net.ssl.trustStore=/certs/ca.p12` replaces the default CAs, and every other TLS connection of the service fails
+with `PKIX path building failed`). Add the CA to a copy of the JDK trust store and use the copy:
+
+```
+keytool -importkeystore -srckeystore $JAVA_HOME/lib/security/cacerts -srcstorepass changeit -destkeystore /certs/cacerts.p12 -deststorepass changeit -deststoretype PKCS12
+keytool -importcert -noprompt -alias redis-ca -file /certs/ca.crt -keystore /certs/cacerts.p12 -storepass changeit
+JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStore=/certs/cacerts.p12 -Djavax.net.ssl.trustStorePassword=changeit
+```
+
+`JAVA_TOOL_OPTIONS` is one variable: when the OAUTHBEARER set above is used too, put both `-D` options into it.
 
 ### Privileges
 
